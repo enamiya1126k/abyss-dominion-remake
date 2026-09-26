@@ -1,0 +1,386 @@
+{
+  "build": 563,
+  "version": "3.1.242",
+  "baseBuilds": [
+    560,
+    561,
+    562
+  ],
+  "type": "patch",
+  "requiredServerRestart": true,
+  "includesBgmFix561": true,
+  "includesLuckFix562": true,
+  "sourceCommit": "e337da23473b732b9dac667dcb75fb7235e86bba",
+  "tests": {
+    "node": 142,
+    "webSocketClientsPerGame": 4,
+    "viewports": [
+      [
+        390,
+        740
+      ],
+      [
+        320,
+        568
+      ],
+      [
+        740,
+        390
+      ]
+    ],
+    "browser": "Chromium mobile touch",
+    "nativeIPhoneTested": false
+  },
+  "files": [
+    {
+      "path": "BUILD562_MANIFEST.json",
+      "size": 5825,
+      "sha256": "57ed9a0e00db0c4910f452ba4e2e47a3202daef2f0ff8f48cef950922140f13d"
+    },
+    {
+      "path": "README_BUILD563.md",
+      "size": 5863,
+      "sha256": "d0a2a117d7a8990acd6c1823c49bedefb5488df0c2cb6f0039ec019b90d3189c"
+    },
+    {
+      "path": "docs/build563/QA.md",
+      "size": 4313,
+      "sha256": "73a00353965660430dc05af2ce604279688e09c4aad7a28183fead20bf23d2a4"
+    },
+    {
+      "path": "docs/build563/bomb-mobile.png",
+      "size": 346059,
+      "sha256": "b0c45dc6ad8abe6d97c2e38f139ce815efab5a9859af9a8b9891e2005fd4517a"
+    },
+    {
+      "path": "docs/build563/bomb-result.png",
+      "size": 314890,
+      "sha256": "7019e097fa75c00ed7fe8444507c8dc41953e047ede830aba3b81ea3ee51a3ff"
+    },
+    {
+      "path": "docs/build563/browser.json",
+      "size": 3340,
+      "sha256": "5e5f451b3ec67299f5162452d2d50711bb424f77004ac1fcae24ff6f48bb740a"
+    },
+    {
+      "path": "docs/build563/hide-mobile.png",
+      "size": 332340,
+      "sha256": "1ced22f44f91f36494695039ae4f194fb3fc5c1afb17d12b95763a37095fb0a7"
+    },
+    {
+      "path": "docs/build563/hide-result.png",
+      "size": 312414,
+      "sha256": "d946092dacd765fbf7451a05e187bc5789e207088a2c598acb40af8153a44775"
+    },
+    {
+      "path": "docs/build563/preserved.json",
+      "size": 6042,
+      "sha256": "33b241e8fb242f545a132ffb0bf722a0d8086afcc1b7ca771d495c10b50db44d"
+    },
+    {
+      "path": "docs/build563/ricochet-mobile.png",
+      "size": 361739,
+      "sha256": "6dd97d45d445fb8acf2987b53cff29db4d2921b5363cc0481f0cbfdbf03fad46"
+    },
+    {
+      "path": "docs/build563/ricochet-result.png",
+      "size": 329579,
+      "sha256": "2b2f89f568d6f0fb4004a70c15c9aa1f4f7a9867994acb535bab8c29125aaf84"
+    },
+    {
+      "path": "docs/build563/tests.tap",
+      "size": 28733,
+      "sha256": "13a6b930db789e6ec582e6dd2c851dc75fab45045da6f4237d222569ffead121"
+    },
+    {
+      "path": "docs/build563/tetra-mobile.png",
+      "size": 487941,
+      "sha256": "de3b052b07c508172bce32472002d9087d809539f07dcef16414790e4dd6b2ec"
+    },
+    {
+      "path": "docs/build563/tetra-result.png",
+      "size": 268572,
+      "sha256": "824a1589ed7bd7d7ba78d08302adf696f7bd8210c70bf70765a90f5ea8743982"
+    },
+    {
+      "path": "index.html",
+      "size": 239400,
+      "sha256": "46683eb633824559dd3d4a149c11f45001809b80cb54c058b4a477d7dee4a457"
+    },
+    {
+      "path": "online-server/src/BombCoordinator542.js",
+      "size": 799,
+      "sha256": "49dc0f1388702ac300c5a2926fd813ea08d29ee1c09d91ddf8dfc0f73cde600b"
+    },
+    {
+      "path": "online-server/src/HideCoordinator536.js",
+      "size": 6626,
+      "sha256": "0e74bcb1e05833c53ba292a2587ea24216d413f2681f11b1b32ede3ca1b427c0"
+    },
+    {
+      "path": "online-server/src/LuckCoordinator511.js",
+      "size": 4108,
+      "sha256": "b5027f73f9fbb0fbcffeffab0c76214a12ac68b7f2aa37a6254a4693597c9df3"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 23569,
+      "sha256": "cdc90dca687da9b5f807448c8ccf65b164475777bd338aba6132e6f51f53c9af"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 27671,
+      "sha256": "94a6b745ac360afe255f195fe275696453899144c2c40f8d3f5bdb03ef7dd9ce"
+    },
+    {
+      "path": "online-server/src/Realtime563.js",
+      "size": 6362,
+      "sha256": "98987c8fbc406c82703454ac67ff760b8a0a65297b845025ad210f8521b70f23"
+    },
+    {
+      "path": "online-server/src/RicochetCoordinator550.js",
+      "size": 955,
+      "sha256": "c85c08656604eb1b5756b6c7c432fa62f45a54d4c01483445cb01eec98a19655"
+    },
+    {
+      "path": "online-server/src/TetraCoordinator539.js",
+      "size": 5441,
+      "sha256": "d7b15b701e80f3be19264b349689e41a76337e2ecc4face421cdcabe55eb6880"
+    },
+    {
+      "path": "src/Styles/build563-arcade.css",
+      "size": 17587,
+      "sha256": "aa496eba9eb31ecace7c1663fc5f0c52e860a02212a7fdf7ff31cdb487025dce"
+    },
+    {
+      "path": "src/bomb/Relay563.js",
+      "size": 6595,
+      "sha256": "6f43a7ad7688d9327b13c59fed91df9606f5a262c1633cbda93aed1931fa8d41"
+    },
+    {
+      "path": "src/bomb/Rules542.js",
+      "size": 323,
+      "sha256": "841a6606c6af8628cf2b98a381a580e229c09def41d948ea30a8fbba8b6a7950"
+    },
+    {
+      "path": "src/bomb/View542.js",
+      "size": 9931,
+      "sha256": "ea0e1000befb8548483cbf6c55cc95a7a4361af7f1d06a98c298ad15d3ff9265"
+    },
+    {
+      "path": "src/core/AudioRecovery561.js",
+      "size": 1206,
+      "sha256": "ef280648e6060d1714da4973a0b20e1c2488dfbefb48b0d63c55ad62a995fd3d"
+    },
+    {
+      "path": "src/core/AudioSystem.js",
+      "size": 12246,
+      "sha256": "bd9dbc35e607d5ff791ef73587cc7c29ee4e47434e882dc7b7e441c1971eb398"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "834e282fbad2a230e6282671cc939c6a00dec2e333d44cce4aedfac0e1f90bb8"
+    },
+    {
+      "path": "src/hide/Guidance563.js",
+      "size": 1367,
+      "sha256": "00be6fdd584cf99ddd9ef7c3647dc418de9f8472cad3053e6f55dbae3088df4e"
+    },
+    {
+      "path": "src/hide/Relics541.js",
+      "size": 4297,
+      "sha256": "01ea9cb992b019830d8fe1a1af1d246baa67076cf46bf46cff2adc3bc8657632"
+    },
+    {
+      "path": "src/hide/Renderer536.js",
+      "size": 12828,
+      "sha256": "a4003ce0e8caebb5aa70ccbf5c01b01c7ab188e26e793726915c9156445cfebf"
+    },
+    {
+      "path": "src/hide/Rules536.js",
+      "size": 13387,
+      "sha256": "e12f8138dd2b8c0c73de920e180d4283ae4d742a69810c9681d1799b94ab1db1"
+    },
+    {
+      "path": "src/hide/View536.js",
+      "size": 26047,
+      "sha256": "025a0c612b86a91a8d7554607b9a22911f9b80e62c8f4665b29369c635e83888"
+    },
+    {
+      "path": "src/luck/Descriptions562.js",
+      "size": 7011,
+      "sha256": "c41eefbcbca43543deb522b339d990efd69eaabce48e94efebedcabf18a043a2"
+    },
+    {
+      "path": "src/luck/Equipment562.js",
+      "size": 3142,
+      "sha256": "7bd3cc8ddc9688cc5953cf660d72c3f582d158fcbad9f43dd84c5c5d98c54036"
+    },
+    {
+      "path": "src/luck/Items509.js",
+      "size": 5560,
+      "sha256": "fb72716ef625ee3653a1903332ab63489a7ef620975ad85985f35280c9d0cc08"
+    },
+    {
+      "path": "src/luck/Items511.js",
+      "size": 3042,
+      "sha256": "b28f0bad831e5159d571727574da31e094e293aefac7a8a4b7df1eef87458626"
+    },
+    {
+      "path": "src/luck/Presentation511.js",
+      "size": 3741,
+      "sha256": "c66e0842c04960f65654aa9385753dfb4fcd5dc2a9a655b423918c751223a45e"
+    },
+    {
+      "path": "src/luck/Rules509.js",
+      "size": 16225,
+      "sha256": "86f9b499d2c76ea23826a8a5d7e4af61f8e0b6c5c45217fbb5f3a8021c242bb8"
+    },
+    {
+      "path": "src/luck/Rules511.js",
+      "size": 19331,
+      "sha256": "c3a2e6465dfdd944cc57ab0af9bc32a2763b2ac967af72bf3046fd06c44bab29"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "size": 38089,
+      "sha256": "4d8f87654c55556ed6221f2d0cd306681dd969741b00ec726fc04c0be8c6f1ff"
+    },
+    {
+      "path": "src/party/Arcade563.js",
+      "size": 4681,
+      "sha256": "80144581ff9c650451c656423b7a244cd6167bf9b2129d3b94055d3ce3b1d694"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 5713,
+      "sha256": "f3649b63dc89034ccc72317f849b775576a6f03f2b25ce91609f18ae9c956608"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12839,
+      "sha256": "83b661585843bab58228f44b2b0c04749093d37733858cb5c3c25d27ed687069"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29649,
+      "sha256": "bf7149005ef897e8538dd0cf2d65ced184d7dfc738cf759463fc83a58cd74705"
+    },
+    {
+      "path": "src/ricochet550/Board563.js",
+      "size": 5994,
+      "sha256": "623a3c0b7f9f10f98e1993f4a4fcc2b9c74c1e1ab8643a12770187032479575c"
+    },
+    {
+      "path": "src/ricochet550/Goals563.js",
+      "size": 9978,
+      "sha256": "28f8441031e332c4bed8595f3c607e65aca868c82f894be61930101c232b2faf"
+    },
+    {
+      "path": "src/ricochet550/Rules550.js",
+      "size": 447,
+      "sha256": "84d0d305cc6a6f90e8699cd12de5891903b19cc85bf46d4bc7cd07c083d797ed"
+    },
+    {
+      "path": "src/ricochet550/View550.js",
+      "size": 10252,
+      "sha256": "e4efa7d54dee3df8e02c1afc2ec8d9c8e464f3fe8c202f6d2ea7ec0d382c47be"
+    },
+    {
+      "path": "src/tetra/Renderer539.js",
+      "size": 9718,
+      "sha256": "29a7bd5defe8e756e0fc23b6dd5428cb9870dc827add332f4a804a4ceeee6ebd"
+    },
+    {
+      "path": "src/tetra/Rules539.js",
+      "size": 16635,
+      "sha256": "8544f98d8a4bf7c513e697c6b1d4e186884a51a5195d848a975eef71bc8a3c90"
+    },
+    {
+      "path": "src/tetra/View539.js",
+      "size": 18693,
+      "sha256": "d4eb9475564df456141318b6acf5bf079566dfdacce05dbd68a7a12599e44483"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "size": 6086,
+      "sha256": "71fcf9dd1c86d81b249e8c04e54d09b4cf2b9c58bed105040d573aef3ca4c0d3"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "8354db40235de6c2181ee16ac58a009d0cd698d5fad32aaa5ec9d22865f48682"
+    },
+    {
+      "path": "tests/build561-audio-recovery.test.mjs",
+      "size": 2068,
+      "sha256": "b5adeed2b26b472f1d8051713bee730ced3d2cc450b5d19b1d268e40d1d38472"
+    },
+    {
+      "path": "tests/build562-luck-items.test.mjs",
+      "size": 17970,
+      "sha256": "d117340948fdba4195167d923d38ae4630d0c388fec8f3d72571d6d599d13266"
+    },
+    {
+      "path": "tests/build562-luck-wire.test.mjs",
+      "size": 4744,
+      "sha256": "9bc22f903f1d74523c535863753bb1a057fce2527e4835be78bbb5b5e91d5e6d"
+    },
+    {
+      "path": "tests/build563-rules.test.mjs",
+      "size": 10253,
+      "sha256": "12e1e50f2a296230fcd2ef3eb86dc1d2c0d763786dcba5c89fe239a28d83cc64"
+    },
+    {
+      "path": "tests/build563-wire.test.mjs",
+      "size": 7200,
+      "sha256": "bd31f7a243701de1f996a1245cbcbdaf280c261d2cc25487407a3dd7794d9a41"
+    },
+    {
+      "path": "tools/build560/audio-fixture.mjs",
+      "size": 2257,
+      "sha256": "80ab43222801e2be01799ecf0949b76428f903103ea326e14067f182cc17a025"
+    },
+    {
+      "path": "tools/build562/fixture.mjs",
+      "size": 1460,
+      "sha256": "942af6600a6e1547e16f3e4a4c1cb0764ddbca2c3c71a0e880a16f19d4599d8f"
+    },
+    {
+      "path": "tools/build563/browser.mjs",
+      "size": 7247,
+      "sha256": "97e48b292ae5abec46279b4fb5949857d5e0f406bf08e8c6b453a5aa90b314a9"
+    },
+    {
+      "path": "tools/build563/fixture.mjs",
+      "size": 1549,
+      "sha256": "67331c735c4bcdbfebd8ccd767fea81132bf3607171ad3e7bfdee07aa0243ce4"
+    },
+    {
+      "path": "tools/build563/package.py",
+      "size": 6925,
+      "sha256": "9eecedac351c0fb6b71d1eae030ed076301a31af110ee29cfec09f4e21145946"
+    },
+    {
+      "path": "tools/build563/preview.mjs",
+      "size": 5025,
+      "sha256": "1b9e69b112a17fcd819240b6db1bd56972d9dbeb460672427d9fb8f62306991a"
+    },
+    {
+      "path": "tools/build563/wire-fixture.mjs",
+      "size": 3781,
+      "sha256": "826daa251e81177b5228c844f80ef0bba33f4344d400ae65fdc16acaf69993d8"
+    },
+    {
+      "path": "world-raid-offline563-assets.json",
+      "size": 49039,
+      "sha256": "78ec7aa3f4b7078f0e538a8cf49f1efa79ad87e1bb42cb96bd8c2c5567d7538a"
+    },
+    {
+      "path": "world-raid-offline563-sw.js",
+      "size": 2502,
+      "sha256": "f211005d27ce53219e880676c8ce626cf7dd414bfe20ab1c5a6bc4d976bd3563"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "browser": "Chromium 133 mobile touch, production luck modules/CSS and unchanged artwork; party lounge and portraits stubbed; not iPhone hardware",
+  "sizes": [
+    {
+      "width": 390,
+      "page": 390,
+      "panel": 390,
+      "scrollWidth": 388,
+      "clientWidth": 388,
+      "scrollHeight": 1114,
+      "clientHeight": 490
+    },
+    {
+      "width": 320,
+      "page": 320,
+      "panel": 320,
+      "scrollWidth": 318,
+      "clientWidth": 318,
+      "scrollHeight": 1158,
+      "clientHeight": 492
+    }
+  ],
+  "checks": [
+    "390/320px: carried and replenishment counts separate, correct R8 multiplier, full descriptions scroll, player switching, close",
+    "revealed refill 4+1=5; pending hit leaves5; visible impact consumes to4",
+    "all40 descriptions; old server cannot start; updated server allows start"
+  ],
+  "errors": [],
+  "failedResources": []
+}

@@ -1,3 +1,4 @@
+import {routeGuide563} from './Guidance563.js';
 import {sampleObjects545,marker545} from './Presentation545.js';
 import {playerColor499} from '../party/PartyColors499.js';
 import {relics541,miniRelics541,guide541,decoySmoke541} from './Relics541.js';
@@ -27,7 +28,7 @@ export function paint536(r,g,selfId,u,at,reduced=false){const c=r.ctx,w=r.width,
  c.drawImage(terrain(r,g.map),0,0,g.map.width,g.map.height);
  for(const room of g.map.rooms){c.save();c.textAlign='center';c.font='700 23px "Noto Sans JP",sans-serif';c.fillStyle='#362d2080';c.fillText(room.name,room.cx,room.y+room.h-25);c.restore()}
  if(u.mapOpen){for(const room of g.map.rooms){c.fillStyle='#063a3ce8';c.fillRect(room.cx-365,room.cy-60,730,115);c.font='700 100px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillStyle='#fff0c8';c.fillText(room.name,room.cx,room.cy+30)}relics541(c,g,true,reduced);if(own)circle(c,own.x,own.y,45,teamColor(own),'#1d736f');c.restore();teammates(c,g,own,cam,w,h,true);c.fillStyle='#fff0c6';c.font='700 12px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillText('館と庭園 · 行きたい床をタップ',w/2,h-15);return}
- relics541(c,g,false,reduced);if(hunt&&own&&g.phase==='play'){c.save();c.setLineDash([10,15]);c.lineWidth=3;c.strokeStyle='#ffedb1a0';circle(c,own.x,own.y,HIDE536.range,null,'#ffedb1a0');c.restore()}
+ routeGuide563(c,r,g,own,u,at);relics541(c,g,false,reduced);if(hunt&&own&&g.phase==='play'){c.save();c.setLineDash([10,15]);c.lineWidth=3;c.strokeStyle='#ffedb1a0';circle(c,own.x,own.y,HIDE536.range,null,'#ffedb1a0');c.restore()}
  if(r.decorMap!==g.map){r.decorMap=g.map;r.decorNodes=g.map.decor.map(o=>({...o,decor:true})).sort((a,b)=>a.y-b.y)}
  const inView=o=>o.x>=cam.x-230&&o.y>=cam.y-100&&o.x<=cam.x+cam.w+230&&o.y<=cam.y+cam.h+200;
  const moving=g.objects.filter(inView);if(king&&Number.isFinite(king.x)&&!(hunt&&g.phase==='hiding'))moving.push({...king,id:'king',king:true});
@@ -41,5 +42,5 @@ export function paint536(r,g,selfId,u,at,reduced=false){const c=r.ctx,w=r.width,
  for(const e of g.events){const age=g.elapsed-e.at;if(age<0||age>1500||!Number.isFinite(e.x)||!['catch','miss'].includes(e.type))continue;c.save();c.globalAlpha=1-age/1500;c.lineWidth=5;circle(c,e.x,e.y,Math.min(110,20+age/5),null,e.type==='catch'?'#ffe098':'#fffbd0');c.textAlign='center';c.font='700 32px "Noto Sans JP",sans-serif';c.fillStyle='#fff7c7';c.strokeStyle='#353622';c.lineWidth=7;const label=e.type==='catch'?'みつけた！':'ただの置き物…';c.strokeText(label,e.x,e.y-60-age/40);c.fillText(label,e.x,e.y-60-age/40);c.restore()}c.restore();
  // The hunter's close view is visibly narrower; teammates remain private to the hiding team.
  if(hunt&&own&&g.phase==='play'){const x=(own.x-cam.x)*scale,y=(own.y-cam.y)*scale,rad=HIDE536.sight*scale,shade=c.createRadialGradient(x,y,rad*.65,x,y,rad*1.05);shade.addColorStop(0,'#07140a00');shade.addColorStop(.76,'#07140a70');shade.addColorStop(1,'#07140adb');c.fillStyle=shade;c.fillRect(0,0,w,h)}
- guide541(c,g,own,cam,w,h);teammates(c,g,own,cam,w,h);const friends=own?.hunter?[own]:g.players.filter(p=>!p.hunter);mini(r,c,g.map,friends,selfId,w-107,h-105,94,g.heist541,g.elapsed);c.fillStyle='#fff5d2';c.font='8px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillText(own?.hunter?'現在地':'あなたと仲間',w-60,h-7);
+ guide541(c,g,own,cam,w,h,u.nextObjective563);teammates(c,g,own,cam,w,h);const friends=own?.hunter?[own]:g.players.filter(p=>!p.hunter);mini(r,c,g.map,friends,selfId,w-107,h-105,94,g.heist541,g.elapsed);c.fillStyle='#fff5d2';c.font='8px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillText(own?.hunter?'現在地':'あなたと仲間',w-60,h-7);
 }

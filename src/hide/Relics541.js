@@ -22,9 +22,9 @@ export function miniRelics541(c,h,k,elapsed=0){
  for(const gate of exits559(h)){c.fillStyle=open?'#a2ffff':'#ede3c0';c.fillRect(gate.x*k-4,gate.y*k-3,8,6)}
  if(h.prisoners?.length){c.fillStyle='#b2bfff';c.fillRect(h.cage.x*k-3,h.cage.y*k-3,6,6)}c.restore();
 }
-export function guide541(c,g,p,cam,w,h){
+export function guide541(c,g,p,cam,w,h,selected=null){
  if(!p?.alive||!g.heist541)return;const heist=g.heist541,open=gatesOpen559(heist);
- let targets=open?exits559(heist):heist.seals.filter(s=>!s.done&&(!p.hunter||s.alarmUntil>g.elapsed));
+ let targets=!p.hunter&&selected?[selected]:open?exits559(heist):heist.seals.filter(s=>!s.done&&(!p.hunter||s.alarmUntil>g.elapsed));
  if(!open)targets=[...targets].sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y)).slice(0,1);
  if(p.hunter&&open)return;
  const used=[];

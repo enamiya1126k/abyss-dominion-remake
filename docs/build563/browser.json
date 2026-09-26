@@ -1,0 +1,162 @@
+{
+  "browser": "Chromium mobile touch. Production minigame views, physics, artwork and CSS; isolated party/catalogue fixture. iPhone hardware not tested.",
+  "checks": [
+    "Four production play screens fit390/320px portrait and740px landscape.",
+    "Real touch drag/release launches one shot in correct world direction.",
+    "Touch cancellation clears pull without firing.",
+    "Large opponent touch target passes once; duplicate click cannot pass twice.",
+    "Receive lock visibly disables pass targets.",
+    "Tapping a lit foothold produces an authoritative jump without a drag.",
+    "Hider primary objective starts navigation; route visible; five alternatives and disguise controls accessible.",
+    "Hunter furniture tap approaches and investigates automatically once.",
+    "All four lobbies/results render; replay and game-list buttons available."
+  ],
+  "sizes": [
+    {
+      "key": "ricochet",
+      "width": 390,
+      "height": 740,
+      "screen": 390,
+      "scroll": 390,
+      "stage": {
+        "w": 390,
+        "h": 474,
+        "bottom": 660.5
+      }
+    },
+    {
+      "key": "bomb",
+      "width": 390,
+      "height": 740,
+      "screen": 390,
+      "scroll": 390,
+      "stage": {
+        "w": 390,
+        "h": 482,
+        "bottom": 669
+      }
+    },
+    {
+      "key": "tetra",
+      "width": 390,
+      "height": 740,
+      "screen": 390,
+      "scroll": 390,
+      "stage": {
+        "w": 390,
+        "h": 617,
+        "bottom": 740
+      }
+    },
+    {
+      "key": "hide",
+      "width": 390,
+      "height": 740,
+      "screen": 390,
+      "scroll": 390,
+      "stage": {
+        "w": 388,
+        "h": 436,
+        "bottom": 631.5
+      }
+    },
+    {
+      "key": "ricochet",
+      "width": 320,
+      "height": 568,
+      "screen": 320,
+      "scroll": 320,
+      "stage": {
+        "w": 320,
+        "h": 386,
+        "bottom": 520.5
+      }
+    },
+    {
+      "key": "bomb",
+      "width": 320,
+      "height": 568,
+      "screen": 320,
+      "scroll": 320,
+      "stage": {
+        "w": 320,
+        "h": 394,
+        "bottom": 529
+      }
+    },
+    {
+      "key": "tetra",
+      "width": 320,
+      "height": 568,
+      "screen": 320,
+      "scroll": 320,
+      "stage": {
+        "w": 320,
+        "h": 445,
+        "bottom": 568
+      }
+    },
+    {
+      "key": "hide",
+      "width": 320,
+      "height": 568,
+      "screen": 320,
+      "scroll": 320,
+      "stage": {
+        "w": 318,
+        "h": 353,
+        "bottom": 481
+      }
+    },
+    {
+      "key": "ricochet",
+      "width": 740,
+      "height": 390,
+      "screen": 740,
+      "scroll": 740,
+      "stage": {
+        "w": 740,
+        "h": 203,
+        "bottom": 339.5
+      }
+    },
+    {
+      "key": "bomb",
+      "width": 740,
+      "height": 390,
+      "screen": 740,
+      "scroll": 740,
+      "stage": {
+        "w": 740,
+        "h": 214,
+        "bottom": 351
+      }
+    },
+    {
+      "key": "tetra",
+      "width": 740,
+      "height": 390,
+      "screen": 740,
+      "scroll": 740,
+      "stage": {
+        "w": 740,
+        "h": 320,
+        "bottom": 390
+      }
+    },
+    {
+      "key": "hide",
+      "width": 740,
+      "height": 390,
+      "screen": 740,
+      "scroll": 740,
+      "stage": {
+        "w": 738,
+        "h": 228,
+        "bottom": 305
+      }
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

@@ -1,3 +1,4 @@
+import {bindAudioRecovery561,updateAudioStatus561} from './AudioRecovery561.js?v=3.1.240-build561';
 const TRACKS=Object.freeze({
  home:"assets/audio/main-bgm.mp3",explore:"assets/audio/dungeon-bgm.mp3",battle:"assets/audio/battle-bgm.mp3",
  boss:"assets/audio/boss-bgm.mp3",elite:"assets/audio/elite-bgm.mp3",abyss:"assets/audio/abyss-bgm.mp3",divine:"assets/audio/ten-gods-bgm.mp3",
@@ -25,6 +26,7 @@ export class AudioSystem{
    else if(this.context?.state==="interrupted"||this.context?.state==="suspended")this.needsGesture=true;
   };
   if(typeof window!=="undefined"){const previous=window[AUDIO_OWNER_KEY];if(previous&&previous!==this)previous.destroy?.();window[AUDIO_OWNER_KEY]=this}
+  this.removeRecoveryUI=bindAudioRecovery561(this);
   if(typeof document!=="undefined"){
    document.addEventListener("visibilitychange",this.onVisibility,{passive:true});document.addEventListener("freeze",this.onFreeze,{passive:true});
    // Touch release is a playback gesture on mobile. Keep recovery available after
@@ -41,9 +43,11 @@ export class AudioSystem{
  track(scene){
   const src=TRACKS[scene]??TRACKS.home;
   if(!this.music){
-   this.music=new Audio();this.music.loop=true;this.music.preload="metadata";this.music.playsInline=true;this.music.volume=0;
-   this.onMediaError=()=>{this.needsGesture=true;this.lastError={name:"MediaError",code:this.music.error?.code??0,source:this.trackSource};};
+   this.music=new Audio();this.music.crossOrigin="anonymous";this.music.loop=true;this.music.preload="metadata";this.music.playsInline=true;this.music.volume=0;
+   this.onMediaError=()=>{++this.fadeToken;this.pendingPlay=null;this.needsGesture=true;this.lastError={name:"MediaError",code:this.music.error?.code??0,source:this.trackSource};updateAudioStatus561(this);};
    this.music.addEventListener("error",this.onMediaError);
+   this.onMediaStatus=()=>updateAudioStatus561(this);
+   for(const name of ["playing","pause","waiting","loadstart"])this.music.addEventListener(name,this.onMediaStatus);
   }
   if(this.trackSource!==src){
    this.music.pause();this.music.src=`${src}?v=2.11.2-build166`;this.trackSource=src;
@@ -83,6 +87,7 @@ export class AudioSystem{
   this.updateGain();
   if(!this.enabled())this.stopAll(false);
   else if(this.unlocked&&this.pageIsActive()&&!this.suspendedByPage)this.switchTrack(this.scene,true);
+  updateAudioStatus561(this);
  }
  setScene(scene){
   if(!TRACKS[scene])scene="home";
@@ -93,9 +98,11 @@ export class AudioSystem{
  switchTrack(scene,immediate=false){
   if(!this.unlocked||!this.pageIsActive()||!this.enabled())return Promise.resolve(false);
   const source=TRACKS[scene]??TRACKS.home;
-  if(this.pendingPlay?.source===source)return this.pendingPlay.promise;
+  if(this.pendingPlay?.source===source&&!this.music?.error)return this.pendingPlay.promise;
   const changed=this.trackSource!==source,next=this.track(scene),token=++this.fadeToken;
   this.suspendedByPage=false;this.current=next;
+  // play() alone cannot recover a media element left in a network-error state.
+  if(next.error)next.load();
   const target=safeVolume(this.settings()?.musicVolume,.28);
   next.volume=immediate||!changed?target:0;
   const pending={source,token,promise:null};this.pendingPlay=pending;
@@ -114,8 +121,24 @@ export class AudioSystem{
   },error=>{
    if(token===this.fadeToken&&!this.destroyed){this.needsGesture=true;this.lastError={name:error?.name??"PlaybackError",message:String(error?.message??error),source};}
    return false;
-  }).finally(()=>{if(this.pendingPlay===pending)this.pendingPlay=null});
+  }).finally(()=>{if(this.pendingPlay===pending)this.pendingPlay=null;updateAudioStatus561(this)});
   return pending.promise;
+ }
+ statusLabel(){
+  if(!this.enabled())return 'サウンドはOFFです。';
+  if(safeVolume(this.settings()?.musicVolume,.28)===0)return 'BGMの音量が0%です。';
+  if(this.current?.error)return '音源の読み込みに失敗しました。再生し直してください。';
+  if(this.lastError?.name==='NotAllowedError')return '再生ボタンを押して音楽を開始してください。';
+  if(this.current&&!this.current.paused&&this.current.readyState>=3)return 'BGMを再生中です。';
+  if(this.pendingPlay)return '音楽を読み込んでいます…';
+  return 'BGMは停止中です。再生ボタンで再開できます。';
+ }
+ retryPlayback(){
+  if(!this.enabled()||safeVolume(this.settings()?.musicVolume,.28)===0){updateAudioStatus561(this);return Promise.resolve(false)}
+  // Explicit recovery reloads only this track, not the page or the save.
+  ++this.fadeToken;this.pendingPlay=null;this.lastError=null;
+  this.music?.pause();this.music?.load();
+  return this.unlock();
  }
  pauseForPage(){
   this.suspendedByPage=true;++this.fadeToken;this.pendingPlay=null;
@@ -133,12 +156,14 @@ export class AudioSystem{
  }
  destroy(){
   this.destroyed=true;this.stopAll(true);this.unlocked=false;
+  this.removeRecoveryUI?.();
   if(typeof document!=="undefined"){
    document.removeEventListener("visibilitychange",this.onVisibility);document.removeEventListener("freeze",this.onFreeze);
    for(const name of GESTURES)document.removeEventListener(name,this.onUserGesture,true);
   }
   if(typeof window!=="undefined"){window.removeEventListener("pagehide",this.onPageHide);window.removeEventListener("beforeunload",this.onPageHide);window.removeEventListener("pageshow",this.onPageShow);window.removeEventListener("blur",this.onBlur);window.removeEventListener("focus",this.onFocus);if(window[AUDIO_OWNER_KEY]===this)delete window[AUDIO_OWNER_KEY]}
   this.music?.removeEventListener("error",this.onMediaError);this.context?.removeEventListener?.("statechange",this.onContextState);
+  for(const name of ["playing","pause","waiting","loadstart"])this.music?.removeEventListener(name,this.onMediaStatus);
   try{ignoreRejection(this.context?.close?.())}catch(_error){}
  }
  sfx(kind="select"){

@@ -81,7 +81,7 @@ export function resolveRound509(g,at){
   }
   const turbines=count(grown,'turbine'),coils=p.coils+count(grown,'coil'),usedCoils=big?coils:0,batteries=big?count(active,'battery'):0;
   const gain=(max(0n,base)+passive+seed+bond)*3n**BigInt(turbines)*2n**BigInt(usedCoils+batteries)/2n**BigInt(turbines);
-  return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres509(p.distance),start:metres509(p.distance),gain,planned:gain,knockback:max(0n,-base),hit:false,loadout,coils:big?0:coils,wards:Math.max(p.wards,count(active,'ward')),guards:count(active,'shield'),mirrors:count(active,'mirror'),revenge:count(grown,'revenge'),automatic:g.auto509[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
+  return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres509(p.distance),start:metres509(p.distance),gain,planned:gain,knockback:max(0n,-base),hit:false,loadout,coils:big?0:coils,wards:(p.wards??0)+count(active,'ward'),guards:count(active,'shield'),mirrors:count(active,'mirror'),revenge:count(grown,'revenge'),automatic:g.auto509[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
    calculation:{base,passive,seed,bond,turbines,coils:usedCoils,batteries,dice:it.id==='product'?[...d.dice]:null,jackpot:it.id==='jackpot'?d.jackpot:null,planned:gain}};
  });
  const attacks=[];

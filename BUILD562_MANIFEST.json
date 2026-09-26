@@ -1,0 +1,192 @@
+{
+  "build": 562,
+  "version": "3.1.241",
+  "baseBuilds": [
+    560,
+    561
+  ],
+  "type": "patch",
+  "requiredServerRestart": true,
+  "includesBgmFix561": true,
+  "sourceCommit": "e337da23473b732b9dac667dcb75fb7235e86bba",
+  "tests": {
+    "node": 113,
+    "diceConditions": 6048,
+    "mobileWidths": [
+      390,
+      320
+    ]
+  },
+  "files": [
+    {
+      "path": "README_BUILD562.md",
+      "size": 4587,
+      "sha256": "7ce9a3387cc68c14abec44f59a2083ff350c69d449e76e7acb70569f51fb0967"
+    },
+    {
+      "path": "docs/build562/ITEM_AUDIT.md",
+      "size": 9456,
+      "sha256": "17bd945c4745a18ddf032ba4231fdc434d83bb823f5561398d072b413c3b4592"
+    },
+    {
+      "path": "docs/build562/browser.json",
+      "size": 878,
+      "sha256": "18e93c4f4e8a976464205b45f14ddd1dd9266a95a0be813b95c0625a29caa800"
+    },
+    {
+      "path": "docs/build562/equipment-mobile.png",
+      "size": 165863,
+      "sha256": "d3cbf4cc824efbdfd9e2f9a7ebb6b16e63d0e5d3501bb5022c18ef357ff771df"
+    },
+    {
+      "path": "docs/build562/reproduction.json",
+      "size": 699,
+      "sha256": "cd4d5e66c211ea046c6df9e3d1e9be70f22878ecc797701a25f6a289acc6a668"
+    },
+    {
+      "path": "docs/build562/tests.tap",
+      "size": 8957,
+      "sha256": "a8dbb76a72f4d8f9b44b98fe3f7d050d366f68cb011c041a35475fd80aa8a2a0"
+    },
+    {
+      "path": "index.html",
+      "size": 236782,
+      "sha256": "156c9643586d37e4e1442e40b42720e322ca0eba4a16dbb3477dbe718a64160d"
+    },
+    {
+      "path": "online-server/src/LuckCoordinator511.js",
+      "size": 4108,
+      "sha256": "b5027f73f9fbb0fbcffeffab0c76214a12ac68b7f2aa37a6254a4693597c9df3"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 23569,
+      "sha256": "0117404fb5426191fd8fb137854fbf76928b638103c7cff21f4b65e479b4fd54"
+    },
+    {
+      "path": "src/core/AudioRecovery561.js",
+      "size": 1206,
+      "sha256": "ef280648e6060d1714da4973a0b20e1c2488dfbefb48b0d63c55ad62a995fd3d"
+    },
+    {
+      "path": "src/core/AudioSystem.js",
+      "size": 12246,
+      "sha256": "bd9dbc35e607d5ff791ef73587cc7c29ee4e47434e882dc7b7e441c1971eb398"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "730d514a1e3b19c6c6da10be217e236c863384b90f9b58dff734f8ffaa328797"
+    },
+    {
+      "path": "src/luck/Descriptions562.js",
+      "size": 7011,
+      "sha256": "c41eefbcbca43543deb522b339d990efd69eaabce48e94efebedcabf18a043a2"
+    },
+    {
+      "path": "src/luck/Equipment562.js",
+      "size": 3142,
+      "sha256": "7bd3cc8ddc9688cc5953cf660d72c3f582d158fcbad9f43dd84c5c5d98c54036"
+    },
+    {
+      "path": "src/luck/Items509.js",
+      "size": 5560,
+      "sha256": "fb72716ef625ee3653a1903332ab63489a7ef620975ad85985f35280c9d0cc08"
+    },
+    {
+      "path": "src/luck/Items511.js",
+      "size": 3042,
+      "sha256": "b28f0bad831e5159d571727574da31e094e293aefac7a8a4b7df1eef87458626"
+    },
+    {
+      "path": "src/luck/Presentation511.js",
+      "size": 3741,
+      "sha256": "c66e0842c04960f65654aa9385753dfb4fcd5dc2a9a655b423918c751223a45e"
+    },
+    {
+      "path": "src/luck/Rules509.js",
+      "size": 16225,
+      "sha256": "86f9b499d2c76ea23826a8a5d7e4af61f8e0b6c5c45217fbb5f3a8021c242bb8"
+    },
+    {
+      "path": "src/luck/Rules511.js",
+      "size": 19331,
+      "sha256": "c3a2e6465dfdd944cc57ab0af9bc32a2763b2ac967af72bf3046fd06c44bab29"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "size": 38089,
+      "sha256": "4d8f87654c55556ed6221f2d0cd306681dd969741b00ec726fc04c0be8c6f1ff"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 5640,
+      "sha256": "7a4bc92ec29bb6b7b07ae87a1948e09f849fedfec7fd8f7130474da15b945a8b"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29649,
+      "sha256": "bd7bf99d7ee429f01620195ffb4853cc894de52f11ec049a3b540b0ed7ea611d"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "size": 6086,
+      "sha256": "71fcf9dd1c86d81b249e8c04e54d09b4cf2b9c58bed105040d573aef3ca4c0d3"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "2b21573bdad8f6d3cbd4f661552e0cf7662cd792c1dd685b2819b13c4d1d2f25"
+    },
+    {
+      "path": "tests/build562-luck-items.test.mjs",
+      "size": 17970,
+      "sha256": "d117340948fdba4195167d923d38ae4630d0c388fec8f3d72571d6d599d13266"
+    },
+    {
+      "path": "tests/build562-luck-wire.test.mjs",
+      "size": 4744,
+      "sha256": "9bc22f903f1d74523c535863753bb1a057fce2527e4835be78bbb5b5e91d5e6d"
+    },
+    {
+      "path": "tools/build562/audit-report.mjs",
+      "size": 6757,
+      "sha256": "c189fb04ff9423dcde33f9c069b2dabd01ebd9d7bb64d5edaf49c510b6513bc5"
+    },
+    {
+      "path": "tools/build562/browser.mjs",
+      "size": 8141,
+      "sha256": "e6dde1a379e16ef2a3afe6fbde124c9c8a23320605278f1f7f7332344d036d79"
+    },
+    {
+      "path": "tools/build562/fixture.mjs",
+      "size": 1460,
+      "sha256": "942af6600a6e1547e16f3e4a4c1cb0764ddbca2c3c71a0e880a16f19d4599d8f"
+    },
+    {
+      "path": "tools/build562/package.py",
+      "size": 4430,
+      "sha256": "585183ba440c1f51aefd6712b58914300a0676032ea8b0b8480720e657abb358"
+    },
+    {
+      "path": "tools/build562/reproduce.mjs",
+      "size": 1430,
+      "sha256": "6a839da1c1be789ef2760350c4b4c0e7cadfd3d7cb7d570137d13af912527e90"
+    },
+    {
+      "path": "tools/build562/stamp.py",
+      "size": 1883,
+      "sha256": "a6bff27967a60d980761352d211714e6c9c4bb4b296a3c7c13fc19fce8735c7f"
+    },
+    {
+      "path": "world-raid-offline562-assets.json",
+      "size": 48595,
+      "sha256": "c033e560bb76cc23ea07b2d58e1de6aec4242fc80f5b0522407c590b964ecfae"
+    },
+    {
+      "path": "world-raid-offline562-sw.js",
+      "size": 2502,
+      "sha256": "e5cee89ee670e6338c2aff61a3cca799897227defe1d6cb0c5cc7a355db273d0"
+    }
+  ]
+}

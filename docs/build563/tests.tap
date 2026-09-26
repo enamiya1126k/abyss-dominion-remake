@@ -1,0 +1,862 @@
+TAP version 13
+# Subtest: a media error clears a hung play and the next touch reloads the failed source
+ok 1 - a media error clears a hung play and the next touch reloads the failed source
+  ---
+  duration_ms: 2.031919
+  type: 'test'
+  ...
+# Subtest: explicit replay cancels a stuck attempt but cannot override OFF or zero music volume
+ok 2 - explicit replay cancels a stuck attempt but cannot override OFF or zero music volume
+  ---
+  duration_ms: 0.580154
+  type: 'test'
+  ...
+# Subtest: catalogue covers all 40 items, 28 persistent pieces and 12 one-shot choices
+ok 3 - catalogue covers all 40 items, 28 persistent pieces and 12 one-shot choices
+  ---
+  duration_ms: 3.769215
+  type: 'test'
+  ...
+# Subtest: item dash: promised initial metres and persistence
+ok 4 - item dash: promised initial metres and persistence
+  ---
+  duration_ms: 7.46569
+  type: 'test'
+  ...
+# Subtest: item rocket: promised initial metres and persistence
+ok 5 - item rocket: promised initial metres and persistence
+  ---
+  duration_ms: 2.41714
+  type: 'test'
+  ...
+# Subtest: item turbo: promised initial metres and persistence
+ok 6 - item turbo: promised initial metres and persistence
+  ---
+  duration_ms: 2.749329
+  type: 'test'
+  ...
+# Subtest: item shell: promised initial metres and persistence
+ok 7 - item shell: promised initial metres and persistence
+  ---
+  duration_ms: 1.938819
+  type: 'test'
+  ...
+# Subtest: item lightning: promised initial metres and persistence
+ok 8 - item lightning: promised initial metres and persistence
+  ---
+  duration_ms: 1.746089
+  type: 'test'
+  ...
+# Subtest: item shield: promised initial metres and persistence
+ok 9 - item shield: promised initial metres and persistence
+  ---
+  duration_ms: 1.365246
+  type: 'test'
+  ...
+# Subtest: item mirror: promised initial metres and persistence
+ok 10 - item mirror: promised initial metres and persistence
+  ---
+  duration_ms: 2.060633
+  type: 'test'
+  ...
+# Subtest: item engine: promised initial metres and persistence
+ok 11 - item engine: promised initial metres and persistence
+  ---
+  duration_ms: 1.42118
+  type: 'test'
+  ...
+# Subtest: item magnet: promised initial metres and persistence
+ok 12 - item magnet: promised initial metres and persistence
+  ---
+  duration_ms: 1.280738
+  type: 'test'
+  ...
+# Subtest: item banana: promised initial metres and persistence
+ok 13 - item banana: promised initial metres and persistence
+  ---
+  duration_ms: 1.100476
+  type: 'test'
+  ...
+# Subtest: item pit: promised initial metres and persistence
+ok 14 - item pit: promised initial metres and persistence
+  ---
+  duration_ms: 0.841457
+  type: 'test'
+  ...
+# Subtest: item swap: promised initial metres and persistence
+ok 15 - item swap: promised initial metres and persistence
+  ---
+  duration_ms: 1.066045
+  type: 'test'
+  ...
+# Subtest: item dice: promised initial metres and persistence
+ok 16 - item dice: promised initial metres and persistence
+  ---
+  duration_ms: 1.044022
+  type: 'test'
+  ...
+# Subtest: item spring: promised initial metres and persistence
+ok 17 - item spring: promised initial metres and persistence
+  ---
+  duration_ms: 0.741877
+  type: 'test'
+  ...
+# Subtest: item comet: promised initial metres and persistence
+ok 18 - item comet: promised initial metres and persistence
+  ---
+  duration_ms: 2.845725
+  type: 'test'
+  ...
+# Subtest: item battery: promised initial metres and persistence
+ok 19 - item battery: promised initial metres and persistence
+  ---
+  duration_ms: 1.704036
+  type: 'test'
+  ...
+# Subtest: item turbine: promised initial metres and persistence
+ok 20 - item turbine: promised initial metres and persistence
+  ---
+  duration_ms: 0.978643
+  type: 'test'
+  ...
+# Subtest: item seed: promised initial metres and persistence
+ok 21 - item seed: promised initial metres and persistence
+  ---
+  duration_ms: 0.480713
+  type: 'test'
+  ...
+# Subtest: item bond: promised initial metres and persistence
+ok 22 - item bond: promised initial metres and persistence
+  ---
+  duration_ms: 0.701225
+  type: 'test'
+  ...
+# Subtest: item coil: promised initial metres and persistence
+ok 23 - item coil: promised initial metres and persistence
+  ---
+  duration_ms: 0.7105
+  type: 'test'
+  ...
+# Subtest: item ward: promised initial metres and persistence
+ok 24 - item ward: promised initial metres and persistence
+  ---
+  duration_ms: 0.65741
+  type: 'test'
+  ...
+# Subtest: item revenge: promised initial metres and persistence
+ok 25 - item revenge: promised initial metres and persistence
+  ---
+  duration_ms: 0.829379
+  type: 'test'
+  ...
+# Subtest: item product: promised initial metres and persistence
+ok 26 - item product: promised initial metres and persistence
+  ---
+  duration_ms: 0.760525
+  type: 'test'
+  ...
+# Subtest: item mega: promised initial metres and persistence
+ok 27 - item mega: promised initial metres and persistence
+  ---
+  duration_ms: 0.744992
+  type: 'test'
+  ...
+# Subtest: item jackpot: promised initial metres and persistence
+ok 28 - item jackpot: promised initial metres and persistence
+  ---
+  duration_ms: 0.609778
+  type: 'test'
+  ...
+# Subtest: item breaker: promised initial metres and persistence
+ok 29 - item breaker: promised initial metres and persistence
+  ---
+  duration_ms: 0.601746
+  type: 'test'
+  ...
+# Subtest: item sniper: promised initial metres and persistence
+ok 30 - item sniper: promised initial metres and persistence
+  ---
+  duration_ms: 0.517449
+  type: 'test'
+  ...
+# Subtest: item wrench: promised initial metres and persistence
+ok 31 - item wrench: promised initial metres and persistence
+  ---
+  duration_ms: 0.728357
+  type: 'test'
+  ...
+# Subtest: item doubling: promised initial metres and persistence
+ok 32 - item doubling: promised initial metres and persistence
+  ---
+  duration_ms: 2.023316
+  type: 'test'
+  ...
+# Subtest: item bank: promised initial metres and persistence
+ok 33 - item bank: promised initial metres and persistence
+  ---
+  duration_ms: 0.56501
+  type: 'test'
+  ...
+# Subtest: item solar: promised initial metres and persistence
+ok 34 - item solar: promised initial metres and persistence
+  ---
+  duration_ms: 0.645692
+  type: 'test'
+  ...
+# Subtest: item forge: promised initial metres and persistence
+ok 35 - item forge: promised initial metres and persistence
+  ---
+  duration_ms: 1.170322
+  type: 'test'
+  ...
+# Subtest: item echo: promised initial metres and persistence
+ok 36 - item echo: promised initial metres and persistence
+  ---
+  duration_ms: 0.500193
+  type: 'test'
+  ...
+# Subtest: item focus: promised initial metres and persistence
+ok 37 - item focus: promised initial metres and persistence
+  ---
+  duration_ms: 0.446272
+  type: 'test'
+  ...
+# Subtest: item crown: promised initial metres and persistence
+ok 38 - item crown: promised initial metres and persistence
+  ---
+  duration_ms: 0.501015
+  type: 'test'
+  ...
+# Subtest: item overdrive: promised initial metres and persistence
+ok 39 - item overdrive: promised initial metres and persistence
+  ---
+  duration_ms: 0.490068
+  type: 'test'
+  ...
+# Subtest: item triple: promised initial metres and persistence
+ok 40 - item triple: promised initial metres and persistence
+  ---
+  duration_ms: 0.45803
+  type: 'test'
+  ...
+# Subtest: item harvest: promised initial metres and persistence
+ok 41 - item harvest: promised initial metres and persistence
+  ---
+  duration_ms: 0.403027
+  type: 'test'
+  ...
+# Subtest: item nova: promised initial metres and persistence
+ok 42 - item nova: promised initial metres and persistence
+  ---
+  duration_ms: 0.433433
+  type: 'test'
+  ...
+# Subtest: item dragon: promised initial metres and persistence
+ok 43 - item dragon: promised initial metres and persistence
+  ---
+  duration_ms: 0.51127
+  type: 'test'
+  ...
+# Subtest: stack dash: 1, 2 and 3 copies with elapsed rounds
+ok 44 - stack dash: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 4.864725
+  type: 'test'
+  ...
+# Subtest: stack shell: 1, 2 and 3 copies with elapsed rounds
+ok 45 - stack shell: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.860511
+  type: 'test'
+  ...
+# Subtest: stack lightning: 1, 2 and 3 copies with elapsed rounds
+ok 46 - stack lightning: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 3.105996
+  type: 'test'
+  ...
+# Subtest: stack shield: 1, 2 and 3 copies with elapsed rounds
+ok 47 - stack shield: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 2.01228
+  type: 'test'
+  ...
+# Subtest: stack mirror: 1, 2 and 3 copies with elapsed rounds
+ok 48 - stack mirror: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 2.27858
+  type: 'test'
+  ...
+# Subtest: stack engine: 1, 2 and 3 copies with elapsed rounds
+ok 49 - stack engine: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.39491
+  type: 'test'
+  ...
+# Subtest: stack magnet: 1, 2 and 3 copies with elapsed rounds
+ok 50 - stack magnet: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 2.800086
+  type: 'test'
+  ...
+# Subtest: stack banana: 1, 2 and 3 copies with elapsed rounds
+ok 51 - stack banana: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 2.336157
+  type: 'test'
+  ...
+# Subtest: stack pit: 1, 2 and 3 copies with elapsed rounds
+ok 52 - stack pit: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.484915
+  type: 'test'
+  ...
+# Subtest: stack spring: 1, 2 and 3 copies with elapsed rounds
+ok 53 - stack spring: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.703955
+  type: 'test'
+  ...
+# Subtest: stack battery: 1, 2 and 3 copies with elapsed rounds
+ok 54 - stack battery: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.612798
+  type: 'test'
+  ...
+# Subtest: stack turbine: 1, 2 and 3 copies with elapsed rounds
+ok 55 - stack turbine: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 7.225574
+  type: 'test'
+  ...
+# Subtest: stack seed: 1, 2 and 3 copies with elapsed rounds
+ok 56 - stack seed: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.950627
+  type: 'test'
+  ...
+# Subtest: stack bond: 1, 2 and 3 copies with elapsed rounds
+ok 57 - stack bond: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.279706
+  type: 'test'
+  ...
+# Subtest: stack coil: 1, 2 and 3 copies with elapsed rounds
+ok 58 - stack coil: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.628151
+  type: 'test'
+  ...
+# Subtest: stack ward: 1, 2 and 3 copies with elapsed rounds
+ok 59 - stack ward: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.89312
+  type: 'test'
+  ...
+# Subtest: stack revenge: 1, 2 and 3 copies with elapsed rounds
+ok 60 - stack revenge: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 2.247263
+  type: 'test'
+  ...
+# Subtest: stack breaker: 1, 2 and 3 copies with elapsed rounds
+ok 61 - stack breaker: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.583805
+  type: 'test'
+  ...
+# Subtest: stack sniper: 1, 2 and 3 copies with elapsed rounds
+ok 62 - stack sniper: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.12288
+  type: 'test'
+  ...
+# Subtest: stack wrench: 1, 2 and 3 copies with elapsed rounds
+ok 63 - stack wrench: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.477564
+  type: 'test'
+  ...
+# Subtest: stack doubling: 1, 2 and 3 copies with elapsed rounds
+ok 64 - stack doubling: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.231504
+  type: 'test'
+  ...
+# Subtest: stack bank: 1, 2 and 3 copies with elapsed rounds
+ok 65 - stack bank: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.502572
+  type: 'test'
+  ...
+# Subtest: stack solar: 1, 2 and 3 copies with elapsed rounds
+ok 66 - stack solar: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.114348
+  type: 'test'
+  ...
+# Subtest: stack forge: 1, 2 and 3 copies with elapsed rounds
+ok 67 - stack forge: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.252055
+  type: 'test'
+  ...
+# Subtest: stack echo: 1, 2 and 3 copies with elapsed rounds
+ok 68 - stack echo: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.284234
+  type: 'test'
+  ...
+# Subtest: stack focus: 1, 2 and 3 copies with elapsed rounds
+ok 69 - stack focus: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.40155
+  type: 'test'
+  ...
+# Subtest: stack crown: 1, 2 and 3 copies with elapsed rounds
+ok 70 - stack crown: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.605542
+  type: 'test'
+  ...
+# Subtest: stack overdrive: 1, 2 and 3 copies with elapsed rounds
+ok 71 - stack overdrive: 1, 2 and 3 copies with elapsed rounds
+  ---
+  duration_ms: 1.107337
+  type: 'test'
+  ...
+# Subtest: ward adds all unused guards, stacks, consumes only a guarded hit, and survives JSON restart
+ok 72 - ward adds all unused guards, stacks, consumes only a guarded hit, and survives JSON restart
+  ---
+  duration_ms: 3.324015
+  type: 'test'
+  ...
+# Subtest: seed, periodic bond and individual forge ages activate on the promised rounds
+ok 73 - seed, periodic bond and individual forge ages activate on the promised rounds
+  ---
+  duration_ms: 12.535694
+  type: 'test'
+  ...
+# Subtest: new turbine, coil, doubling, overdrive, echo and revenge wait until the next round
+ok 74 - new turbine, coil, doubling, overdrive, echo and revenge wait until the next round
+  ---
+  duration_ms: 4.273073
+  type: 'test'
+  ...
+# Subtest: echo sums copies before rounding and preserves half-metres through amplification
+ok 75 - echo sums copies before rounding and preserves half-metres through amplification
+  ---
+  duration_ms: 2.296587
+  type: 'test'
+  ...
+# Subtest: big rocket: consumes today's coil, bank and sun; permanent gear remains
+ok 76 - big rocket: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.783971
+  type: 'test'
+  ...
+# Subtest: big turbo: consumes today's coil, bank and sun; permanent gear remains
+ok 77 - big turbo: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.67728
+  type: 'test'
+  ...
+# Subtest: big comet: consumes today's coil, bank and sun; permanent gear remains
+ok 78 - big comet: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.62415
+  type: 'test'
+  ...
+# Subtest: big dice: consumes today's coil, bank and sun; permanent gear remains
+ok 79 - big dice: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.677159
+  type: 'test'
+  ...
+# Subtest: big product: consumes today's coil, bank and sun; permanent gear remains
+ok 80 - big product: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.664951
+  type: 'test'
+  ...
+# Subtest: big mega: consumes today's coil, bank and sun; permanent gear remains
+ok 81 - big mega: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.659654
+  type: 'test'
+  ...
+# Subtest: big jackpot: consumes today's coil, bank and sun; permanent gear remains
+ok 82 - big jackpot: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.660535
+  type: 'test'
+  ...
+# Subtest: big triple: consumes today's coil, bank and sun; permanent gear remains
+ok 83 - big triple: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.775968
+  type: 'test'
+  ...
+# Subtest: big harvest: consumes today's coil, bank and sun; permanent gear remains
+ok 84 - big harvest: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.665832
+  type: 'test'
+  ...
+# Subtest: big nova: consumes today's coil, bank and sun; permanent gear remains
+ok 85 - big nova: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 3.416263
+  type: 'test'
+  ...
+# Subtest: big dragon: consumes today's coil, bank and sun; permanent gear remains
+ok 86 - big dragon: consumes today's coil, bank and sun; permanent gear remains
+  ---
+  duration_ms: 0.537469
+  type: 'test'
+  ...
+# Subtest: gate is not a big move; accumulated resources remain and continue charging
+ok 87 - gate is not a big move; accumulated resources remain and continue charging
+  ---
+  duration_ms: 0.605742
+  type: 'test'
+  ...
+# Subtest: all dice faces and 0..6 focus copies respect the cap, product and cannon odds
+ok 88 - all dice faces and 0..6 focus copies respect the cap, product and cannon odds
+  ---
+  duration_ms: 2215.049122
+  type: 'test'
+  ...
+# Subtest: crown fires only on the selected 8- or 16-round final; copies multiply
+ok 89 - crown fires only on the selected 8- or 16-round final; copies multiply
+  ---
+  duration_ms: 5.763678
+  type: 'test'
+  ...
+# Subtest: mixed multipliers and huge distances use exact integers without a distance ceiling
+ok 90 - mixed multipliers and huge distances use exact integers without a distance ceiling
+  ---
+  duration_ms: 2.167403
+  type: 'test'
+  ...
+# Subtest: attack shell: target, stacking and strength
+ok 91 - attack shell: target, stacking and strength
+  ---
+  duration_ms: 1.576133
+  type: 'test'
+  ...
+# Subtest: attack lightning: target, stacking and strength
+ok 92 - attack lightning: target, stacking and strength
+  ---
+  duration_ms: 1.477194
+  type: 'test'
+  ...
+# Subtest: attack magnet: target, stacking and strength
+ok 93 - attack magnet: target, stacking and strength
+  ---
+  duration_ms: 1.538386
+  type: 'test'
+  ...
+# Subtest: attack banana: target, stacking and strength
+ok 94 - attack banana: target, stacking and strength
+  ---
+  duration_ms: 0.994207
+  type: 'test'
+  ...
+# Subtest: attack pit: target, stacking and strength
+ok 95 - attack pit: target, stacking and strength
+  ---
+  duration_ms: 1.014487
+  type: 'test'
+  ...
+# Subtest: attack breaker: target, stacking and strength
+ok 96 - attack breaker: target, stacking and strength
+  ---
+  duration_ms: 1.561371
+  type: 'test'
+  ...
+# Subtest: attack sniper: target, stacking and strength
+ok 97 - attack sniper: target, stacking and strength
+  ---
+  duration_ms: 0.999385
+  type: 'test'
+  ...
+# Subtest: attack wrench: target, stacking and strength
+ok 98 - attack wrench: target, stacking and strength
+  ---
+  duration_ms: 1.272996
+  type: 'test'
+  ...
+# Subtest: shell/breaker exclude a sole leading self; adjacent attacks ignore equal positions
+ok 99 - shell/breaker exclude a sole leading self; adjacent attacks ignore equal positions
+  ---
+  duration_ms: 1.690125
+  type: 'test'
+  ...
+# Subtest: sniper threshold is 2000, uses the largest original plan and a stack stays one attack
+ok 100 - sniper threshold is 2000, uses the largest original plan and a stack stays one attack
+  ---
+  duration_ms: 2.468266
+  type: 'test'
+  ...
+# Subtest: wrench retargets after an earlier theft, excludes new gear, and starts stolen effects next round
+ok 101 - wrench retargets after an earlier theft, excludes new gear, and starts stolen effects next round
+  ---
+  duration_ms: 1.143582
+  type: 'test'
+  ...
+# Subtest: defense priority and stacked volleys consume one per hit; blocked hits do not charge revenge
+ok 102 - defense priority and stacked volleys consume one per hit; blocked hits do not charge revenge
+  ---
+  duration_ms: 0.52409
+  type: 'test'
+  ...
+# Subtest: spring blocks unlimited banana/pit volleys without consuming other defense
+ok 103 - spring blocks unlimited banana/pit volleys without consuming other defense
+  ---
+  duration_ms: 0.855578
+  type: 'test'
+  ...
+# Subtest: mirror returns the same attack strength once; a second mirror blocks instead of looping
+ok 104 - mirror returns the same attack strength once; a second mirror blocks instead of looping
+  ---
+  duration_ms: 0.891722
+  type: 'test'
+  ...
+# Subtest: revenge charges on each unblocked hit including reflection, is carried, and is not spent by this round’s big
+ok 105 - revenge charges on each unblocked hit including reflection, is carried, and is not spent by this round’s big
+  ---
+  duration_ms: 0.838081
+  type: 'test'
+  ...
+# Subtest: turbo/mega lose all forward gains on an unblocked hit; a guard preserves the boost
+ok 106 - turbo/mega lose all forward gains on an unblocked hit; a guard preserves the boost
+  ---
+  duration_ms: 1.437935
+  type: 'test'
+  ...
+# Subtest: a stop cannot be undone by a later magnet and no negative distance is possible
+ok 107 - a stop cannot be undone by a later magnet and no negative distance is possible
+  ---
+  duration_ms: 0.709759
+  type: 'test'
+  ...
+# Subtest: gate swaps start positions, targets the front opponent even from first, and can be guarded
+ok 108 - gate swaps start positions, targets the front opponent even from first, and can be guarded
+  ---
+  duration_ms: 1.856024
+  type: 'test'
+  ...
+# Subtest: full 8- and 16-round progression preserves every unused ward and does not replenish twice
+ok 109 - full 8- and 16-round progression preserves every unused ward and does not replenish twice
+  ---
+  duration_ms: 14.795937
+  type: 'test'
+  ...
+# Subtest: equipment panel spends guards at impact, reflected guards at return, and uses the actual round
+ok 110 - equipment panel spends guards at impact, reflected guards at return, and uses the actual round
+  ---
+  duration_ms: 1.206286
+  type: 'test'
+  ...
+# Subtest: equipment panel theft and revenge follow the broadcast and agree with the final server state
+ok 111 - equipment panel theft and revenge follow the broadcast and agree with the final server state
+  ---
+  duration_ms: 1.11562
+  type: 'test'
+  ...
+# Subtest: lobby rejects old clients, wrong actor/game and mixed builds; public server capability is explicit
+ok 112 - lobby rejects old clients, wrong actor/game and mixed builds; public server capability is explicit
+  ---
+  duration_ms: 9.827807
+  type: 'test'
+  ...
+# Subtest: sealed hands and future draw/dice stay private; duplicate messages do not resolve twice
+ok 113 - sealed hands and future draw/dice stay private; duplicate messages do not resolve twice
+  ---
+  duration_ms: 8.953091
+  type: 'test'
+  ...
+# Subtest: 8 rounds through real server handlers: ward carry, restart and repeated tick
+ok 114 - 8 rounds through real server handlers: ward carry, restart and repeated tick
+  ---
+  duration_ms: 19.892481
+  type: 'test'
+  ...
+# Subtest: 16 rounds through real server handlers: ward carry, restart and repeated tick
+ok 115 - 16 rounds through real server handlers: ward carry, restart and repeated tick
+  ---
+  duration_ms: 24.424729
+  type: 'test'
+  ...
+# Subtest: pinball: 90 seconds, four goals, collidable players before shooting, momentum adds
+ok 116 - pinball: 90 seconds, four goals, collidable players before shooting, momentum adds
+  ---
+  duration_ms: 5.428523
+  type: 'test'
+  ...
+# Subtest: pinball: passive rotor rests until impact and exchanges angular momentum
+ok 117 - pinball: passive rotor rests until impact and exchanges angular momentum
+  ---
+  duration_ms: 4.838715
+  type: 'test'
+  ...
+# Subtest: pinball: goal owner scores; gem respawns without resetting positions; final gems worth2
+ok 118 - pinball: goal owner scores; gem respawns without resetting positions; final gems worth2
+  ---
+  duration_ms: 4.16441
+  type: 'test'
+  ...
+# Subtest: pinball: shot nonce, cooldown, invalid values and cancelled pull
+ok 119 - pinball: shot nonce, cooldown, invalid values and cancelled pull
+  ---
+  duration_ms: 0.514164
+  type: 'test'
+  ...
+# Subtest: pinball: max speed never tunnels out; seeded 90/150 second games finish with meaningful scores
+ok 120 - pinball: max speed never tunnels out; seeded 90/150 second games finish with meaningful scores
+  ---
+  duration_ms: 2051.067946
+  type: 'test'
+  ...
+# Subtest: bomb: pass preserves fuse, locks receiver, cannot pass to dead/self or with stale bomb
+ok 121 - bomb: pass preserves fuse, locks receiver, cannot pass to dead/self or with stale bomb
+  ---
+  duration_ms: 1.216681
+  type: 'test'
+  ...
+# Subtest: bomb: future queued tap waits for authoritative clock, not dropped one tick early
+ok 122 - bomb: future queued tap waits for authoritative clock, not dropped one tick early
+  ---
+  duration_ms: 0.350528
+  type: 'test'
+  ...
+# Subtest: bomb: exact fuse explosion eliminates only holder; survivors score once; next bomb excludes victim
+ok 123 - bomb: exact fuse explosion eliminates only holder; survivors score once; next bomb excludes victim
+  ---
+  duration_ms: 1.06966
+  type: 'test'
+  ...
+# Subtest: bomb: 30 seeded AI matches complete3rounds; totals18, each score≤9, no fixed winner
+ok 124 - bomb: 30 seeded AI matches complete3rounds; totals18, each score≤9, no fixed winner
+  ---
+  duration_ms: 36.84326
+  type: 'test'
+  ...
+# Subtest: tetra: first sea is stable; tap and drag resolve to the same assisted endpoint
+ok 125 - tetra: first sea is stable; tap and drag resolve to the same assisted endpoint
+  ---
+  duration_ms: 3.415543
+  type: 'test'
+  ...
+# Subtest: tetra: last safe pad return; submerged/occupied pad falls back to checkpoint
+ok 126 - tetra: last safe pad return; submerged/occupied pad falls back to checkpoint
+  ---
+  duration_ms: 0.998954
+  type: 'test'
+  ...
+# Subtest: tetra: 20 seeded courses are traversable, all AI finish or reach advanced checkpoints
+ok 127 - tetra: 20 seeded courses are traversable, all AI finish or reach advanced checkpoints
+  ---
+  duration_ms: 277.958897
+  type: 'test'
+  ...
+# Subtest: hide: tap furniture approaches and checks once, without repeated charge consumption
+ok 128 - hide: tap furniture approaches and checks once, without repeated charge consumption
+  ---
+  duration_ms: 75.97595
+  type: 'test'
+  ...
+# Subtest: hide: invisible furniture cannot be automatically chased or checked
+ok 129 - hide: invisible furniture cannot be automatically chased or checked
+  ---
+  duration_ms: 58.241324
+  type: 'test'
+  ...
+# Subtest: hide: private hider coordinates and disguise owners are absent from hunter snapshot
+ok 130 - hide: private hider coordinates and disguise owners are absent from hunter snapshot
+  ---
+  duration_ms: 51.372216
+  type: 'test'
+  ...
+# Subtest: hide: default target comes from visible public mission state; all routes reachable
+ok 131 - hide: default target comes from visible public mission state; all routes reachable
+  ---
+  duration_ms: 162.176855
+  type: 'test'
+  ...
+# Subtest: hide: living without escape loses;3of5 opens two exits and either exit wins
+ok 132 - hide: living without escape loses;3of5 opens two exits and either exit wins
+  ---
+  duration_ms: 151.323018
+  type: 'test'
+  ...
+# Subtest: tetra: a jump arriving on a dry tip during a wave is judged by landing, not killed before arrival
+ok 133 - tetra: a jump arriving on a dry tip during a wave is judged by landing, not killed before arrival
+  ---
+  duration_ms: 1.940492
+  type: 'test'
+  ...
+# Subtest: pinball: actual party creation/ready/start gates, old version rejected
+ok 134 - pinball: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 3.412919
+  type: 'test'
+  ...
+# Subtest: bomb: actual party creation/ready/start gates, old version rejected
+ok 135 - bomb: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 0.842939
+  type: 'test'
+  ...
+# Subtest: tetra: actual party creation/ready/start gates, old version rejected
+ok 136 - tetra: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 4.681408
+  type: 'test'
+  ...
+# Subtest: hide: actual party creation/ready/start gates, old version rejected
+ok 137 - hide: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 83.855634
+  type: 'test'
+  ...
+# Subtest: pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+ok 138 - pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+  ---
+  duration_ms: 59.631297
+  type: 'test'
+  ...
+# Subtest: bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+ok 139 - bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+  ---
+  duration_ms: 22.64509
+  type: 'test'
+  ...
+# Subtest: hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+ok 140 - hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+  ---
+  duration_ms: 287.977927
+  type: 'test'
+  ...
+# Subtest: all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+ok 141 - all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+  ---
+  duration_ms: 291.313654
+  type: 'test'
+  ...
+# Subtest: four independent WebSocket clients: production queues/frames for all four games
+ok 142 - four independent WebSocket clients: production queues/frames for all four games
+  ---
+  duration_ms: 793.660497
+  type: 'test'
+  ...
+1..142
+# tests 142
+# suites 0
+# pass 142
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3013.698265

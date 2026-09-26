@@ -1,0 +1,89 @@
+{
+  "build": 561,
+  "version": "3.1.240",
+  "baseBuild": 560,
+  "type": "patch",
+  "requiredServerRestart": false,
+  "files": [
+    {
+      "path": "README_BUILD561.md",
+      "size": 3911,
+      "sha256": "2b7e9f1ed9693b211ad81f23c73d47e81c828ec24057baa0069fcb0df959a865"
+    },
+    {
+      "path": "docs/build561/QA.md",
+      "size": 2934,
+      "sha256": "6e8fb97888b9127775f5eddc45217a7ec5412bfdff8366df52a97bd9c247c62b"
+    },
+    {
+      "path": "docs/build561/browser.json",
+      "size": 2369,
+      "sha256": "6947d481048bf1a78565bf2bfe1542c21c1bbbfa5fd21e9f4f4016963de96bb5"
+    },
+    {
+      "path": "docs/build561/source-verification.json",
+      "size": 961,
+      "sha256": "77817fc23d8a027b61bd65d5586d1aca5e985f474dc9a81b95cc705d258ecca3"
+    },
+    {
+      "path": "index.html",
+      "size": 235388,
+      "sha256": "50f838b405903a275fb525a8ef9f9ab7fc5a58591840e97615fff122c830bcc2"
+    },
+    {
+      "path": "src/core/AudioRecovery561.js",
+      "size": 1206,
+      "sha256": "ef280648e6060d1714da4973a0b20e1c2488dfbefb48b0d63c55ad62a995fd3d"
+    },
+    {
+      "path": "src/core/AudioSystem.js",
+      "size": 12246,
+      "sha256": "bd9dbc35e607d5ff791ef73587cc7c29ee4e47434e882dc7b7e441c1971eb398"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "8d4a7d48fc2ef3584ef2aebf386ee46ddf63dd8501f7ddaa16e8410661e271b5"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "size": 6086,
+      "sha256": "71fcf9dd1c86d81b249e8c04e54d09b4cf2b9c58bed105040d573aef3ca4c0d3"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "ff062c43063b7759e39d9a675f9fc902f4586740bf3c0666397fb99c512861db"
+    },
+    {
+      "path": "tests/build561-audio-recovery.test.mjs",
+      "size": 2068,
+      "sha256": "b5adeed2b26b472f1d8051713bee730ced3d2cc450b5d19b1d268e40d1d38472"
+    },
+    {
+      "path": "tools/build561/browser.mjs",
+      "size": 10475,
+      "sha256": "d3da32ec8c1d2971c6c159940133e4ea44fad41f279b09177c12eea3ff56a499"
+    },
+    {
+      "path": "tools/build561/package.py",
+      "size": 3535,
+      "sha256": "1cc24c879e29a1895b1bcf38f01428ad37d4475a1f15a1d2efe3b1e6f54c8bcf"
+    },
+    {
+      "path": "tools/build561/stamp.py",
+      "size": 1847,
+      "sha256": "8c2d3dfb1318c5073872a23515c7bf1eac5c5f42b842a0d9feb01f769b236d2d"
+    },
+    {
+      "path": "world-raid-offline561-assets.json",
+      "size": 48376,
+      "sha256": "ace7aa7fde01b33ba16697a0b8a5ba719df3f5915a6a9275c1f5b5e7ced1fc21"
+    },
+    {
+      "path": "world-raid-offline561-sw.js",
+      "size": 2502,
+      "sha256": "9855cc041a55a32d29c69d769d623f5030e14e2c239eb78503835c67d1afaae3"
+    }
+  ]
+}

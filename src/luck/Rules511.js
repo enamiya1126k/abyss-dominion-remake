@@ -71,7 +71,10 @@ function target511(g,seat,mode,rows){const me=g.players[seat],d=draw(g,seat);let
  if(mode==='ahead')candidates=candidates.filter(p=>metres511(p.distance)>metres511(me.distance));
  if(mode==='behind')candidates=candidates.filter(p=>metres511(p.distance)<metres511(me.distance));
  if(mode==='leader'){const top=g.players.reduce((n,p)=>max(n,metres511(p.distance)),0n);candidates=candidates.filter(p=>metres511(p.distance)===top)}
- const metric=p=>mode==='sniper'?rows[p.seat].planned:mode==='wrench'?BigInt(count(p.loadout,'turbine')*100+count(p.loadout,'engine')):metres511(p.distance);
+ // Earlier thieves can remove the best target's equipment in this same round.
+ // Rank only equipment that is still present and was equipped before this round.
+ const stealable=p=>rows[p.seat].loadout.filter(x=>x.round<g.round);
+ const metric=p=>mode==='sniper'?rows[p.seat].planned:mode==='wrench'?BigInt(count(stealable(p),'turbine')*100+count(stealable(p),'engine')):metres511(p.distance);
  if(mode==='sniper')candidates=candidates.filter(p=>metric(p)>=2000n);if(mode==='wrench')candidates=candidates.filter(p=>metric(p)>0n);
  candidates.sort((a,b)=>metric(a)===metric(b)?0:metric(a)>metric(b)?(mode==='ahead'?1:-1):(mode==='ahead'?-1:1));
  if(!candidates.length)return null;const c=candidates.filter(p=>metric(p)===metric(candidates[0]));return c[d.tie%c.length].seat;
@@ -99,11 +102,14 @@ export function resolveRound511(g,at){
   const saved=metres511(p.savings)+200n*BigInt(count(active,'bank')),cash=big?saved*4n:0n;
   const suns=(p.suns??0)+(big?0:count(active,'solar')),usedSuns=big?suns:0;
   const doubling=grown.filter(x=>x.id==='doubling').reduce((n,x)=>n+g.round-x.round,0);
-  const echo=metres511(p.lastAdvance)/2n*BigInt(count(grown,'echo'));
+  // Keep the half-metre until every amplifier has been applied. Two amplifiers
+  // must give exactly 100%, including an odd previous advance.
+  const echoTwice=metres511(p.lastAdvance)*BigInt(count(grown,'echo')),echo=echoTwice/2n;
   const crowns=g.round===rounds528(g)?count(active,'crown'):0,overdrive=count(grown,'overdrive')*(big?2:1);
-  const gain=(max(0n,base)+passive+seed+bond+forge+cash+echo)*3n**BigInt(turbines+usedSuns)*2n**BigInt(usedCoils+batteries+doubling+overdrive)*5n**BigInt(crowns)/2n**BigInt(turbines);
-  return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres511(p.distance),start:metres511(p.distance),gain,planned:gain,knockback:max(0n,-base),stopped:false,hit:false,loadout,savings:big?0n:saved,suns:big?0:suns,coils:big?0:coils,wards:Math.max(p.wards,count(active,'ward')),guards:count(active,'shield'),mirrors:count(active,'mirror'),revenge:count(grown,'revenge'),automatic:g.auto511[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
-   calculation:{base,passive,seed,bond,forge,cash,echo,doubling,overdrive,crowns,suns:usedSuns,focus,turbines,coils:usedCoils,batteries,dice:DICE511.includes(it.id)?it.id==='jackpot'?[jackpot]:faces.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,rawDice:DICE511.includes(it.id)?it.id==='jackpot'?[d.jackpot]:d.dice.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,jackpot:it.id==='jackpot'?jackpot:null,planned:gain}};
+  const gain=((max(0n,base)+passive+seed+bond+forge+cash)*2n+echoTwice)*3n**BigInt(turbines+usedSuns)*2n**BigInt(usedCoils+batteries+doubling+overdrive)*5n**BigInt(crowns)/2n**BigInt(turbines+1);
+  const beforeAttacks={savings:big?0n:saved,suns:big?0:suns,coils:big?0:coils,wards:(p.wards??0)+count(active,'ward'),guards:count(active,'shield'),mirrors:count(active,'mirror')};
+  return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres511(p.distance),start:metres511(p.distance),gain,planned:gain,knockback:max(0n,-base),stopped:false,hit:false,loadout,...beforeAttacks,beforeAttacks,revenge:count(grown,'revenge'),automatic:g.auto511[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
+   calculation:{base,passive,seed,bond,forge,cash,echo,echoTwice,doubling,overdrive,crowns,suns:usedSuns,focus,turbines,coils:usedCoils,batteries,wardAdded:count(active,'ward'),dice:DICE511.includes(it.id)?it.id==='jackpot'?[jackpot]:faces.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,rawDice:DICE511.includes(it.id)?it.id==='jackpot'?[d.jackpot]:d.dice.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,jackpot:it.id==='jackpot'?jackpot:null,planned:gain}};
  });
  const attacks=[];
  function apply(kind,source,target,strength,reflected=false){const a=rows[source],b=rows[target];let outcome='hit',guard='';
@@ -118,7 +124,8 @@ export function resolveRound511(g,at){
    const eligible=b.loadout.map((x,i)=>({...x,i})).filter(x=>['turbine','engine'].includes(x.id)&&x.round<g.round).sort((x,y)=>(x.id==='turbine'?0:1)-(y.id==='turbine'?0:1));
    if(!eligible.length){hit.outcome='miss';return hit}
    // Strength steals more pieces; copies join next round and cannot fire recursively now.
-   for(const gear of eligible.slice(0,strength)){const index=b.loadout.findIndex(x=>x.id===gear.id&&x.round===gear.round);b.loadout.splice(index,1);a.loadout.push({id:gear.id,round:g.round});hit.amount++;}
+   hit.stolen=[];
+   for(const gear of eligible.slice(0,strength)){const index=b.loadout.findIndex(x=>x.id===gear.id&&x.round===gear.round);b.loadout.splice(index,1);a.loadout.push({id:gear.id,round:g.round});hit.stolen.push({id:gear.id,fromRound:gear.round});hit.amount++;}
   }
   b.hit=true;b.coils+=b.revenge;
   if(kind==='shell'||kind==='banana'){hit.amount=BigInt((kind==='shell'?100:250)*strength);b.knockback+=hit.amount}
@@ -143,7 +150,7 @@ export function resolveRound511(g,at){
  }
  for(const r of rows){if(r.stopped||['turbo','mega'].includes(r.item)&&r.hit){r.gain=0n;r.stopped=true;}r.to=max(0n,r.start+r.gain-r.knockback);r.delta=r.to-r.from;r.lastAdvance=max(0n,r.delta)}
  const after=ranks511(rows.map(r=>({playerId:r.playerId,distance:r.to})));for(const r of rows)r.afterRank=after.find(x=>x.playerId===r.playerId).rank;
- return serial({round:g.round,at,fromMax:g.scaleMax,toMax:rows.reduce((n,r)=>max(n,r.to+100n),600n),rows,attacks,castMs:attacks.length*LUCK511.castMs,diceOrder:g.plan511[g.round-1].order.filter(seat=>DICE511.includes(rows[seat].item)),diceMs:rows.filter(r=>DICE511.includes(r.item)).length*LUCK511.diceMs});
+ return serial({round:g.round,itemRules562:1,at,fromMax:g.scaleMax,toMax:rows.reduce((n,r)=>max(n,r.to+100n),600n),rows,attacks,castMs:attacks.length*LUCK511.castMs,diceOrder:g.plan511[g.round-1].order.filter(seat=>DICE511.includes(rows[seat].item)),diceMs:rows.filter(r=>DICE511.includes(r.item)).length*LUCK511.diceMs});
 }
 
 function reveal(g,at){g.event=resolveRound511(g,at);g.history.push(copy(g.event));g.phase='reveal';g.phaseAt=at;g.nextAt=at+LUCK511.revealMs}
@@ -166,7 +173,7 @@ export function advanceLuck511(g,now){if(!Number.isFinite(now))return false;let 
 export function publicLuck511(g,selfId,connected=()=>true){
  if(g.rules511!==1)return publicLuck509(g,selfId,connected);
  const me=g.players.find(p=>p.playerId===selfId),choosing=['chest','hand'].includes(g.phase),seat=me?.seat;
- return{id:g.id,code:g.code,game:'luck',rules511:1,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:rounds528(g),scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
+ return{id:g.id,code:g.code,game:'luck',rules511:1,itemRules562:1,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:rounds528(g),scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
  members:g.members.map(m=>({playerId:m.playerId,name:m.name,color499:m.color499,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null})),
  players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{...p.choice},seat:p.seat,ai:p.ai,color499:p.color499,distance:p.distance,loadout:copy(p.loadout),coils:p.coils,wards:p.wards,savings:p.savings,suns:p.suns,lastAdvance:p.lastAdvance,connected:p.ai||!!connected(p.playerId),locked:choosing?slots(g)[p.seat]!==null:false})),
  ownBox:choosing&&me?g.boxes511[seat]:null,ownPick:g.phase==='hand'&&me?g.items511[seat]:null,

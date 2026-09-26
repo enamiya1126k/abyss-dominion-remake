@@ -1,0 +1,181 @@
+{
+  "baseline": "Build562",
+  "unchanged": [
+    {
+      "path": "src/cart/Courses544.js",
+      "sha256": "be672ec08e9faf5c52c8edb4891443ccbfabad0608e77ea7b89a24830994b370"
+    },
+    {
+      "path": "src/cart/Controls547.js",
+      "sha256": "db58a2e7d628f240edeedd4dd4571330568b7a4b5fc10f670734d6494c985da1"
+    },
+    {
+      "path": "src/cart/Sling547.js",
+      "sha256": "efde7150f1fe77ca13e12e1e09159b831854ea4d3cf668583ce87b579970862e"
+    },
+    {
+      "path": "src/cart/Rules543.js",
+      "sha256": "24992f466840190035666cae52ce45700ebe73a6f5bb4ea72b1c32fd399bc2df"
+    },
+    {
+      "path": "src/cart/View543.js",
+      "sha256": "993580aae56a4e9965ac076b207b9bbbac7c30c716a49ea7e3fafd3e76c182f9"
+    },
+    {
+      "path": "src/cart/Audio543.js",
+      "sha256": "7cfc7ad505f9804116f1542dec592bac152e992880d93e5872c4ae84c0e41a5f"
+    },
+    {
+      "path": "src/cart/Collisions545.js",
+      "sha256": "ca0f90ad9917fb12ef5d7e564e462d6f0186a17422ae180c69434c4b9c8d606a"
+    },
+    {
+      "path": "src/cart/Conveyor549.js",
+      "sha256": "6e517c9808054da8f9dc727446da672f9932af8ba08693271318dd9a500870c7"
+    },
+    {
+      "path": "src/cart/Craft548.js",
+      "sha256": "0071942e67348c620c66029c0021e1c52d797e166153d676f80f9b668519fd11"
+    },
+    {
+      "path": "src/cart/Renderer543.js",
+      "sha256": "124e58ccfe2aeacc3d73d008b98ff40dbbc072b1c69682e23180745be018b2ec"
+    },
+    {
+      "path": "src/gorilla/View505.js",
+      "sha256": "032d6a8931a33f39a5edabf2099925aaf4ec303629a83aa53ef0942cebe3bb5e"
+    },
+    {
+      "path": "src/gorilla/Performance506.js",
+      "sha256": "27acc028716d68c25b50e4fe63418b295bc63716df88580ed2bf13234659ce51"
+    },
+    {
+      "path": "src/luck/Rules509.js",
+      "sha256": "86f9b499d2c76ea23826a8a5d7e4af61f8e0b6c5c45217fbb5f3a8021c242bb8"
+    },
+    {
+      "path": "src/luck/Items509.js",
+      "sha256": "fb72716ef625ee3653a1903332ab63489a7ef620975ad85985f35280c9d0cc08"
+    },
+    {
+      "path": "src/luck/Rules511.js",
+      "sha256": "c3a2e6465dfdd944cc57ab0af9bc32a2763b2ac967af72bf3046fd06c44bab29"
+    },
+    {
+      "path": "src/luck/Bridge510.js",
+      "sha256": "17ca1d4bb722a68285183ef598e95953525e72c150e0f06c5a1a651c9cfe83bf"
+    },
+    {
+      "path": "src/luck/Descriptions562.js",
+      "sha256": "c41eefbcbca43543deb522b339d990efd69eaabce48e94efebedcabf18a043a2"
+    },
+    {
+      "path": "src/luck/Items508.js",
+      "sha256": "c17e70544e659b57062f71ebf7d06205a9797331dfda5da078cfba8188948974"
+    },
+    {
+      "path": "src/luck/Rules508.js",
+      "sha256": "12cc68741f3052a81e7d27ecf8aebad21e0b5bdc2e9584be1230beb00c1d9a53"
+    },
+    {
+      "path": "src/luck/Presentation508.js",
+      "sha256": "37334f97256e8790562e8976605ed98963012c3e61a8f21ca8360139973b128f"
+    },
+    {
+      "path": "src/luck/Presentation510.js",
+      "sha256": "09142b44108a099613d05b3db3a68124b523f0949dc804808741e365f70b819f"
+    },
+    {
+      "path": "src/luck/Equipment562.js",
+      "sha256": "7bd3cc8ddc9688cc5953cf660d72c3f582d158fcbad9f43dd84c5c5d98c54036"
+    },
+    {
+      "path": "src/luck/Rules507.js",
+      "sha256": "a9f74df1bb2aff051201ccdd26a8de9a44981a32bfd27b0e19eaa090f4cf6199"
+    },
+    {
+      "path": "src/luck/Audio507.js",
+      "sha256": "a89def5610ee5fe832c3f4c8f8d35714a51156ada2b4c606c988854220c7866e"
+    },
+    {
+      "path": "src/luck/Audio510.js",
+      "sha256": "5a8cae2fae654cfe43e45f9cef022a974a6f54343d72bd16761db5f36c9eb646"
+    },
+    {
+      "path": "src/luck/View509.js",
+      "sha256": "4b646ce8d5381f464dd46f2e63efff9901957fd3c4eba366d47c30c709adc9b0"
+    },
+    {
+      "path": "src/luck/Audio508.js",
+      "sha256": "d6d821582bc6459da989f2a53f7d4f22b399abebc7c07cbdd133d2025e79c177"
+    },
+    {
+      "path": "src/luck/Bridge508.js",
+      "sha256": "ad6847425e95f622f4d9b5ee2cc0beda080878abb21db8b2a0732b6adfe4febb"
+    },
+    {
+      "path": "src/luck/Presentation507.js",
+      "sha256": "ae73becb04ed7a0574525714c408b47dc744f80a6b8490bf5ffe98427dc9d330"
+    },
+    {
+      "path": "src/luck/Audio509.js",
+      "sha256": "ac02d8d126fdb7adf42ee081e894c9daca8886bfe44cb55e78f00df027a6772d"
+    },
+    {
+      "path": "src/luck/Scenery512.js",
+      "sha256": "4de0999a8932beb51bf479938cea861be03dea71f1fe03c4a0a8b00a08d87d21"
+    },
+    {
+      "path": "src/luck/Bridge511.js",
+      "sha256": "c459aa783933e39f44b6922c3022efebb55bb53d954d47eda320dc205e558606"
+    },
+    {
+      "path": "src/luck/View507.js",
+      "sha256": "39d8d73bd92de8030d535176abf7d979b301c72f6b45d6ffe1056648a9265a43"
+    },
+    {
+      "path": "src/luck/Audio511.js",
+      "sha256": "05c5fda2a63646a39d1b376670119dd2a6f1da2e52e1fe2f69f6d8b697ca7a0e"
+    },
+    {
+      "path": "src/luck/View510.js",
+      "sha256": "e9b3744a49e2a60703ec6c5f7644145fedcb407223ba73bcced1dfd968f0d5cb"
+    },
+    {
+      "path": "src/luck/Bridge509.js",
+      "sha256": "459042f3fe045efe9defb053e6582eeb5a080ec42df04da5ead97d3abe44d9c6"
+    },
+    {
+      "path": "src/luck/Items511.js",
+      "sha256": "b28f0bad831e5159d571727574da31e094e293aefac7a8a4b7df1eef87458626"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "sha256": "4d8f87654c55556ed6221f2d0cd306681dd969741b00ec726fc04c0be8c6f1ff"
+    },
+    {
+      "path": "src/luck/Presentation511.js",
+      "sha256": "c66e0842c04960f65654aa9385753dfb4fcd5dc2a9a655b423918c751223a45e"
+    },
+    {
+      "path": "src/luck/View508.js",
+      "sha256": "3f25b97b0cda65c0ca09f4e33a2ce38ffcad28238c4d4c0c7cb14f94b8b292bf"
+    },
+    {
+      "path": "src/luck/Presentation509.js",
+      "sha256": "e1a2cf678238db73dfa060c325acacf2715463b666b4a3f6c0ffbd810cf2c255"
+    },
+    {
+      "path": "src/core/AudioSystem.js",
+      "sha256": "bd9dbc35e607d5ff791ef73587cc7c29ee4e47434e882dc7b7e441c1971eb398"
+    },
+    {
+      "path": "src/core/AudioRecovery561.js",
+      "sha256": "ef280648e6060d1714da4973a0b20e1c2488dfbefb48b0d63c55ad62a995fd3d"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "sha256": "71fcf9dd1c86d81b249e8c04e54d09b4cf2b9c58bed105040d573aef3ca4c0d3"
+    }
+  ]
+}

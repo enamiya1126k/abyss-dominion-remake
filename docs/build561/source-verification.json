@@ -1,0 +1,34 @@
+{
+  "repository": "enamiya1126k/abyss-dominion-remake",
+  "observedCommit": "e337da23473b732b9dac667dcb75fb7235e86bba",
+  "observedCommitDate": "2026-09-25T11:45:14Z",
+  "observedVersion": "3.1.239",
+  "githubPages": "https://enamiya1126k.github.io/abyss-dominion-remake/",
+  "publicChecks": {
+    "indexBuild560": true,
+    "workerBuild560": true,
+    "homeMP3Range": {
+      "status": 206,
+      "contentRange": "bytes 0-1/3640405",
+      "bodyBytes": 2
+    }
+  },
+  "baselineFiles": [
+    {
+      "path": "src/core/AudioSystem.js",
+      "gitBlobSHA": "e42cc617a2565a729b5a77b10961bb4d05998b6f"
+    },
+    {
+      "path": "index.html",
+      "gitBlobSHA": "10b9c19a3a8923de6d2f7707d3581dabb26da2e6"
+    },
+    {
+      "path": "world-raid-offline560-sw.js",
+      "gitBlobSHA": "af86db84c976e6da8be39f432540f21f3fb3df9a"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "gitBlobSHA": "4cbe8ca9425cb9a5efd5735aa8abbd812e71b29d"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ export function handleLuck511(c,session,m){
  const p=Object.values(c.data.parties462??{}).find(p=>p.id===g.partyId462),me=g.members.find(x=>x.playerId===session.playerId&&!x.departed);
  if(!p||!me||m.gameId!==g.id)throw Error('ゲームが切り替わりました');
  if(m.luckVersion511!==1)throw Error('運だけ大運動会には本体のBuild511更新が必要です');
+ if(g.phase==='lobby'&&m.luckVersion562!==1)throw Error('運だけ大運動会には本体のBuild562更新が必要です');
  if(m.kind==='rounds'){
   if(g.phase!=='lobby')throw Error('ラウンド数は開始前に選んでください');
   if(p.hostId!==session.playerId)throw Error('部屋主がラウンド数を選べます');
@@ -26,6 +27,7 @@ export function handleLuck511(c,session,m){
  }else if(m.kind==='start'){
   if(m.minigamesVersion528!==1||p.members.some(x=>x.minigamesVersion528!==1))throw Error('全員がBuild528へ更新してから開始してください');
   if(p.hostId!==session.playerId)throw Error('部屋主が開始できます');if(g.phase!=='lobby')return true;
+  if(p.members.some(x=>x.luckVersion562!==1))throw Error('全員がBuild562へ更新してから開始してください');
   if(p.members.some(x=>x.luckVersion511!==1))throw Error('全員がBuild511へ更新してから開始してください');
   if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員が魔物を選んで「準備OK」を押してください');
   if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかの対戦の終了を待っています');

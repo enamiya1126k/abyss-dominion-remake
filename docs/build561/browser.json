@@ -1,0 +1,110 @@
+{
+  "browser": "Chromium 133, mobile touch, production Service Workers and actual unchanged MP3s; not iPhone hardware",
+  "before": {
+    "coldRange": {
+      "error": "TypeError",
+      "message": "Failed to fetch"
+    },
+    "warmFull": {
+      "status": 200,
+      "range": null,
+      "length": 3640405
+    },
+    "warmRange": {
+      "status": 200,
+      "range": null,
+      "length": 3640405
+    },
+    "media": {
+      "time": 0,
+      "code": 4,
+      "needsGesture": true
+    }
+  },
+  "after": {
+    "controller": "world-raid-offline561-sw.js",
+    "coldRange": {
+      "status": 206,
+      "range": "bytes 0-1/3640405",
+      "length": 2
+    },
+    "staleRange": {
+      "status": 206,
+      "range": "bytes 0-1/3640405",
+      "length": 2
+    },
+    "staleFull": {
+      "status": 200,
+      "range": null,
+      "length": 3640405
+    },
+    "networkErrorRecovery": true,
+    "statusUI": true,
+    "offAndZeroRespected": true,
+    "pageResume": true,
+    "saveUntouched": true,
+    "offlineModuleCache": true
+  },
+  "tracks": [
+    {
+      "scene": "home",
+      "time": 0.205868,
+      "rms": 0.015263261061567232,
+      "sameElement": true,
+      "error": null
+    },
+    {
+      "scene": "explore",
+      "time": 0.661451,
+      "rms": 0.000055700881284423115,
+      "sameElement": true,
+      "error": null
+    },
+    {
+      "scene": "battle",
+      "time": 0.211565,
+      "rms": 0.00003895921918482866,
+      "sameElement": true,
+      "error": null
+    },
+    {
+      "scene": "boss",
+      "time": 0.260757,
+      "rms": 0.000014650397917813813,
+      "sameElement": true,
+      "error": null
+    },
+    {
+      "scene": "elite",
+      "time": 0.719501,
+      "rms": 0.007628166467046107,
+      "sameElement": true,
+      "error": null
+    },
+    {
+      "scene": "abyss",
+      "time": 0.208662,
+      "rms": 0.00019702081179055053,
+      "sameElement": true,
+      "error": null
+    },
+    {
+      "scene": "divine",
+      "time": 0.530839,
+      "rms": 0.00011050546491922226,
+      "sameElement": true,
+      "error": null
+    }
+  ],
+  "errors": [],
+  "nativeRangeRequests": 14,
+  "musicFiles": [
+    "assets/audio/main-bgm.mp3",
+    "assets/audio/dungeon-bgm.mp3",
+    "assets/audio/battle-bgm.mp3",
+    "assets/audio/boss-bgm.mp3",
+    "assets/audio/elite-bgm.mp3",
+    "assets/audio/abyss-bgm.mp3",
+    "assets/audio/ten-gods-bgm.mp3"
+  ]
+}

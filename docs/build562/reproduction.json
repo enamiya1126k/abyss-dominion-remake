@@ -1,0 +1,49 @@
+{
+  "ward": {
+    "before": {
+      "wards": 3
+    },
+    "after": {
+      "wards": 4
+    },
+    "expected": {
+      "wards": 4
+    }
+  },
+  "echo": {
+    "before": {
+      "planned": 320
+    },
+    "after": {
+      "planned": 321
+    },
+    "expected": {
+      "planned": 321
+    }
+  },
+  "echoMultiplier": {
+    "before": {
+      "planned": 520
+    },
+    "after": {
+      "planned": 521
+    },
+    "expected": {
+      "planned": 521
+    }
+  },
+  "wrench": {
+    "before": {
+      "secondTarget": 2,
+      "secondOutcome": "miss"
+    },
+    "after": {
+      "secondTarget": 3,
+      "secondOutcome": "hit"
+    },
+    "expected": {
+      "secondTarget": 3,
+      "secondOutcome": "hit"
+    }
+  }
+}

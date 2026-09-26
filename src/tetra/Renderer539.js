@@ -1,6 +1,7 @@
-import {TETRA539 as C,clamp539,pad539,pose539,wave539,aim539,tip539} from './Rules539.js';
+import {TETRA539 as C,clamp539,pad539,pose539,wave539,aim539,tip539,tapAim563} from './Rules539.js';
 import {color499} from '../party/PartyColors499.js';
 const TAU=Math.PI*2,images=new Map();
+const chargingState563=u=>u.chargeStart!=null;
 const art=name=>{if(!images.has(name)){const i=new Image();i.decoding='async';i.src=new URL(`../../assets/${'tetra541'}/${name}.webp`,import.meta.url).href;images.set(name,i)}return images.get(name)};
 const ready=i=>i?.complete&&i.naturalWidth>0;
 export function renderer539(canvas){return{canvas,ctx:canvas.getContext('2d',{alpha:false}),ocean:art('ocean'),pads:art('pads'),width:0,height:0,scale:1,cameraY:null,cameraX:0,points:[]}}
@@ -23,6 +24,7 @@ export function paint539(r,g,selfId,u,at,reduced=false){const c=r.ctx,w=r.width,
  for(const pad of visible){const s=screenPoint539(r,pad.x,pad.y),size=pad.r*(pad.checkpoint!=null?2.28:2.50)*r.scale,cell=pad.checkpoint!=null?3:pad.kind==='low'?1:pad.kind==='slippery'?2:0;
   ellipse(c,s.x,s.y+size*.17,size*.42,size*.22,'#00253750');c.save();c.translate(s.x,s.y);c.rotate(pad.angle*.25);c.globalAlpha=pad.submerged?.24:1;
   if(ready(r.pads)){const cw=r.pads.width/2,ch=r.pads.height/2;c.drawImage(r.pads,cell%2*cw,Math.floor(cell/2)*ch,cw,ch,-size/2,-size*[.18,.28,.18,.54][cell],size,size)}else ellipse(c,0,0,pad.r*r.scale,pad.r*r.scale*.8,'#b2a990','#eedbb1');c.restore();
+  if(!p.flight&&p.fallAt==null&&p.finishedAt==null&&!chargingState563(u)&&tapAim563(g,p,pad.x,pad.y)){c.lineWidth=2;ellipse(c,s.x,s.y,Math.max(16,pad.tip*r.scale+7),Math.max(12,pad.tip*r.scale+7),null,'#c6ffdeb0');}
   if(pad.checkpoint!=null){c.lineWidth=1.6;ellipse(c,s.x,s.y,(pad.r-12)*r.scale,(pad.r-12)*r.scale,null,'#d8f2bc80');label(c,pad.kind==='finish'?'GOAL':pad.checkpoint===0?'START':`中継 ${pad.checkpoint}`,s.x,s.y+size*.40,'#fbefc4',10)}
   else{c.lineWidth=1;ellipse(c,s.x,s.y,pad.tip*r.scale,pad.tip*r.scale,pad.submerged?'#4bb3c13a':'#fff1b510',pad.submerged?'#9beaf066':'#fff3b999');if(pad.submerged||pad.tideWarning)label(c,pad.submerged?'水没':'まもなく水没',s.x,s.y+size*.39,pad.submerged?'#b6f8ff':'#ffcaa0',8)}
  }
@@ -35,6 +37,7 @@ export function paint539(r,g,selfId,u,at,reduced=false){const c=r.ctx,w=r.width,
  for(const e of g.events){const age=elapsed-e.at;if(e.type!=='perfect541'||age<0||age>750)continue;const q=screenPoint539(r,e.x,e.y);c.save();c.globalAlpha=1-age/750;c.strokeStyle=e.flow>=3?'#a3f7ff':'#ffe29b';c.lineWidth=2;ellipse(c,q.x,q.y,12+age*.035,6+age*.016,null,c.strokeStyle);label(c,e.flow>=3?'追い風 READY':'PERFECT!',q.x,q.y-28-age*.04,c.strokeStyle,14);c.restore()}
  const points=[];for(const player of g.players){const point=pose539(g,player,elapsed),s=screenPoint539(r,point.x,point.y),fall=player.fallAt!=null?clamp539((elapsed-player.fallAt)/550,0,1):0;points.push({seat:player.seat,x:s.x,y:s.y-point.z*r.scale,visible:s.y>=-60&&s.y<=h+65,fall,scale:1+point.z/850});if(s.y<-50||s.y>h+50)continue;const color=color499(player.color499,player.seat).hex;c.globalAlpha=1-fall;ellipse(c,s.x,s.y+2,player.playerId===selfId?10:8,4,'#00263c88',color);c.globalAlpha=1}r.points=points;
  for(const e of g.events){const age=elapsed-e.at;if(e.type!=='splash'||age<0||age>1000)continue;const s=screenPoint539(r,e.x,e.y),t=age/1000;c.save();c.globalAlpha=1-t;c.lineWidth=2;ellipse(c,s.x,s.y,10+t*35,5+t*17,null,'#ecffff');if(!reduced)for(let i=0;i<8;i++){const a=i*TAU/8;ellipse(c,s.x+Math.cos(a)*t*40,s.y+Math.sin(a)*t*20-Math.sin(t*Math.PI)*23,2,4,'#dcffff')}c.restore()}
+ const next=g.course.pads[g.course.checkpoints[(p.checkpoint??0)+1]];if(next&&!charging){const q=screenPoint539(r,next.x,next.y);if(q.y<50||q.x<25||q.x>w-25){const x=clamp539(q.x,65,w-65);label(c,'↑ '+(next.kind==='finish'?'ゴール':'次の中継 '+next.checkpoint),x,45,'#fff1b5',13);}}
  const px=w-11,top=85,bottom=h-57;c.strokeStyle='#062537ba';c.lineWidth=5;c.beginPath();c.moveTo(px,top);c.lineTo(px,bottom);c.stroke();for(let i=0;i<6;i++)ellipse(c,px,bottom-(bottom-top)*i/5,3,3,'#e1c990');for(const player of g.players){const progress=clamp539((C.startY-(player.finishedAt!=null?C.goalY:pose539(g,player,elapsed).y))/(C.startY-C.goalY),0,1);ellipse(c,px+(player.seat%2?-3:3),bottom-progress*(bottom-top),player.playerId===selfId?5:3.5,player.playerId===selfId?5:3.5,color499(player.color499,player.seat).hex,player.playerId===selfId?'#fff3c7':null)}
- if(p.fallAt!=null){label(c,'より「イージー！」',w/2,h*.44,'#ffe4a7',20);label(c,'直前の中継ポイントから復帰',w/2,h*.44+27,'#ffffff',11)}if(p.finishedAt!=null){label(c,'GOAL!',w/2,h*.38,'#ffe5a6',36);label(c,'仲間のゴールを見守ろう',w/2,h*.38+37)}return{elapsed,wave,charging}
+ if(p.fallAt!=null){label(c,'より「イージー！」',w/2,h*.44,'#ffe4a7',20);label(c,'直前の足場へ復帰 · 水没・混雑時は中継へ',w/2,h*.44+27,'#ffffff',11)}if(p.finishedAt!=null){label(c,'GOAL!',w/2,h*.38,'#ffe5a6',36);label(c,'仲間のゴールを見守ろう',w/2,h*.38+37)}return{elapsed,wave,charging}
 }

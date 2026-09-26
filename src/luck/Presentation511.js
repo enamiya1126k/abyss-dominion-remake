@@ -1,7 +1,7 @@
 import {LUCK511,metres511,rounds528} from './Rules511.js';
 import {paintKey510,animating510,banner510,distance510,gearList510} from './Presentation510.js';
 export {raceFrame510 as raceFrame511,broadcastFrame510 as broadcastFrame511,delta510 as delta511,hitLabel510 as hitLabel511,distance510 as distance511,fullDistance510 as fullDistance511,gearList510 as gearList511,courseOffsets510 as courseOffsets511,markerLabel510 as markerLabel511} from './Presentation510.js';
-export const equipment511=p=>`装備 ${(p.loadout??[]).length}個${p.coils?' · コイル'+p.coils:''}${p.suns?' · 太陽'+p.suns:''}${metres511(p.savings)>0n?' · 貯金'+distance510(p.savings):''} ▾`;
+export const equipment511=p=>`装備 ${(p.loadout??[]).length}個${p.wards?' · お守り'+p.wards:''}${p.coils?' · コイル'+p.coils:''}${p.suns?' · 太陽'+p.suns:''}${metres511(p.savings)>0n?' · 貯金'+distance510(p.savings):''} ▾`;
 export function banner511(g,self){if(g.phase==='dice')return{title:'',sub:''};if(g.phase==='hand'&&g.round===rounds528(g))return{title:g.ownPick!=null?'最後の一手、セット。':'育てた力、解き放て。',sub:'この4枚には、必ず大技が1枚以上。'};return banner510(g,self)}
 export function paintKey511(g,at,ready,pending,reduced){return paintKey510(g,at,ready,pending,reduced)+(g.phase==='dice'?':dice:'+ (reduced?Math.min((g.event?.diceOrder.length??1)-1,Math.floor(Math.max(0,at-g.phaseAt)/LUCK511.diceMs)):Math.floor(Math.min(Math.max(0,at-g.phaseAt),g.event.diceMs)/16.667)):'')}
 export const animating511=(g,at,reduced)=>animating510(g,at,reduced)||(!reduced&&g?.phase==='dice'&&at>=g.phaseAt&&at<g.phaseAt+g.event.diceMs);

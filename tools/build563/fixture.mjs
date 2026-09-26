@@ -1,0 +1,7 @@
+import {makeGoal563,startGoal563,advanceGoal563,inputGoal563,publicGoal563} from '../../src/ricochet550/Goals563.js';
+import {makeRelay563,startRelay563,advanceRelay563,publicRelay563,inputRelay563} from '../../src/bomb/Relay563.js';
+import {makeTetra539,startTetra539,advanceTetra539,publicTetra539} from '../../src/tetra/Rules539.js';
+import {makeHide536,startHide536,advanceHide536,publicHide536} from '../../src/hide/Rules536.js';
+export const members=()=>['あなた','お返しゴブ','より','ホネホネ'].map((name,seat)=>({playerId:'p'+seat,name,color499:['orange','blue','green','pink'][seat],owned:[{id:'m'+seat,speciesId:['slime','goblin','wolf','skeleton'][seat]}],choice:{id:'m'+seat,speciesId:['slime','goblin','wolf','skeleton'][seat]},ai:false}));
+export const specs={ricochet:{make:makeGoal563,start:startGoal563,advance:advanceGoal563,public:publicGoal563,input:inputGoal563,queue:()=>[]},bomb:{make:makeRelay563,start:startRelay563,advance:advanceRelay563,public:publicRelay563,input:inputRelay563,queue:()=>new Map()},tetra:{make:makeTetra539,start:startTetra539,advance:advanceTetra539,public:publicTetra539,queue:()=>new Map()},hide:{make:makeHide536,start:startHide536,advance:advanceHide536,public:publicHide536,queue:()=>new Map()}};
+export function fixture(key,now=100000,role='hider',bots=true){const spec=specs[key],people=members();if(bots)people.slice(1).forEach(p=>p.ai=true);const g=spec.make({id:key+'563',code:'ABCD',hostId:'p0',partyId:'party',members:people,now});g.role=role;spec.start(g,now,563);return g;}
