@@ -33,7 +33,7 @@ export function realtime563(cfg){
   if(['lobby','result'].includes(saved.phase)){if(now-saved.updatedAt>86400000&&!saved.members.some(m=>c.sessions.get(m.playerId)?.connected)){c.transaction(()=>{delete rooms(c)[saved.code];const p=party(c,saved);if(p){p.game=null;p.raceCode=null;p.members.forEach(m=>m.ready=false);}});runtimes(c).delete(saved.id);c.broadcast();}continue;}
   const r=runtime(c,saved),g=r.g,p=party(c,g),auto=new Set();g.hostId=saved.hostId;g.members=structuredClone(saved.members);
   for(const player of g.players)if(!player.ai&&(!p?.members.some(m=>m.playerId===player.playerId)||!c.sessions.get(player.playerId)?.connected||p?.members.find(m=>m.playerId===player.playerId)?.atHome)){auto.add(player.playerId);if(cfg.array)r.inputs=r.inputs.filter(i=>i.playerId!==player.playerId);else r.inputs.delete(player.playerId);}
-  cfg.advance(g,now,r.inputs,auto);const changed=r.phase!==g.phase,critical=g.events?.filter(e=>['goal','finish','pass','blast','start','roundEnd'].includes(e.type)).at(-1)?.id??0;
+  cfg.advance(g,now,r.inputs,auto);const changed=r.phase!==g.phase,critical=g.events?.filter(e=>['goal','finish','pass','blast','start','roundEnd','bank','steal','bite'].includes(e.type)).at(-1)?.id??0;
   if(changed||critical!==r.lastEvent||now-r.lastSave>=1000){c.transaction(()=>{rooms(c)[g.code]=structuredClone(g);});r.lastSave=now;r.lastEvent=critical;r.phase=g.phase;}
   if(changed)for(const m of p?.members??[])c.push(c.sessions.get(m.playerId));
   if(now-r.lastSend>=cfg.frameMs){r.lastSend=now;for(const m of p?.members??[])if(c.sessions.get(m.playerId)?.connected&&c.subscribers.has(m.playerId))c.send(m.playerId,{type:cfg.frame,selfId:m.playerId,serverNow:now,[cfg.state]:cfg.public(g,m.playerId,{frame:true})});}

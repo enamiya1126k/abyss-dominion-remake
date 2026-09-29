@@ -1,5 +1,6 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
+ {id:'crane',name:'よこどり！お宝クレーン',tag:'回収中も横取りOK × 欲張りミミック',players:'４人対戦 · 90秒 · 空席はAI',image:'./assets/crane566/cover.webp',description:'狙ってタップ、クレーンを伸ばせ！ 手元に届くまでは、相手の宝もよこどり自由。大きな宝ほど帰りが遅い。欲張ってミミックまでつかむと、ガブッと４点ロスト！'},
  {id:'pinball',name:'人間エアホッケー！',tag:'２対２ × 無限パス強化 × エアホッケー',players:'２対２ · 90／150秒 · 空席はAI',image:'./assets/hockey565/court.webp',description:'引いて、離して、パックを相手のゴールへ！ 自陣からパスで弾速＋5％、上限なし！ プロペラ有無と弾速×2を選べる。最後の15秒は１ゴール２点！'},
  {id:'cart',name:'帰ってこい！暴走ショッピングカート',tag:'12の坂 × 崖際200点 × 大追突',players:'４人対戦 · 全５回 · 12コース抽選 · 空席はAI',image:'./assets/cart543/cover.webp',description:'止まったからって、安心するな。逆方向に引いて、離すと発進！ 引く長さで勢いを決めたら、あとは見守るだけ。 後ろからの追突で天国から場外へ。滑る床と加速ベルトを読み、金枠に停めて＋50点、その先の崖際は最大200点！ 最後は得点２倍。'},
  {id:'bomb',name:'魔王城の爆弾リレー！',tag:'相手をタップ × お返し × 最後の１秒',players:'４人対戦 · 全３回 · 空席はAI',image:'./assets/bomb542/cover.webp',description:'爆弾が来た！ 相手をタップしてお返し！ 渡しても導火線は戻らない。持ったまま０秒でドカン、爆発を免れるたび１点。３回勝負の生き残りリレー！'},
