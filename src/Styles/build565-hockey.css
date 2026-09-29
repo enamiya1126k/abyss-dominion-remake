@@ -1,0 +1,35 @@
+.hk-play565{background:#071d19;max-width:760px}
+.hk-play565 .arc-head563{height:34px;padding:0 7px;background:linear-gradient(110deg,#102e25,#172e25,#071c18);border-bottom:1px solid #b79a5555}
+.hk-play565 .arc-head563 small{display:none}.hk-play565 .arc-head563 b{font-size:12px;letter-spacing:1px;color:#f4e3b7}
+.hk-play565 .arc-head563 button{min-height:29px;height:29px;padding:2px 7px;border-radius:5px;font-size:9px}.hk-play565 .arc-head563 button:first-child{font-size:24px;min-width:29px}
+.hk-scorebar565{display:grid;grid-template-columns:minmax(0,1fr) 57px minmax(0,1fr);gap:7px;align-items:center;padding:4px 9px 5px;height:55px;flex:none;background:linear-gradient(#102a24,#09201c);border-bottom:1px solid #c2a268}
+.hk-scorebar565 article{display:flex;align-items:center;gap:6px;min-width:0;border-top:2px solid var(--team);padding-top:2px}
+.hk-scorebar565 article>div{flex:1;min-width:0}.hk-scorebar565 article>div>b{font-size:10px;color:var(--team);white-space:nowrap;display:block;letter-spacing:.3px}
+.hk-scorebar565 article small{display:block;font-size:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#8aa095;line-height:14px}.hk-scorebar565 article small span{color:var(--player)}
+.hk-scorebar565 article>strong{font:800 33px/1 system-ui,sans-serif;letter-spacing:-1px;color:#fff1c6;font-variant-numeric:tabular-nums}
+.hk-scorebar565 article:last-child{flex-direction:row-reverse}.hk-scorebar565 article:last-child>div{text-align:right}
+.hk-clock565{text-align:center;align-self:center}.hk-clock565>strong{display:block;font:750 22px/1.1 system-ui,sans-serif;font-variant-numeric:tabular-nums;color:#f7edd4}.hk-clock565>strong.is-hot{color:#ffae7b}.hk-clock565 small{font-size:8px;color:#c2b991;white-space:nowrap}
+.hk-play565 .pb-stage563{min-height:100px}.hk-modebadge565{position:absolute;z-index:2;top:38px;left:16px;pointer-events:none;font-size:7px;letter-spacing:1px;color:#ddcfab9c}
+.hk-play565 .pb-pawn563>span{top:0;bottom:auto;transform:translate(-50%,-55%);filter:drop-shadow(0 2px 1px #00160dbb)}
+.hk-play565 .pb-pawn563>b{top:calc(var(--radius) + 6px);max-width:77px;font-size:8px;line-height:12px;border:0;border-bottom:1px solid var(--team);border-radius:2px;background:#061d17d9;padding:0 3px;color:var(--player);text-shadow:0 1px #000}
+.hk-play565 .pb-pawn563>b>i{color:var(--team);font-size:7px}
+.hk-play565 .hk-control565{padding:4px 10px 5px;border-top:1px solid #cfaf6a;background:linear-gradient(120deg,#142f25,#071e18);height:51px}
+.hk-control565>div:first-child{gap:7px;height:18px}.hk-play565 .hk-control565 b{font-size:11px;letter-spacing:.4px}.hk-play565 .hk-control565 span{font-size:9px}
+.hk-control565>div:first-child>strong{margin-left:auto;font-size:10px;color:#e8dbae;white-space:nowrap}.hk-control565>div:first-child>strong.is-powered{color:#ffbd72;text-shadow:0 0 7px #ff993b55}
+.hk-play565 .arc-meter563{height:4px;margin-top:3px;border-radius:2px;border-color:#856b3d66}.hk-powerrow565{display:flex;justify-content:space-between;align-items:center;margin-top:3px;line-height:12px}.hk-play565 .hk-powerrow565 b{font-size:8px;color:#efc886;letter-spacing:1px}.hk-play565 .hk-powerrow565 span{font-size:8px;color:#afbba7}
+.hk-modes565{padding:14px 14px 12px;border:1px solid #bb9f6759;border-radius:10px;margin:18px 0;background:linear-gradient(135deg,#1c382c,#081f1b)}
+.hk-modes565 h2{margin:0 0 12px;font-size:16px}.hk-modes565>div{display:flex;align-items:center;gap:7px;margin:9px 0}.hk-modes565>div>b{font-size:11px;flex:1}.hk-modes565 button{font-size:11px;padding:7px 11px;min-width:64px}.hk-modes565 p{font-size:11px;line-height:1.8;margin:12px 0 5px;color:#e9d4a7}.hk-modes565>small{font-size:9px;color:#adb9a6}.hk-modes565 button:disabled{opacity:.65}
+.hk-goal565{position:absolute;inset:0;display:grid;place-items:center;z-index:6;pointer-events:none;--team:#89d7ff}
+.hk-goalcard565{position:relative;width:100%;padding:13px 10px 12px;text-align:center;border-block:2px solid #fce5a0;background:linear-gradient(90deg,#0c201ab0,#132f28f5 15%,#102b24fa 85%,#0c201ab0);box-shadow:0 6px 35px #0008,inset 0 1px #ffffff50;transform:rotate(-3deg)}
+.hk-goalcard565>small{display:block;font:900 italic clamp(32px,12vw,62px)/1 system-ui,sans-serif;letter-spacing:2px;color:#fff0b8;text-shadow:0 3px 0 #98662e,0 0 18px #edc97555}
+.hk-goalcard565>div{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:5px}.hk-goalcard565>div>b{font-size:clamp(14px,4.2vw,22px);color:var(--team)}.hk-goalcard565>div>strong{font:900 64px/1 system-ui,sans-serif;color:#fff4cf;text-shadow:0 3px 0 #8f6839;font-variant-numeric:tabular-nums}
+.hk-goalcard565>p{margin:7px 0 12px;font-size:11px;font-weight:700;color:#f1ddac}.hk-goalcard565>footer{max-width:190px;margin:auto;font:700 9px/1.8 system-ui,sans-serif;letter-spacing:2px;color:#d4dbc4}.hk-goalcard565 footer>i{display:block;height:3px;background:#c9dabe26;margin-top:5px}.hk-goalcard565 footer em{display:block;height:100%;background:var(--team);transform-origin:left}
+.hk-goalshine565{position:absolute;inset:0;background:radial-gradient(ellipse at center,#ffe4a630,transparent 65%);opacity:.5}
+.is-scored .hk-goalcard565{animation:hkGoal565 .55s cubic-bezier(.16,.9,.3,1) both}.is-scored .hk-goalshine565{animation:hkShine565 .7s ease-out both}
+.hk-play565.is-impact565 canvas,.hk-play565.is-impact565 .pb-pawns563{animation:hkImpact565 .24s ease-out}
+@keyframes hkGoal565{0%{opacity:0;transform:scale(1.32) rotate(-6deg)}24%{opacity:1;transform:scale(.96) rotate(-3deg)}55%{transform:scale(1.02) rotate(-3deg)}100%{transform:scale(1) rotate(-3deg)}}
+@keyframes hkShine565{0%{opacity:1;background-color:#ffeabd55}100%{opacity:.5;background-color:transparent}}
+@keyframes hkImpact565{0%,100%{translate:0 0}20%{translate:-3px 2px}40%{translate:3px -2px}65%{translate:-1px 1px}}
+@media(max-width:340px){.hk-scorebar565{gap:4px;padding-inline:7px;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr)}.hk-scorebar565 article>div>b{font-size:9px}.hk-scorebar565 article>strong{font-size:29px}.hk-scorebar565 article small{font-size:6.5px}.hk-modes565{padding-inline:10px}}
+@media(orientation:landscape) and (max-height:500px){.hk-play565 .arc-head563{height:28px}.hk-scorebar565{height:42px;padding-block:2px}.hk-scorebar565 article>strong{font-size:29px}.hk-play565 .hk-control565{height:35px;padding:2px 10px}.hk-powerrow565{display:none}.hk-modebadge565{top:24px}.hk-goalcard565{padding-block:5px}.hk-goalcard565>small{font-size:32px}.hk-goalcard565>div>strong{font-size:42px}.hk-goalcard565>p{margin:3px}.hk-goalcard565 footer>i{margin-top:2px}}
+@media(prefers-reduced-motion:reduce){.hk-play565.is-impact565 canvas,.hk-play565.is-impact565 .pb-pawns563,.is-scored .hk-goalcard565,.is-scored .hk-goalshine565{animation:none}.hk-goalcard565{transform:none}.hk-goalshine565{display:none}}

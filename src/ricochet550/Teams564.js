@@ -17,11 +17,16 @@ export function teamPicker564(c, g) {
 
 export function teamScoreboard564(c, g) {
   const myTeam = g.players.find(p => p.playerId === c.transport.selfId)?.team564 ?? 0;
-  return `<div class="hk-scores564" aria-label="チーム得点">${[myTeam,1-myTeam].map(id => {
+  const cards = [myTeam,1-myTeam].map(id => {
     const t = g.teams564[id];
-    return `<article style="--team:${t.color}"><header><b>${t.mark} ${id === myTeam ? '味方' : '相手'}</b><small>${t.name}</small><strong data-hk-score="${id}">${t.score}</strong></header>
-      <div>${g.players.filter(p => p.team564 === id).map(p => `<span style="--player:${color(p)}">${avatar(c,p)}<b>${esc(p.playerId === c.transport.selfId ? 'あなた' : p.name)}</b></span>`).join('')}</div></article>`;
-  }).join('')}</div>`;
+    return `<article style="--team:${t.color}"><div><b>${t.mark} ${t.name}</b><small>${g.players.filter(p => p.team564 === id).map(p => `<span style="--player:${color(p)}">${esc(p.playerId === c.transport.selfId ? 'YOU' : p.name)}</span>`).join(' / ')}</small></div><strong data-hk-score="${id}">${t.score}</strong></article>`;
+  });
+  return `<div class="hk-scorebar565" aria-label="チーム得点">${cards[0]}<div class="hk-clock565"><strong data-rc-time>90</strong><small>${myTeam===0?'↑ 上':'↓ 下'}へ攻撃</small></div>${cards[1]}</div>`;
+}
+
+export function modePicker565(c, g) {
+  const host=g.hostId===c.transport.selfId,options=g.hockey565??{rotor:false,speed:1};
+  return `<section class="hk-modes565"><h2>今回のルール</h2><div><b>プロペラ</b>${[false,true].map(v=>`<button data-rc-rotor="${v}" aria-pressed="${options.rotor===v}" ${host?'':'disabled'}>${v?'あり':'なし'}</button>`).join('')}</div><div><b>パックの弾速</b>${[1,2].map(v=>`<button data-rc-speed="${v}" aria-pressed="${options.speed===v}" ${host?'':'disabled'}>${v===1?'通常':'×2 モード'}</button>`).join('')}</div><p>味方へのパスで弾速＋5％。上限なし。<br>打ち返されても強化は残る。自爆に注意！</p><small>${host?'変更すると全員の準備OKが解除されます。':'部屋主が設定します。'}</small></section>`;
 }
 
 export function hockeyResult564(c, g, u, options) {
@@ -32,6 +37,6 @@ export function hockeyResult564(c, g, u, options) {
     <div class="hk-finale564"><small>${g.draw564 ? 'DRAW' : won ? 'VICTORY' : 'MATCH FINISHED'}</small><h1>${title}</h1>
       <div class="hk-finalscore564">${g.teams564.map(t=>`<span style="--team:${t.color}"><small>${t.mark} ${t.name}</small><strong>${t.score}</strong></span>`).join('<b>:</b>')}</div>
       <p>${g.draw564 ? '両チーム、同点で決着。' : `${TEAM564[g.teamResults564[0].id].name}チームの勝利！`}</p></div>
-    <div class="arc-body563">${resultActions490(c)}${g.teamResults564.map(t=>`<section class="hk-resultteam564" style="--team:${t.color}"><h2>${t.mark} ${t.name} ${t.id===me?.team564?'・あなたのチーム':''}</h2>${g.players.filter(p=>p.team564===t.id).map(p=>`<article style="--player:${color(p)}">${avatar(c,p)}<div><b>${esc(p.name)}</b><small>${p.goals}ゴール · ${p.assists564}アシスト</small></div></article>`).join('')}</section>`).join('')}
+    <div class="arc-body563">${resultActions490(c)}${g.teamResults564.map(t=>`<section class="hk-resultteam564" style="--team:${t.color}"><h2>${t.mark} ${t.name} ${t.id===me?.team564?'・あなたのチーム':''}</h2>${g.players.filter(p=>p.team564===t.id).map(p=>`<article style="--player:${color(p)}">${avatar(c,p)}<div><b>${esc(p.name)}</b><small>${p.goals}ゴール · ${p.assists564}アシスト · ${p.passes565??0}パス</small></div></article>`).join('')}</section>`).join('')}
     <p class="arc-note563">チームの合計得点で勝敗が決まります。同点は引き分けです。</p></div></section>`;
 }

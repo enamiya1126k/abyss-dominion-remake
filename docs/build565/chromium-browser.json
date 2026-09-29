@@ -1,0 +1,105 @@
+{
+  "engine": "chromium",
+  "hardwareIPhone": false,
+  "scope": "Production hockey view, renderer, artwork, input and physics; outside party/catalogue isolated. Wire tests exercise production server queues separately.",
+  "checks": [
+    "Both team perspectives fit 390/320px portrait and 740px landscape, with the correct attack direction.",
+    "Native touch drag/release fires exactly once; cooldown rejects a second shot; touch cancellation does not fire.",
+    "Keyboard direction/charge/release remains available.",
+    "Lobby team selection updates the actual team allocation.",
+    "Host controls propeller and 2x speed; choices reset readiness and are disabled for guests.",
+    "Team win, defeat and draw show both teams with replay/list controls.",
+    "Goal celebration shows scoring team and points, holds the puck for 2000 ms, and uncapped charge displays correctly.",
+    "Own-goal feedback is explicit and reduced-motion disables shake and flash animations.",
+    "An older server room shows an update message instead of running incompatible rules."
+  ],
+  "sizes": [
+    {
+      "width": 390,
+      "height": 740,
+      "self": 0,
+      "scroll": 390,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "w": 390,
+        "h": 600,
+        "bottom": 689
+      },
+      "mission": "↑ 上へ攻撃"
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "self": 1,
+      "scroll": 390,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "w": 390,
+        "h": 600,
+        "bottom": 689
+      },
+      "mission": "↓ 下へ攻撃"
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "self": 0,
+      "scroll": 320,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "w": 320,
+        "h": 428,
+        "bottom": 517
+      },
+      "mission": "↑ 上へ攻撃"
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "self": 1,
+      "scroll": 320,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "w": 320,
+        "h": 428,
+        "bottom": 517
+      },
+      "mission": "↓ 下へ攻撃"
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "self": 0,
+      "scroll": 740,
+      "stage": {
+        "x": 0,
+        "y": 70,
+        "w": 740,
+        "h": 285,
+        "bottom": 355
+      },
+      "mission": "↑ 上へ攻撃"
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "self": 1,
+      "scroll": 740,
+      "stage": {
+        "x": 0,
+        "y": 70,
+        "w": 740,
+        "h": 285,
+        "bottom": 355
+      },
+      "mission": "↓ 下へ攻撃"
+    }
+  ],
+  "errors": [],
+  "failed": [],
+  "browserVersion": "153.0.8010.0"
+}
