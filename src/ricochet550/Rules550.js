@@ -1,2 +1,3 @@
-// Build563: one visible treasure, four colored goals, collision-driven rotor.
-export {PINBALL563 as RICOCHET550,makeGoal563 as make550,startGoal563 as start550,inputGoal563 as input550,launch563 as launch550,advanceGoal563 as advance550,publicGoal563 as public550,signatureGoal563 as signature550,physicsGoal563 as physics550,pairGoal563 as pair550,finishGoal563 as finishRound550,limit563 as limit550,goals563,canShoot563} from './Goals563.js';
+// Build564: two teams, two goals; the Build563 slingshot controls are unchanged.
+export {HOCKEY564 as RICOCHET550,makeHockey564 as make550,startHockey564 as start550,input564 as input550,launch564 as launch550,advanceHockey564 as advance550,publicHockey564 as public550,signature564 as signature550,physicsHockey564 as physics550,pairHockey564 as pair550,finishHockey564 as finishRound550,goals564,canShoot564} from './Hockey564.js';
+export {limit563 as limit550} from './Goals563.js';
