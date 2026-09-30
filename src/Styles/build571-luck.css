@@ -1,0 +1,19 @@
+/* Generated item atlas and a transparent, hollow crystal shield. */
+.lk511 .lk-art508[data-atlas="571"]{background-image:url('../../assets/luck571/items.webp');background-size:400% 300%;background-position:calc(var(--tile-x)*100%/3) calc(var(--tile-y)*100%/2)}
+.lk511 .lk-aura508{inset:-29% -32% -20%;border:0;border-radius:0;box-shadow:none;background:url('../../assets/luck571/barrier.webp') center/100% 100% no-repeat;filter:drop-shadow(0 0 5px #65e7ef99);pointer-events:none}
+.lk511 .lk-cast-ring508{border:0;border-radius:0;background:url('../../assets/luck571/barrier.webp') center/contain no-repeat;box-shadow:none;inset:-25%;filter:drop-shadow(0 0 10px #6cf6ffff)}
+.lk511 .lk-cast-ring508[data-reflect="true"]{filter:hue-rotate(40deg) drop-shadow(0 0 12px #c6a1ff)}
+.lk-charge571{padding:7px 9px;margin:7px 0 0;border:1px solid #d6bb7266;border-radius:8px;color:#ffe7a3;background:#122e29;font-size:10px;line-height:1.6;overflow-wrap:anywhere}
+.lk-burst571{position:absolute;z-index:7;top:10px;left:9%;right:9%;text-align:center;padding:7px 10px;border-radius:10px;background:linear-gradient(90deg,#102e20dd,#233e25ee,#102e20dd);border:1px solid #ecd28b88;color:#fff1b6;font-size:12px;font-weight:800;line-height:1.7;overflow-wrap:anywhere;text-shadow:0 1px 5px #101800;pointer-events:none}
+.lk511 .lk-buff-status511 dd,.lk511 .lk-dice-formula511,.lk511 .lk-dice-buffs511{overflow-wrap:anywhere}
+.lk511 .lk-gear-grid528 article>small{color:#f3d395;line-height:1.65}
+.lk511 .lk-gear-grid528 article>b{overflow-wrap:anywhere}
+.lk511 .lk-gear-button509{font-family:inherit;font-size:9px}
+.lk511[data-phase="hand"] .lk-controls508{overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+@media(orientation:portrait){
+ .lk511[data-phase="hand"] .lk-stage508{min-height:120px}
+ .lk511[data-phase="hand"] .lk-controls508{min-height:0;max-height:calc(100% - 320px)}
+}
+@media(prefers-reduced-motion:reduce){.lk511 .lk-cast-ring508{animation:none}}
+
+.lk511 .lk-world-label512,.lk511 .lk-locator511>small{font-family:inherit}

@@ -1,4 +1,5 @@
 import {ITEMS509,ATTACKS509,BIG509} from './Items509.js';
+import {ITEMS571,DETAILS571} from './Items571.js';
 import {DETAILS562} from './Descriptions562.js';
 const extra = [
  {id:'doubling',name:'倍々クロノクリスタル',move:100,persistent:true,type:'成長バフ',detail:'毎回+100m。次の回から倍率が×2→×4→×8…。複数個の倍率は掛け算。'},
@@ -14,8 +15,8 @@ const extra = [
  {id:'nova',name:'超新星ロケット',move:12000,persistent:false,type:'大技・一回',detail:'+12,000mを土台に、育てた倍率を全部乗せて発進！ 貯金・太陽・コイルも一斉解放。'},
  {id:'dragon',name:'蓄積竜の大跳躍',move:0,persistent:false,type:'大技・一回',detail:'いまの累積距離+2,000mを前進の土台に！ 育てた倍率も全部乗せて、もうひと跳び。'}
 ];
-export const ITEMS511=Object.freeze([...ITEMS509,...extra.map((x,tile)=>({...x,tile,atlas:511}))].map(x=>Object.freeze({...x,detail:DETAILS562[x.id]})));
+export const ITEMS511=Object.freeze([...ITEMS509,...extra.map((x,tile)=>({...x,tile,atlas:511})),...ITEMS571].map(x=>Object.freeze({...x,detail:DETAILS571[x.id]??DETAILS562[x.id]??x.detail})));
 export const item511=id=>ITEMS511.find(x=>x.id===id)??ITEMS511[0];
 export const ATTACKS511=ATTACKS509;
-export const BIG511=Object.freeze([...BIG509,'triple','harvest','nova','dragon']);
+export const BIG511=Object.freeze([...BIG509,'triple','harvest','nova','dragon','sprint']);
 export const DICE511=Object.freeze(['dice','product','jackpot','triple']);
