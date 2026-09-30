@@ -1,0 +1,147 @@
+{
+  "errors": [],
+  "failed": [],
+  "cases": [
+    {
+      "world": "moon",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "venus",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "sun",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "graveyard",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "rebirth",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "moon",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 187,
+      "horizon": "none"
+    },
+    {
+      "world": "venus",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 187,
+      "horizon": "none"
+    },
+    {
+      "world": "sun",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 187,
+      "horizon": "none"
+    },
+    {
+      "world": "graveyard",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 187,
+      "horizon": "none"
+    },
+    {
+      "world": "rebirth",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "cover",
+      "repeat": "no-repeat",
+      "transform": "none",
+      "height": 187,
+      "horizon": "none"
+    }
+  ],
+  "nativeIPhone": false
+}

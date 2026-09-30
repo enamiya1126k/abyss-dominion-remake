@@ -11,10 +11,10 @@ function state(from=[0,0,0,0],to=from,item='dash'){
   return {id:'scenery',phase:'run',phaseAt:1000,round:4,players:from.map((distance,seat)=>({seat,playerId:'p'+seat,distance,loadout:[]})),event:{rows:from.map((value,seat)=>({seat,from:value,to:to[seat],item,delta:(BigInt(to[seat])-BigInt(value)).toString()}))}};
 }
 const frame=(g,ms=0,self='p0',reduced=false)=>sceneryFrame512(g,g.phaseAt+ms,raceFrame511(g,g.phaseAt+ms,self,reduced),reduced);
-test('all ten boundaries are exact, including decimal strings beyond safe Number range',()=>{
+test('all fifteen boundaries are exact, including decimal strings beyond safe Number range',()=>{
   assert.equal(worldIndex512(-1),0);assert.equal(worldIndex512(0),0);
   WORLDS512.slice(1).forEach((w,i)=>{assert.equal(worldIndex512(w.from-1n),i);assert.equal(worldIndex512(w.from),i+1);assert.equal(worldIndex512(String(w.from+1n)),i+1)});
-  assert.equal(worldIndex512('999999999999999999999999999999999999999999'),9);
+  assert.equal(worldIndex512(10n**100n),14);
 });
 test('every viewer follows their own distance, independently of the leader and the minimap',()=>{
   const g=state([0,10000,10000000,1000000000]);g.phase='hand';
@@ -34,10 +34,10 @@ test('ordinary crossings begin at their actual marker crossing and fade for at m
   }
 });
 test('a huge jump reveals every intermediate world without adding run time',()=>{
-  const g=state([0,0,0,0],['1000000000000000000000000000000',0,0,0],'mega'),before=JSON.stringify(g),route=worldRoute512(g.event.rows[0]);
-  assert.deepEqual(route.map(s=>s.index),[0,1,2,3,4,5,6,7,8,9]);
+  const g=state([0,0,0,0],[(10n**60n).toString(),0,0,0],'mega'),before=JSON.stringify(g),route=worldRoute512(g.event.rows[0]);
+  assert.deepEqual(route.map(s=>s.index),Array.from({length:15},(_,i)=>i));
   for(let i=1;i<route.length;i++){assert.equal(frame(g,route[i].at+181).index,i);if(i>1)assert.ok(route[i].at-route[i-1].at>=279.99)}
-  assert.ok(route.at(-1).at+180<LUCK511.runMs);assert.equal(frame(g,4800).index,9);assert.equal(JSON.stringify(g),before);
+  assert.ok(route.at(-1).at+180<LUCK511.runMs);assert.equal(frame(g,4800).index,14);assert.equal(JSON.stringify(g),before);
 });
 test('scenery never leads physical distance during a forward run',()=>{
   for(const finish of [10001,105000,1e8,'10000000000000000000000000000000000000000']){
@@ -79,13 +79,13 @@ function loaderRig(){
 test('background loader caps downloads at two, prioritizes the current world and caches completed images',()=>{
   const r=loaderRig();r.loader.preload([5,6]);assert.equal(r.instances.length,2);assert.match(r.instances[0].src,/space\.png$/);assert.match(r.instances[1].src,/galaxy\.png$/);
   r.instances[0].onload();assert.equal(r.instances.length,3);assert.equal(r.loader.status(5),'ready');assert.equal(r.timers.size,2);
-  for(let i=1;i<9;i++)r.instances[i].onload();assert.equal(r.instances.length,9);assert.equal(r.timers.size,0);assert.equal(r.events(),9);
-  for(let i=0;i<100;i++)r.loader.preload();assert.equal(r.instances.length,9);r.unsubscribe();
+  for(let i=1;i<14;i++)r.instances[i].onload();assert.equal(r.instances.length,14);assert.equal(r.timers.size,0);assert.equal(r.events(),14);
+  for(let i=0;i<100;i++)r.loader.preload();assert.equal(r.instances.length,14);r.unsubscribe();
 });
 test('failed and timed-out scenery uses fallback, allows remaining downloads and retries explicitly',()=>{
   const r=loaderRig();r.loader.preload();r.instances[0].onerror();assert.equal(r.loader.status(1),'failed');[...r.timers.values()][0]();assert.equal(r.loader.status(2),'failed');
-  for(let i=2;i<9;i++)r.instances[i].onload();assert.equal(r.loader.status(6),'ready');assert.equal(r.timers.size,0);
-  r.loader.retry();assert.equal(r.instances.length,11);r.instances[9].onload();r.instances[10].onload();assert.equal(r.loader.status(1),'ready');r.unsubscribe();
+  for(let i=2;i<14;i++)r.instances[i].onload();assert.equal(r.loader.status(6),'ready');assert.equal(r.timers.size,0);
+  r.loader.retry();assert.equal(r.instances.length,16);r.instances[14].onload();r.instances[15].onload();assert.equal(r.loader.status(1),'ready');r.unsubscribe();
 });
 test('leaving the game cancels downloads, timers and callbacks; reopening resumes only missing assets',()=>{
   const r=loaderRig();r.loader.preload();const stale=r.instances[0].onload;r.unsubscribe();assert.equal(r.timers.size,0);assert.equal(r.instances[0].onload,null);assert.equal(r.instances[0].src,'');stale();assert.equal(r.events(),0);assert.equal(r.instances.length,2);
