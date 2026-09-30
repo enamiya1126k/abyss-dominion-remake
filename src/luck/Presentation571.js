@@ -14,6 +14,10 @@ export function stock571(p,round){const added=round?count571((p.loadout??[]).fil
 export function gearEffect571(id,p,round){
  const gear=p.loadout??[],n=count571(gear,id),old=gear.filter(x=>x.round<round),grown=count571(old,id);
  const effects={
+  regalia:()=>`今回、開始時単独1位なら前進×${power571(4,grown)}（新規装備分は次回から）`,
+  podium:()=>`勲章${gear.filter(x=>x.id===id).map(x=>x.medals575??0).join("・")}個 → 育成倍率×${power571(2,gear.filter(x=>x.id===id).reduce((v,x)=>v+(x.medals575??0)*copies571(x),0))}（獲得分は次の回から）`,
+  frontier:()=>`覚醒${gear.filter(x=>x.id===id&&x.awake575).reduce((v,x)=>v+copies571(x),0)}個 → 前進×${power571(8,gear.filter(x=>x.id===id&&x.awake575).reduce((v,x)=>v+copies571(x),0))}（覚醒した次の回から）`,
+  usurper:()=>`未達成${gear.filter(x=>x.id===id&&!x.claimed575).reduce((v,x)=>v+copies571(x),0)}個。前半に2位以下→単独1位で太陽+3/個、一度限り`,
   solar:()=>`装備${n}個：大技以外で太陽+${n}個／回。蓄積${p.suns??0}個 → 次の大技×${power571(3,p.suns)}`,
   coil:()=>`装備${n}個：今回の補充+${grown}個。蓄積${p.coils??0}個 → 大技×${power571(2,p.coils)}`,
   hunter:()=>`装備${n}個：命中した相手1人につき+${n}個。蓄積${p.strikes??0}個 → 大技×${power571(2,p.strikes)}`,
@@ -34,3 +38,5 @@ export function gearEffect571(id,p,round){
  };
  return effects[id]?.()??`装備${n}個ぶんの効果が発動`;
 }
+
+export function rewardLabel575(r){const a=r?.rewards575;return !a?"":[a.medals?`勲章+${a.medals}！`:"",a.awaken?`星図${a.awaken}個が覚醒！`:"",a.suns?`首位奪取！ 太陽+${a.suns}`:""].filter(Boolean).join(" · ");}

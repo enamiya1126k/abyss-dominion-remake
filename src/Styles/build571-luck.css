@@ -27,3 +27,5 @@
 .lk-loot574{position:absolute;left:50%;top:43%;width:47px;height:55px;display:grid;place-items:center;border:1px solid #f8d78f;border-radius:9px;background:linear-gradient(150deg,#44694d,#102f29);box-shadow:0 0 12px #f3d78266}
 .lk-loot574 .lk-art508{width:42px;height:42px}
 @media(prefers-reduced-motion:reduce){.lk-opening574{display:none}}
+
+.lk511 .lk-art508[data-atlas="575"]{background-image:url('../../assets/luck575/items.webp');background-size:200% 200%;background-position:calc(var(--tile-x)*100%) calc(var(--tile-y)*100%)}
