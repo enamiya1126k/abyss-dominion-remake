@@ -1,0 +1,31 @@
+{
+  "errors": [],
+  "failed": [],
+  "cases": [
+    {
+      "width": 390,
+      "height": 740,
+      "reduced": false,
+      "result": "+1095万m"
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "reduced": true,
+      "result": "+1095万m"
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "reduced": false,
+      "result": "+1095万m"
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "reduced": true,
+      "result": "+1095万m"
+    }
+  ],
+  "nativeIPhone": false
+}
