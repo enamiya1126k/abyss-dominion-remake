@@ -1,0 +1,698 @@
+{
+  "build": 568,
+  "version": "3.1.247",
+  "type": "cumulative-patch",
+  "baseBuilds": [
+    563,
+    564,
+    565,
+    566,
+    567
+  ],
+  "sourceMain": "77184f3d5917c9d250d427e8a2e5c26e7a1b5239",
+  "previousRemoteCommit": "5738e815bfb19627508f642e457fd74040533e81",
+  "requiredServerRestart": true,
+  "tests": {
+    "node": 86,
+    "webSocketClients": 4,
+    "viewports": [
+      [
+        390,
+        740
+      ],
+      [
+        320,
+        568
+      ],
+      [
+        740,
+        390
+      ]
+    ],
+    "allFourSeats": true,
+    "nativeIPhoneTested": false,
+    "aiComparisonMatchesPerVersion": 48
+  },
+  "files": [
+    {
+      "path": "README_BUILD565.md",
+      "size": 3846,
+      "sha256": "852f0866f906934d5e9a95d80c70caabd63289467078e5e427f593c17538274d"
+    },
+    {
+      "path": "README_BUILD566.md",
+      "size": 4087,
+      "sha256": "ebe6473f3e3b7200d5f3699f323a99251fa76b06fafda0db1bdb29ac33924022"
+    },
+    {
+      "path": "README_BUILD567.md",
+      "size": 3186,
+      "sha256": "86abfea3f43c6e20f85b0a94ffea2749bc4af18f0af780be7cacb88aea3b3c12"
+    },
+    {
+      "path": "README_BUILD568.md",
+      "size": 3251,
+      "sha256": "f8352ede1cef93d0b843cf8c80619867f3cf556fbd08c7bc02b36b9728333943"
+    },
+    {
+      "path": "assets/crane566/arena.webp",
+      "size": 136302,
+      "sha256": "3e28604e6035c36e6321cb3bc0ff52080e6c98f80e649f13825f2a898b21801f"
+    },
+    {
+      "path": "assets/crane566/chest.webp",
+      "size": 18116,
+      "sha256": "13ce4284dd3946ae2c72d705d7ef8ff2691059a03922bc435660245d52929965"
+    },
+    {
+      "path": "assets/crane566/cover.webp",
+      "size": 114102,
+      "sha256": "4126758c9a10fd81e646b1ac58e0d1870ab2eb83ec5cd97b8fd2c2821395094f"
+    },
+    {
+      "path": "assets/crane566/mimic.webp",
+      "size": 19230,
+      "sha256": "d0749a49d67e4a37c4f509e09ceeea3933300f29a084c9d64fab0a0ef4673c0e"
+    },
+    {
+      "path": "assets/hockey565/court.webp",
+      "size": 140058,
+      "sha256": "ad86e321ac5ab418adf47748950bc84fde05f0e1401606e5c16b0dad1c002e47"
+    },
+    {
+      "path": "assets/hockey565/goal.webp",
+      "size": 19932,
+      "sha256": "3af601bf2ab097a6312d5ce5709d425311d003d0e6e7a532ff8fbc23cf6df84b"
+    },
+    {
+      "path": "assets/hockey565/puck.webp",
+      "size": 11162,
+      "sha256": "88840e25903ad721fed0a9795b8207a524b132a40516bf3669363559f4e3ab2a"
+    },
+    {
+      "path": "assets/hockey565/striker.webp",
+      "size": 43518,
+      "sha256": "5c9be1b09cb47c75345c5eb0fd92deeda567c0ede78944567398f04e594b8e1f"
+    },
+    {
+      "path": "docs/build565/ART.md",
+      "size": 5697,
+      "sha256": "2d8e41279f779bf8467bb865d09701f924d0f219b5f3da2503a0a861f9fdb99d"
+    },
+    {
+      "path": "docs/build565/QA.md",
+      "size": 4604,
+      "sha256": "a3056d235405d3f75518f8ca74ee1f90e8f5cc151f06eb065aee6fe0dbc7e14d"
+    },
+    {
+      "path": "docs/build565/chromium-browser.json",
+      "size": 2627,
+      "sha256": "c5378c6acb503b876ec4fcfbaf77e3a0039f17caa89d037e1f4241b3ed256705"
+    },
+    {
+      "path": "docs/build565/chromium-goal.png",
+      "size": 1116077,
+      "sha256": "baa306f431a51a9ada3b2c7e18682c1195de6fe05c0a91528c28f61af881bd52"
+    },
+    {
+      "path": "docs/build565/chromium-lobby.png",
+      "size": 1161631,
+      "sha256": "04290d588e91b318ec413fc4a2b0318ebbb1fb1422c20c3dc361b7caba7699f4"
+    },
+    {
+      "path": "docs/build565/chromium-mobile.png",
+      "size": 1278755,
+      "sha256": "274fa627aa506bddfed7fda421d2a08b25a14b58b74d8bee88b2067eab502c63"
+    },
+    {
+      "path": "docs/build565/chromium-result.png",
+      "size": 493794,
+      "sha256": "6d51c4fe1c1d90fee11d1b6537e155535288e623b95e64eb0c2cb9df315aa2d4"
+    },
+    {
+      "path": "docs/build565/goal-demo.gif",
+      "size": 1143237,
+      "sha256": "d1ba2c1bb0eac308baf1196a02fcfd19f2a7260e37856b260c904a78949be2d1"
+    },
+    {
+      "path": "docs/build565/tests.tap",
+      "size": 12751,
+      "sha256": "3d3fb25ad300791fd44c367f8c6526a36264ea25cb3bd304b35858fd3f86898f"
+    },
+    {
+      "path": "docs/build566/ART.md",
+      "size": 5743,
+      "sha256": "3c370704c8c458544ae29d6e41c189393f2129ad8402ed834c671e6fe0040aa2"
+    },
+    {
+      "path": "docs/build566/QA.md",
+      "size": 3845,
+      "sha256": "b2220810d0b16457f5beb33991813450f31c92f678cdd471905b3568b6632961"
+    },
+    {
+      "path": "docs/build566/chromium-browser.json",
+      "size": 4931,
+      "sha256": "66abc712002db38f6f6f5e74c4b3341e176d2dac649319da22bae8810475a896"
+    },
+    {
+      "path": "docs/build566/chromium-lobby.png",
+      "size": 1128649,
+      "sha256": "cd7588f9ffb60b35e0de63b12b9e841458a074e29948560e8ee24cfef9eb2a0b"
+    },
+    {
+      "path": "docs/build566/chromium-mobile.png",
+      "size": 1474687,
+      "sha256": "dda7947fd35f510338ef65d698e3249faa63a1426529ddd48d330c816871f167"
+    },
+    {
+      "path": "docs/build566/chromium-result.png",
+      "size": 1284122,
+      "sha256": "ff59ed4ebb3de72cdc9089b324ddb568b8bd642bfd06dcaaaa16402088f8f3cc"
+    },
+    {
+      "path": "docs/build566/chromium-steal.png",
+      "size": 1443831,
+      "sha256": "06571e66169d53ddead38844af4687e9ec246271f37082663b1c9d31d5c051d3"
+    },
+    {
+      "path": "docs/build566/snatch-demo.gif",
+      "size": 1476046,
+      "sha256": "108ac263d62aa2bb6e4fe496019ebe296ae13d8075e9b58929f8e4cec86e9674"
+    },
+    {
+      "path": "docs/build566/tests.tap",
+      "size": 19483,
+      "sha256": "57008f28cb8a965113445f984f763067613eec73470768c672bbd82bdf7f2ef1"
+    },
+    {
+      "path": "docs/build567/QA.md",
+      "size": 2720,
+      "sha256": "c33d67aecf7d71ac59d0cadc59de2f960c4041426b0c5fbc3fcf1bf7057dbd5e"
+    },
+    {
+      "path": "docs/build567/chromium-blade-follow.png",
+      "size": 1348700,
+      "sha256": "dc4cd94ed48be205a142bf2918d48786dd7905acc5387dfa8c611b90c52cab88"
+    },
+    {
+      "path": "docs/build567/chromium-browser.json",
+      "size": 2990,
+      "sha256": "aadb2b9567d4f52d74f9df393527b0fc69c1fd0ed1a916ae1e6b04c384b36b22"
+    },
+    {
+      "path": "docs/build567/chromium-lobby.png",
+      "size": 1409392,
+      "sha256": "0618f76ec97266c0da891051c1622ae50735ba34c06ead2aa7d5790fce4e6f34"
+    },
+    {
+      "path": "docs/build567/chromium-mobile.png",
+      "size": 1348497,
+      "sha256": "ca401ddc0537734d304baeb9490c0f034f4aae32c1c3cf795fe798f81b890c42"
+    },
+    {
+      "path": "docs/build567/chromium-result.png",
+      "size": 1219995,
+      "sha256": "d5acb8ceb2dd8a21c94cff298d04c0dfe058ea611ede0e3ee7e82e81a83a4b4a"
+    },
+    {
+      "path": "docs/build567/chromium-stop.png",
+      "size": 1323543,
+      "sha256": "1df28ed6ec0f0e44008f203a49f99a9aa9aff3424386c7df2c86206f99f7507a"
+    },
+    {
+      "path": "docs/build567/legacy-tests.tap",
+      "size": 21068,
+      "sha256": "f964d73c4ee0ad270a1e7f53210028b933e8675a906300ac9c65a55df073d346"
+    },
+    {
+      "path": "docs/build567/swipe-demo.gif",
+      "size": 2758713,
+      "sha256": "a67f3b4e5f5833b120146b9d789e2f1cdd52b5c93d7c1b33684e1d52a73c6c96"
+    },
+    {
+      "path": "docs/build567/tests.tap",
+      "size": 23276,
+      "sha256": "0c5f29be6d205d7267b92dc0346bf1024d7473439eb973f5185cb7fec191a199"
+    },
+    {
+      "path": "docs/build568/QA.md",
+      "size": 3711,
+      "sha256": "451d29a132f74547b0ba64f78277b361aab4d59578b0136bb0a16ae0a28c70bc"
+    },
+    {
+      "path": "docs/build568/ai-comparison.json",
+      "size": 2019,
+      "sha256": "a57d7af791c118b6697b94d64cccde589c5e2b7e36e570bf7e5a98a54d31e8d5"
+    },
+    {
+      "path": "docs/build568/chromium-browser.json",
+      "size": 11996,
+      "sha256": "3a5631316709cb37a5b93a92fdb97a2130eacc31b5b15c68499e767b99e395a1"
+    },
+    {
+      "path": "docs/build568/chromium-lobby.png",
+      "size": 1189546,
+      "sha256": "e2857334a3e39028d58fc428dd171a80a2b63d57bb9ae48df454886a44e271ff"
+    },
+    {
+      "path": "docs/build568/chromium-ruby-aim.png",
+      "size": 1270813,
+      "sha256": "83b3d6f202f8c1689754d5ef5eae2d0bf8741c53ef59dd1695785883355dfe52"
+    },
+    {
+      "path": "docs/build568/chromium-sapphire-aim.png",
+      "size": 1271832,
+      "sha256": "73cb22f5212e26a72943d0a59f9fba9df4198eb30f42414cc357823c7c56090b"
+    },
+    {
+      "path": "docs/build568/team-view-demo.gif",
+      "size": 695996,
+      "sha256": "66f0386fe2638f618bfe42b637d40a648e412550573bae440c91735f2cba4560"
+    },
+    {
+      "path": "docs/build568/tests.tap",
+      "size": 21930,
+      "sha256": "673f65faeb84177b8bddea2c52a970956c9d95ab126ea2f2a4ac6e89caeb9ce0"
+    },
+    {
+      "path": "index.html",
+      "size": 246541,
+      "sha256": "8b326478094202440e28116df1233395a003e4b26c4742933b567b6e63f952ad"
+    },
+    {
+      "path": "online-server/server.js",
+      "size": 23923,
+      "sha256": "a6704f1c2da23d9472184175894246666b3c669a378aabfb5d89d89d242ce0c1"
+    },
+    {
+      "path": "online-server/src/CabbageCoordinator484.js",
+      "size": 4938,
+      "sha256": "32d52ce28a80dac732f736b53fd4423690ae5ec45fc4e806f2711094bf4fa585"
+    },
+    {
+      "path": "online-server/src/CraneCoordinator566.js",
+      "size": 691,
+      "sha256": "93b7d98caee1d1c778cf4323ded4e5c9094a5b1a5de8ca7f94658191c83f09b4"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 24693,
+      "sha256": "982e7e70ac086b9fdc6dbd6e111cc3170662ef16d7dfaef5e87ac82c483a6349"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 28175,
+      "sha256": "39b51ef8bd91028770a7d0c8ec89f6b7f670921198dba9a5e86fd069df7e0610"
+    },
+    {
+      "path": "online-server/src/Realtime563.js",
+      "size": 6451,
+      "sha256": "cfa1681c38fe9afb0d9d03b581c30d1ab6e1860c7697bc113866d9a620b167cf"
+    },
+    {
+      "path": "online-server/src/RicochetCoordinator550.js",
+      "size": 1104,
+      "sha256": "d9d0b9c6dae194ce8856d7cea917b6b37c765f14d142d90b88e8df154100e61f"
+    },
+    {
+      "path": "src/Styles/build564-hockey.css",
+      "size": 3615,
+      "sha256": "a021527c35538abe598c51aa5992b703396e3c60bb176fb11fd609534bbfcd8c"
+    },
+    {
+      "path": "src/Styles/build565-hockey.css",
+      "size": 6823,
+      "sha256": "f218cbac4b64df8a0c3a114f60cacbcb0f638867753b0e9c6aa30b852ba52f15"
+    },
+    {
+      "path": "src/Styles/build566-crane.css",
+      "size": 4902,
+      "sha256": "c66fe2c549a918c34f96fa59a56519e023471cf39850d30bf8db1d938d38f291"
+    },
+    {
+      "path": "src/Styles/build567-cabbage-swipe.css",
+      "size": 3503,
+      "sha256": "074ac7c91a25d0148682972622faabc24a28880b4e35900003809f0556620f4a"
+    },
+    {
+      "path": "src/cabbage/Debris567.js",
+      "size": 2145,
+      "sha256": "eab465473cf0b550c895adf8e4c96fbb3a20545bcfaeca33c398edb397d7cf58"
+    },
+    {
+      "path": "src/cabbage/Rules484.js",
+      "size": 8246,
+      "sha256": "6ceed11183d113654fd46347a0522642931346443de08e5e1feff07d68bddf0e"
+    },
+    {
+      "path": "src/cabbage/Scene567.js",
+      "size": 7330,
+      "sha256": "23d717cf36ca708ea5b4226c478502428b1064d1fcbd66d1247d1b40d1a29b2d"
+    },
+    {
+      "path": "src/cabbage/Signals491.js",
+      "size": 3126,
+      "sha256": "0afa51832c735bdd542a58549ec982b439c9613e1a1295ac6deb1bc032d47372"
+    },
+    {
+      "path": "src/cabbage/Swipe567.js",
+      "size": 4325,
+      "sha256": "cbea26dcde1fc4d673cf10dfbd05b8b01f80e5cec7ecdda661c04aaba886eddc"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "size": 28071,
+      "sha256": "4c7059d76afc891a9eb0a77b9a3683c9a7d51285dc108539b0ea1a484ea57935"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "1c2637e53857cf50f0b757dd835b0295b48d78a2421e01853e98317a9f82b6b4"
+    },
+    {
+      "path": "src/crane566/Board566.js",
+      "size": 7484,
+      "sha256": "b767032268b5ddbd8604dd7110416272a6413b4890f927027d59085ad9630bcf"
+    },
+    {
+      "path": "src/crane566/Rules566.js",
+      "size": 11176,
+      "sha256": "f58a736ea7f77b4e92d5ad1d290aa669fcfe8861398b68b3b44e2d52e392d3b5"
+    },
+    {
+      "path": "src/crane566/View566.js",
+      "size": 11018,
+      "sha256": "3933b98934d6179b00c20041d08344e0c02f0629e7ddc1033dc09c3347d824f7"
+    },
+    {
+      "path": "src/party/Arcade563.js",
+      "size": 4734,
+      "sha256": "3ec620037cdf1e1a4c35b8202f6cac3a3274b9823fe56212c79a51930f7853f0"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 6146,
+      "sha256": "e0b3c61560ea179ac034f2c766f3217cdee121bbca59f6cc6bdc5344e042a688"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "size": 3578,
+      "sha256": "2a68ff2b2d17b60477bb9fd6315cb1895f32064528f132b2933cb6095b2c0b7e"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 13114,
+      "sha256": "2a23c8d0b72e85224b2357b1c7dc549097d0a8878b649a9a0642449e7eec17fb"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 30205,
+      "sha256": "c7a008a3b365786b26889273ece46a728eeada13b97b876f36f10cb68fdc537f"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "size": 7186,
+      "sha256": "0479815ae1b8e03ebd99da75480513555f00770ac6bff04a7ab2a9d633657989"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "size": 4046,
+      "sha256": "1311f05d6922336fcbc1caef7f6d4949cf12190ab6609ce9a47d632bede6ba84"
+    },
+    {
+      "path": "src/ricochet550/Audio565.js",
+      "size": 1553,
+      "sha256": "bcdc9088c94a994d08e2edb904fed98d2efaa7a49133ebf7cddb35457ece2c40"
+    },
+    {
+      "path": "src/ricochet550/Board564.js",
+      "size": 9689,
+      "sha256": "e98537768d79e70880ae84555a3c69e4f4e51488ce6ea856d0a4ae814839a6d5"
+    },
+    {
+      "path": "src/ricochet550/Control568.js",
+      "size": 1713,
+      "sha256": "9743643392a634056029e47c46f25a54c60e0f60e0d156605b1ee5a1d318b729"
+    },
+    {
+      "path": "src/ricochet550/Hockey564.js",
+      "size": 18230,
+      "sha256": "cb5ad44b93e67784ce623c45550d12961d6fd9eae2a1c16cfb3b0e347a9709bc"
+    },
+    {
+      "path": "src/ricochet550/Rules550.js",
+      "size": 493,
+      "sha256": "f687a901fe5e30c85c7322db76a5ffe73287d2bdbfcfef089217b0396e592051"
+    },
+    {
+      "path": "src/ricochet550/Teams564.js",
+      "size": 4254,
+      "sha256": "0ea7efe84af19a97161fdc7e272b3f41534c3ee1dbd176143ea1e210c2592cce"
+    },
+    {
+      "path": "src/ricochet550/View550.js",
+      "size": 12972,
+      "sha256": "ccfe44d5a798e8fdcad84e1d8ff9641dcfea697ddd2812d8857e378efef892b3"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "df70ce9634667d9dfba257d1b9df9f18b1dd728dca3524fabaa14047294eb548"
+    },
+    {
+      "path": "tests/build484-cabbage.test.mjs",
+      "size": 10407,
+      "sha256": "69361400f33202a94ebfa4cd9d798772f4761f910f9b541e115a9c672fc16ba6"
+    },
+    {
+      "path": "tests/build484-integration.test.mjs",
+      "size": 6240,
+      "sha256": "da2659bb1871586aec0f66f970b210b43ffbd148ee3898b9f33793e7ddd72f99"
+    },
+    {
+      "path": "tests/build490-results.test.mjs",
+      "size": 12245,
+      "sha256": "6c73a9ec60ac691787792bfe222e0d0e502966336d190694789c28c0fb582ae5"
+    },
+    {
+      "path": "tests/build491-integration.test.mjs",
+      "size": 4928,
+      "sha256": "c58c934b4ce9b62310bfd14a9d0d468906ecb6925d1b06c5c55146d12adfa948"
+    },
+    {
+      "path": "tests/build557-cart-regression.test.mjs",
+      "size": 4817,
+      "sha256": "654f9024315c040c48030bdd4741a5f3bd08ede004840327f6b9093858af8c5b"
+    },
+    {
+      "path": "tests/build563-wire.test.mjs",
+      "size": 7278,
+      "sha256": "544583fc6418231b6579b2134995cd9d49f86b1766e7942ef1f66db39c2c5591"
+    },
+    {
+      "path": "tests/build564-cache.test.mjs",
+      "size": 1879,
+      "sha256": "e84fbff20b8556d3927e2af3c2980b7d46582bb8fc5d4d100d99402e5848dcf4"
+    },
+    {
+      "path": "tests/build564-hockey.test.mjs",
+      "size": 8236,
+      "sha256": "c5166bbc7e0775f69ddcbb47900fabea86ad837e46deff2b39cdea88889591e2"
+    },
+    {
+      "path": "tests/build565-hockey.test.mjs",
+      "size": 9019,
+      "sha256": "1ce5d044e822e46ca2adba88ec32085436507a65f0b06cfffc50b36ea9739125"
+    },
+    {
+      "path": "tests/build566-cache.test.mjs",
+      "size": 1513,
+      "sha256": "6b2e8ac7521a6999e6689c84a1abd1800a81fcdeeaa710c21af43a03287959bf"
+    },
+    {
+      "path": "tests/build566-crane.test.mjs",
+      "size": 5954,
+      "sha256": "22b4592b48b2e6d657d15d08dd10e055b5f9ab6e309eb53e13a31fcc2a2d738c"
+    },
+    {
+      "path": "tests/build566-wire.test.mjs",
+      "size": 5561,
+      "sha256": "38b6ab7c9fffaf02adcc3264e6550d339a345bf9d31725ec0c1ad1789328e77b"
+    },
+    {
+      "path": "tests/build567-cabbage.test.mjs",
+      "size": 7216,
+      "sha256": "e55dbca1e0030bc41def9fd2bb7f152b2c096b3dcae021442b553ddd1ebb8b81"
+    },
+    {
+      "path": "tests/build567-cache.test.mjs",
+      "size": 1320,
+      "sha256": "f88ec092a9e60605584c76a56f8199c29ec4465065d38015736490b04c2694a8"
+    },
+    {
+      "path": "tests/build567-wire.test.mjs",
+      "size": 5689,
+      "sha256": "fbe4089ad7f15b5d6572e8c222bd95ff139b389b94c9bd2b5610537a4691452e"
+    },
+    {
+      "path": "tests/build568-cache.test.mjs",
+      "size": 1401,
+      "sha256": "add143f75ce360a49a23028b1c612e882f1e421a61ef8557c3a3e197156e97e0"
+    },
+    {
+      "path": "tests/build568-hockey.test.mjs",
+      "size": 6865,
+      "sha256": "38968aaf1a9f11a861f62eafe6225cd323f8fe468c817e1e814150e22ef5a605"
+    },
+    {
+      "path": "tools/build563/wire-fixture.mjs",
+      "size": 3783,
+      "sha256": "b298cbcbdab1848c9b87f88687d9ae68aaa2c36afe1783caa2a90f5140c3ec30"
+    },
+    {
+      "path": "tools/build565/browser.mjs",
+      "size": 8373,
+      "sha256": "84e95eef996627386deb906d0cbb322471b17bf1db4be7ad47684f7850e0d474"
+    },
+    {
+      "path": "tools/build565/capture.mjs",
+      "size": 1816,
+      "sha256": "9829094152088aca96e4122ec60a72d638096f457565f86defa666be217b1d56"
+    },
+    {
+      "path": "tools/build565/package.py",
+      "size": 3245,
+      "sha256": "b482d0d33b7c7b00452535618c3c2683d8ac82812a9c5fbfb3808d5e6e13b520"
+    },
+    {
+      "path": "tools/build565/preview.mjs",
+      "size": 5252,
+      "sha256": "6fe9a002d360829030e8a15704db70b81d68ff7fa209b6408e40c13f24896045"
+    },
+    {
+      "path": "tools/build566/browser.mjs",
+      "size": 7175,
+      "sha256": "be4b19bff19ba0e1704e0c0b563d68a382ede14ecc129df97d4821a65eb620e8"
+    },
+    {
+      "path": "tools/build566/capture.mjs",
+      "size": 1763,
+      "sha256": "3d89d1824547349c5e78969c524150bf69913bed5d4e971a0328167459b26016"
+    },
+    {
+      "path": "tools/build566/package.py",
+      "size": 2889,
+      "sha256": "3308dcb70624f969aafd142e025bf98a940bcda6e60075c2b9be75185d781407"
+    },
+    {
+      "path": "tools/build566/preview.mjs",
+      "size": 5160,
+      "sha256": "b704c5df5a35bb78ad3f14f7e91ae3893d615a672d25dd22c8f5763e1ef0baf7"
+    },
+    {
+      "path": "tools/build566/wire-fixture.mjs",
+      "size": 1659,
+      "sha256": "c84b2d02c52040905d590bcc627f568ff591e67fadae4faa6232700700ed6eb1"
+    },
+    {
+      "path": "tools/build567/browser.mjs",
+      "size": 9541,
+      "sha256": "a2c9ea36335b8a39b8be318833cfa1e0e52b1e89d96874e7f54166337f6ff9be"
+    },
+    {
+      "path": "tools/build567/cache.py",
+      "size": 2243,
+      "sha256": "a7a553bd56f0fddd448c343d1a4b5c8092c649def2cc3a5771ccfe0727ae8c2c"
+    },
+    {
+      "path": "tools/build567/capture.mjs",
+      "size": 1834,
+      "sha256": "b52220a0625ceb24fe0c5cc6cec17dc774571a52786d53eccb5648b78419f619"
+    },
+    {
+      "path": "tools/build567/package.py",
+      "size": 2852,
+      "sha256": "caba2d0f630f08df08a9e951b29174e6ebbf4729e566a2001b9a4fcbd26bbf34"
+    },
+    {
+      "path": "tools/build567/preview.mjs",
+      "size": 4755,
+      "sha256": "1e28ba5481d1a4ed180ec274c1116ffc54986b7c07bfca238a7dd18d03375f68"
+    },
+    {
+      "path": "tools/build567/wire-fixture.mjs",
+      "size": 1541,
+      "sha256": "3a5dcf8ba7aaebbefa3539fc8c354f29e25dad6e1d2c2bebc26b72bc84968186"
+    },
+    {
+      "path": "tools/build568/browser.mjs",
+      "size": 7448,
+      "sha256": "2f19ea0b2adf8eaf1ddb98b276d19acbbd6842d46644d0962c2493d91988d838"
+    },
+    {
+      "path": "tools/build568/cache.py",
+      "size": 2088,
+      "sha256": "2d772b1f5d36f90e0e07ce90a33c62ecc7fe4d8d682952fa7bda8deb7b5aae7e"
+    },
+    {
+      "path": "tools/build568/capture.mjs",
+      "size": 2417,
+      "sha256": "fff709d565d4df3edad6d07ee232d76e6c7850ccb823027253e60864fda9c914"
+    },
+    {
+      "path": "tools/build568/compare.mjs",
+      "size": 1672,
+      "sha256": "1de8a932b4d8a88a54c982434abb6bb14166d8b5ca7f6091c99dbaabe5b9b7aa"
+    },
+    {
+      "path": "tools/build568/package.py",
+      "size": 3054,
+      "sha256": "a6c58fe6a69ee7fb87d4bf89df1eb377e5c7a58c290ba465aab7f0614ec8ea43"
+    },
+    {
+      "path": "tools/build568/preview.mjs",
+      "size": 5252,
+      "sha256": "4088d9b17d5d298bec3df3a0c5da99dc44fae7acb9e26eaf11a4aa8418f3225b"
+    },
+    {
+      "path": "world-raid-offline565-assets.json",
+      "size": 49240,
+      "sha256": "6ea08816618332eef836930eee97cb07f93b84918b39b321675910c516167f08"
+    },
+    {
+      "path": "world-raid-offline565-sw.js",
+      "size": 2502,
+      "sha256": "ab6d636231634a675183a20b0b7fe55c95f5fe83dc91ad1570be5ff2f1449cc4"
+    },
+    {
+      "path": "world-raid-offline566-assets.json",
+      "size": 49480,
+      "sha256": "3bb74927bee6c4ec7ad039d79062915fa2fc2c673553917938b1aabc7368bd91"
+    },
+    {
+      "path": "world-raid-offline566-sw.js",
+      "size": 2502,
+      "sha256": "b02b628934734c6f0f3316e0ed468c7cadaaf107ad68ca748ea0a51c0e33c4f6"
+    },
+    {
+      "path": "world-raid-offline567-assets.json",
+      "size": 49752,
+      "sha256": "c12b790ad183f2c7c326e55fc4faecd5a7d54c57de9e31029a4fc78639a9d858"
+    },
+    {
+      "path": "world-raid-offline567-sw.js",
+      "size": 2502,
+      "sha256": "7853bf727c013aef70cd9f2b0a35b0ea9f09745cae6d9cac9bac2fb3b155ce97"
+    },
+    {
+      "path": "world-raid-offline568-assets.json",
+      "size": 49808,
+      "sha256": "64f31f78cd833a54cf2ec7fe7e7e636776bac8a9bc2bcc06310a198ea2920c06"
+    },
+    {
+      "path": "world-raid-offline568-sw.js",
+      "size": 2502,
+      "sha256": "fb4802ea9d7b8c6b5269c45c2a7f9dd56bb97d7c5667132e17878d536c2ddcd8"
+    }
+  ]
+}

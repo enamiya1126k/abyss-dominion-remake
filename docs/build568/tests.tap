@@ -1,0 +1,529 @@
+TAP version 13
+# Subtest: MAX is exactly three times the previous top launch speed; low power remains controllable
+ok 1 - MAX is exactly three times the previous top launch speed; low power remains controllable
+  ---
+  duration_ms: 2.336829
+  type: 'test'
+  ...
+# Subtest: untouched starting carts do not drift or acquire a launch state
+ok 2 - untouched starting carts do not drift or acquire a launch state
+  ---
+  duration_ms: 40.855441
+  type: 'test'
+  ...
+# Subtest: a launched cart hits and displaces an unreleased neighbor without consuming its shot
+ok 3 - a launched cart hits and displaces an unreleased neighbor without consuming its shot
+  ---
+  duration_ms: 2.875688
+  type: 'test'
+  ...
+# Subtest: a release adds a vector to the current momentum, including sideways and reverse carries
+ok 4 - a release adds a vector to the current momentum, including sideways and reverse carries
+  ---
+  duration_ms: 0.975733
+  type: 'test'
+  ...
+# Subtest: cancelling a pull does not erase momentum from a collision
+ok 5 - cancelling a pull does not erase momentum from a collision
+  ---
+  duration_ms: 0.473114
+  type: 'test'
+  ...
+# Subtest: opposing fast carts cannot pass through each other in one server tick
+ok 6 - opposing fast carts cannot pass through each other in one server tick
+  ---
+  duration_ms: 1.404327
+  type: 'test'
+  ...
+# Subtest: fast carts repeatedly ricochet from walls without leaving bounds or gaining energy
+ok 7 - fast carts repeatedly ricochet from walls without leaving bounds or gaining energy
+  ---
+  duration_ms: 22.518049
+  type: 'test'
+  ...
+# Subtest: an unreleased cart pushed into the sea loses its turn and does not block round completion
+ok 8 - an unreleased cart pushed into the sea loses its turn and does not block round completion
+  ---
+  duration_ms: 2.060056
+  type: 'test'
+  ...
+# Subtest: a fast pushed cart is blocked by freight crates
+ok 9 - a fast pushed cart is blocked by freight crates
+  ---
+  duration_ms: 1.907766
+  type: 'test'
+  ...
+# Subtest: crossing a conveyor while unreleased accelerates once and keeps the shot available
+ok 10 - crossing a conveyor while unreleased accelerates once and keeps the shot available
+  ---
+  duration_ms: 2.113499
+  type: 'test'
+  ...
+# Subtest: all five rounds settle with AI using the recalibrated pull curve
+ok 11 - all five rounds settle with AI using the recalibrated pull curve
+  ---
+  duration_ms: 444.358754
+  type: 'test'
+  ...
+# Subtest: saved v6 live rooms migrate to lobby before v7 scoring are applied
+ok 12 - saved v6 live rooms migrate to lobby before v7 scoring are applied
+  ---
+  duration_ms: 0.806552
+  type: 'test'
+  ...
+# Subtest: pinball: actual party creation/ready/start gates, old version rejected
+ok 13 - pinball: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 9.458407
+  type: 'test'
+  ...
+# Subtest: bomb: actual party creation/ready/start gates, old version rejected
+ok 14 - bomb: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 1.610665
+  type: 'test'
+  ...
+# Subtest: tetra: actual party creation/ready/start gates, old version rejected
+ok 15 - tetra: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 4.707941
+  type: 'test'
+  ...
+# Subtest: hide: actual party creation/ready/start gates, old version rejected
+ok 16 - hide: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 146.106383
+  type: 'test'
+  ...
+# Subtest: pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+ok 17 - pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+  ---
+  duration_ms: 133.032972
+  type: 'test'
+  ...
+# Subtest: bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+ok 18 - bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+  ---
+  duration_ms: 29.822659
+  type: 'test'
+  ...
+# Subtest: hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+ok 19 - hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+  ---
+  duration_ms: 566.735107
+  type: 'test'
+  ...
+# Subtest: all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+ok 20 - all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+  ---
+  duration_ms: 453.146981
+  type: 'test'
+  ...
+# Subtest: four independent WebSocket clients: production queues/frames for all four games
+ok 21 - four independent WebSocket clients: production queues/frames for all four games
+  ---
+  duration_ms: 1102.657065
+  type: 'test'
+  ...
+# Subtest: the live import map, offline cache and version advertise every hockey module consistently
+ok 22 - the live import map, offline cache and version advertise every hockey module consistently
+  ---
+  duration_ms: 58.898515
+  type: 'test'
+  ...
+# {"aiMatches":32,"totalGoals":97,"teamGoals":[44,53]}
+# Subtest: one to four people fill exactly two teams; player colors and selected monsters survive
+ok 23 - one to four people fill exactly two teams; player colors and selected monsters survive
+  ---
+  duration_ms: 7.206651
+  type: 'test'
+  ...
+# Subtest: launch uses reduced residual drift and fine control; reload, sequencing and cancel remain valid
+ok 24 - launch uses reduced residual drift and fine control; reload, sequencing and cancel remain valid
+  ---
+  duration_ms: 2.272246
+  type: 'test'
+  ...
+# Subtest: only a complete puck crossing inside either goal scores for the opposite team
+ok 25 - only a complete puck crossing inside either goal scores for the opposite team
+  ---
+  duration_ms: 3.990041
+  type: 'test'
+  ...
+# Subtest: own goals credit opponents, assists only credit a recent teammate, positions remain in the home half during the goal pause
+ok 26 - own goals credit opponents, assists only credit a recent teammate, positions remain in the home half during the goal pause
+  ---
+  duration_ms: 0.96199
+  type: 'test'
+  ...
+# Subtest: wall banks, goalposts, both teams and the collision-driven rotor remain physical
+ok 27 - wall banks, goalposts, both teams and the collision-driven rotor remain physical
+  ---
+  duration_ms: 2.682528
+  type: 'test'
+  ...
+# Subtest: final fifteen seconds are two points; deadline seals the result for both teammates
+ok 28 - final fifteen seconds are two points; deadline seals the result for both teammates
+  ---
+  duration_ms: 1.341865
+  type: 'test'
+  ...
+# Subtest: team selection is authenticated, capacity-limited, locked during play and preserved for a rematch
+ok 29 - team selection is authenticated, capacity-limited, locked during play and preserved for a rematch
+  ---
+  duration_ms: 39.708919
+  type: 'test'
+  ...
+# Subtest: all four snapshots agree on team scores, survive save/restore, and old rules return to lobby
+ok 30 - all four snapshots agree on team scores, survive save/restore, and old rules return to lobby
+  ---
+  duration_ms: 39.23958
+  type: 'test'
+  ...
+# Subtest: AI assigns one attacker and one defender; finite ninety-second matches finish across seeds
+ok 31 - AI assigns one attacker and one defender; finite ninety-second matches finish across seeds
+  ---
+  duration_ms: 3145.728689
+  type: 'test'
+  ...
+# Subtest: active facade, client/server protocol and menu all select hockey
+ok 32 - active facade, client/server protocol and menu all select hockey
+  ---
+  duration_ms: 10.984788
+  type: 'test'
+  ...
+# {"optionSimulation565":[{"rotor":false,"speed":1,"matches":12,"goals":37,"passes":85,"maxCharge":8,"teamGoals":[22,15]},{"rotor":false,"speed":2,"matches":12,"goals":62,"passes":77,"maxCharge":6,"teamGoals":[29,33]},{"rotor":true,"speed":1,"matches":12,"goals":42,"passes":81,"maxCharge":6,"teamGoals":[19,23]},{"rotor":true,"speed":2,"matches":12,"goals":62,"passes":89,"maxCharge":5,"teamGoals":[30,32]}]}
+# Subtest: both scoring lines are flush with the outer field boundary
+ok 33 - both scoring lines are flush with the outer field boundary
+  ---
+  duration_ms: 7.522105
+  type: 'test'
+  ...
+# Subtest: pass charge grows exactly five percent per qualified pass with no gameplay ceiling
+ok 34 - pass charge grows exactly five percent per qualified pass with no gameplay ceiling
+  ---
+  duration_ms: 1.826436
+  type: 'test'
+  ...
+# Subtest: same striker, rapid contacts and adjacent strikers cannot farm charge
+ok 35 - same striker, rapid contacts and adjacent strikers cannot farm charge
+  ---
+  duration_ms: 0.475001
+  type: 'test'
+  ...
+# Subtest: an opponent return retains the full charge and can cause a powered own goal
+ok 36 - an opponent return retains the full charge and can cause a powered own goal
+  ---
+  duration_ms: 0.663949
+  type: 'test'
+  ...
+# Subtest: 2x mode doubles puck flight without changing a striker launch or compounding repeated impacts
+ok 37 - 2x mode doubles puck flight without changing a striker launch or compounding repeated impacts
+  ---
+  duration_ms: 0.877818
+  type: 'test'
+  ...
+# Subtest: strikers stay completely in their own half after shots, body collisions and spinning-rotor contacts
+ok 38 - strikers stay completely in their own half after shots, body collisions and spinning-rotor contacts
+  ---
+  duration_ms: 224.553255
+  type: 'test'
+  ...
+# Subtest: propeller off removes its collision, and propeller on really transfers momentum
+ok 39 - propeller off removes its collision, and propeller on really transfers momentum
+  ---
+  duration_ms: 0.623902
+  type: 'test'
+  ...
+# Subtest: extreme unbounded charge still hits a defender instead of tunneling into its goal
+ok 40 - extreme unbounded charge still hits a defender instead of tunneling into its goal
+  ---
+  duration_ms: 0.947317
+  type: 'test'
+  ...
+# Subtest: very fast free shots cross the flush goal once; corner shots rebound from the rail
+ok 41 - very fast free shots cross the flush goal once; corner shots rebound from the rail
+  ---
+  duration_ms: 0.721155
+  type: 'test'
+  ...
+# Subtest: goals lock input for exactly two seconds then reset charge and serve toward the conceding team
+ok 42 - goals lock input for exactly two seconds then reset charge and serve toward the conceding team
+  ---
+  duration_ms: 1.096901
+  type: 'test'
+  ...
+# Subtest: host-only options validate exact values, clear readiness, lock in play and persist on rematch
+ok 43 - host-only options validate exact values, clear readiness, lock in play and persist on rematch
+  ---
+  duration_ms: 31.647152
+  type: 'test'
+  ...
+# Subtest: all clients receive charge, options and the same respawn deadline across save and reconnect
+ok 44 - all clients receive charge, options and the same respawn deadline across save and reconnect
+  ---
+  duration_ms: 23.087628
+  type: 'test'
+  ...
+# Subtest: all four option combinations complete finite AI matches with bounded home positions
+ok 45 - all four option combinations complete finite AI matches with bounded home positions
+  ---
+  duration_ms: 4540.162761
+  type: 'test'
+  ...
+# Subtest: crane: every new or changed front-end module has one current import target and offline cache entry
+ok 46 - crane: every new or changed front-end module has one current import target and offline cache entry
+  ---
+  duration_ms: 38.412689
+  type: 'test'
+  ...
+# {"craneAIMatches":64,"steals":2496,"bites":445,"catches":3881,"wins":[15,11,22,17]}
+# Subtest: crane: 3 humans plus 1 AI, stable colours, immutable source roster and readable public snapshot
+ok 47 - crane: 3 humans plus 1 AI, stable colours, immutable source roster and readable public snapshot
+  ---
+  duration_ms: 4.176188
+  type: 'test'
+  ...
+# Subtest: crane: money is credited only at the dock, and reloading prevents a second claw
+ok 48 - crane: money is credited only at the dock, and reloading prevents a second claw
+  ---
+  duration_ms: 4.353973
+  type: 'test'
+  ...
+# Subtest: crane: a returning treasure can be stolen and only the final owner gets paid
+ok 49 - crane: a returning treasure can be stolen and only the final owner gets paid
+  ---
+  duration_ms: 3.219451
+  type: 'test'
+  ...
+# Subtest: crane: stealing a mimic backfires, cannot make the score negative, and briefly locks the crane
+ok 50 - crane: stealing a mimic backfires, cannot make the score negative, and briefly locks the crane
+  ---
+  duration_ms: 1.526851
+  type: 'test'
+  ...
+# Subtest: crane: ray hits the first body, not the highest value beyond it
+ok 51 - crane: ray hits the first body, not the highest value beyond it
+  ---
+  duration_ms: 2.569428
+  type: 'test'
+  ...
+# Subtest: crane: simultaneous contacts produce one owner, consistent links and no duplicated reward
+ok 52 - crane: simultaneous contacts produce one owner, consistent links and no duplicated reward
+  ---
+  duration_ms: 2.287373
+  type: 'test'
+  ...
+# Subtest: crane: swept contact catches a small target crossed within one step
+ok 53 - crane: swept contact catches a small target crossed within one step
+  ---
+  duration_ms: 0.198133
+  type: 'test'
+  ...
+# Subtest: crane: NaN, forged action, stale shot and input outside play are rejected
+ok 54 - crane: NaN, forged action, stale shot and input outside play are rejected
+  ---
+  duration_ms: 0.425142
+  type: 'test'
+  ...
+# Subtest: crane: 90-second cutoff permits committed cargo to settle, rejects new shots, ties share rank
+ok 55 - crane: 90-second cutoff permits committed cargo to settle, rejects new shots, ties share rank
+  ---
+  duration_ms: 0.695467
+  type: 'test'
+  ...
+# Subtest: crane: disconnect takeover releases control on reconnect and JSON restart preserves an active claw
+ok 56 - crane: disconnect takeover releases control on reconnect and JSON restart preserves an active claw
+  ---
+  duration_ms: 7.981622
+  type: 'test'
+  ...
+# Subtest: crane: 64 seeded AI matches finish, preserve ownership invariants and create steals and mishaps
+ok 57 - crane: 64 seeded AI matches finish, preserve ownership invariants and create steals and mishaps
+  ---
+  duration_ms: 712.214187
+  type: 'test'
+  ...
+# Subtest: crane: production coordinator advertises version, selects owned monster, gates ready/start and fills AI
+ok 58 - crane: production coordinator advertises version, selects owned monster, gates ready/start and fills AI
+  ---
+  duration_ms: 224.034687
+  type: 'test'
+  ...
+# Subtest: crane: authenticated queues reject stale game, round, version, sequence and NaN; persistence includes real score
+ok 59 - crane: authenticated queues reject stale game, round, version, sequence and NaN; persistence includes real score
+  ---
+  duration_ms: 39.42113
+  type: 'test'
+  ...
+# Subtest: crane: home/disconnection uses AI, reconnect restores input, rematch/list clear only this game
+ok 60 - crane: home/disconnection uses AI, reconnect restores input, rematch/list clear only this game
+  ---
+  duration_ms: 50.881709
+  type: 'test'
+  ...
+# Subtest: crane: four real WebSocket clients pass through the production coordinator and receive separate frames
+ok 61 - crane: four real WebSocket clients pass through the production coordinator and receive separate frames
+  ---
+  duration_ms: 481.796693
+  type: 'test'
+  ...
+# Subtest: swipe: one downstroke, then a full lift; hold, repeated down and old taps cannot farm points
+ok 62 - swipe: one downstroke, then a full lift; hold, repeated down and old taps cannot farm points
+  ---
+  duration_ms: 3.293655
+  type: 'test'
+  ...
+# Subtest: swipe: stop charges each completed downstroke, while lift and stillness are safe; destruction persists
+ok 63 - swipe: stop charges each completed downstroke, while lift and stillness are safe; destruction persists
+  ---
+  duration_ms: 8.97552
+  type: 'test'
+  ...
+# Subtest: swipe: input deduplication, ordering, late packets, cancellation and timing survive serialization
+ok 64 - swipe: input deduplication, ordering, late packets, cancellation and timing survive serialization
+  ---
+  duration_ms: 2.974934
+  type: 'test'
+  ...
+# Subtest: swipe: relative finger tracking, hysteresis, release and a new touch preserve one-cut-per-cycle
+ok 65 - swipe: relative finger tracking, hysteresis, release and a new touch preserve one-cut-per-cycle
+  ---
+  duration_ms: 1.006394
+  type: 'test'
+  ...
+# Subtest: swipe: prediction and resend stay equal to authoritative score at 300ms each-way latency and 250ms ticks
+ok 66 - swipe: prediction and resend stay equal to authoritative score at 300ms each-way latency and 250ms ticks
+  ---
+  duration_ms: 8.71457
+  type: 'test'
+  ...
+# Subtest: swipe: all AI chefs obey the same downstroke rule and the match seals after 45 seconds
+ok 67 - swipe: all AI chefs obey the same downstroke rule and the match seals after 45 seconds
+  ---
+  duration_ms: 1.126689
+  type: 'test'
+  ...
+# Subtest: debris: gravity, contact bounce, rolling friction and sleep; a collapsed board wakes settled pieces
+ok 68 - debris: gravity, contact bounce, rolling friction and sleep; a collapsed board wakes settled pieces
+  ---
+  duration_ms: 1.30513
+  type: 'test'
+  ...
+# Subtest: debris: rapid cutting has a fixed memory/work limit and no nonfinite state after stalled frames
+ok 69 - debris: rapid cutting has a fixed memory/work limit and no nonfinite state after stalled frames
+  ---
+  duration_ms: 10.349552
+  type: 'test'
+  ...
+# Subtest: knife contact and cut plane coincide at every viewport, mince stage and destruction depth
+ok 70 - knife contact and cut plane coincide at every viewport, mince stage and destruction depth
+  ---
+  duration_ms: 1.571857
+  type: 'test'
+  ...
+# Subtest: swipe: import aliases, cache manifest, CSS and advertised version load one coherent Build567
+ok 71 - swipe: import aliases, cache manifest, CSS and advertised version load one coherent Build567
+  ---
+  duration_ms: 38.589869
+  type: 'test'
+  ...
+# Subtest: swipe wire: new rooms require updated clients, owned chefs, host start and all-human readiness; empty seat is AI
+ok 72 - swipe wire: new rooms require updated clients, owned chefs, host start and all-human readiness; empty seat is AI
+  ---
+  duration_ms: 15.395195
+  type: 'test'
+  ...
+# Subtest: swipe wire: original tap packets, wrong room/version, observers and disconnected sessions cannot score
+ok 73 - swipe wire: original tap packets, wrong room/version, observers and disconnected sessions cannot score
+  ---
+  duration_ms: 5.563689
+  type: 'test'
+  ...
+# Subtest: swipe wire: stop penalties persist on disk; reconnect cannot replay a cut, and rematch uses swipe controls
+ok 74 - swipe wire: stop penalties persist on disk; reconnect cannot replay a cut, and rematch uses swipe controls
+  ---
+  duration_ms: 14.385543
+  type: 'test'
+  ...
+# Subtest: swipe wire: four real WebSocket clients deliver independent gestures and receive correct self-only acknowledgements
+ok 75 - swipe wire: four real WebSocket clients deliver independent gestures and receive correct self-only acknowledgements
+  ---
+  duration_ms: 287.383743
+  type: 'test'
+  ...
+# Subtest: Build568 loads updated handling, perspective, menu and protocol through one canonical cache URL
+ok 76 - Build568 loads updated handling, perspective, menu and protocol through one canonical cache URL
+  ---
+  duration_ms: 34.960769
+  type: 'test'
+  ...
+# Subtest: both teams see their own goal and every teammate below center; coordinates rotate exactly 180 degrees
+ok 77 - both teams see their own goal and every teammate below center; coordinates rotate exactly 180 degrees
+  ---
+  duration_ms: 3.421394
+  type: 'test'
+  ...
+# Subtest: diagonal and cardinal pulls map screen direction into mirrored world shots without changing power
+ok 78 - diagonal and cardinal pulls map screen direction into mirrored world shots without changing power
+  ---
+  duration_ms: 0.665142
+  type: 'test'
+  ...
+# Subtest: up-arrow attacks for either team and the launch preview includes the same residual velocity as the server
+ok 79 - up-arrow attacks for either team and the launch preview includes the same residual velocity as the server
+  ---
+  duration_ms: 1.036059
+  type: 'test'
+  ...
+# Subtest: small pulls make small corrections, full strength remains 35, and repeated shots cannot bypass reload
+ok 80 - small pulls make small corrections, full strength remains 35, and repeated shots cannot bypass reload
+  ---
+  duration_ms: 0.817848
+  type: 'test'
+  ...
+# Subtest: aiming brakes a moving striker for either team; cancelling restores normal glide without firing
+ok 81 - aiming brakes a moving striker for either team; cancelling restores normal glide without firing
+  ---
+  duration_ms: 3.30097
+  type: 'test'
+  ...
+# Subtest: center and side rails stop the return ricochet while pucks retain their bank-shot bounce
+ok 82 - center and side rails stop the return ricochet while pucks retain their bank-shot bounce
+  ---
+  duration_ms: 2.122778
+  type: 'test'
+  ...
+# Subtest: a hard center-line rebound no longer knocks a stationary puck into our own goal
+ok 83 - a hard center-line rebound no longer knocks a stationary puck into our own goal
+  ---
+  duration_ms: 17.546322
+  type: 'test'
+  ...
+# Subtest: AI behind the puck takes a sideways route instead of driving it toward home
+ok 84 - AI behind the puck takes a sideways route instead of driving it toward home
+  ---
+  duration_ms: 1.125228
+  type: 'test'
+  ...
+# Subtest: old clients cannot start updated hockey; server snapshots keep world positions for all four viewers
+ok 85 - old clients cannot start updated hockey; server snapshots keep world positions for all four viewers
+  ---
+  duration_ms: 32.862166
+  type: 'test'
+  ...
+# Subtest: the real party menu admits the updated server and rejects the old version before sending a game change
+ok 86 - the real party menu admits the updated server and rejects the old version before sending a game change
+  ---
+  duration_ms: 0.967298
+  type: 'test'
+  ...
+1..86
+# tests 86
+# suites 0
+# pass 86
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7796.364753

@@ -1,0 +1,591 @@
+{
+  "scope": "Production hockey view, inputs, rendering and rules; outer roster isolated. Four-client server integration is in the Node tests.",
+  "hardwareIPhone": false,
+  "sizes": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 0,
+      "width": 390,
+      "height": 740,
+      "team": 0,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 390,
+        "height": 600,
+        "top": 89,
+        "right": 390,
+        "bottom": 689,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 112.75,
+          "y": 448.69565217391306,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 112.75,
+          "y": 151.30434782608694,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 277.25,
+          "y": 448.69565217391306,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 277.25,
+          "y": 151.30434782608694,
+          "team": 1
+        }
+      ],
+      "leftTeam": "◆ サファイア"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 1,
+      "width": 390,
+      "height": 740,
+      "team": 1,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 390,
+        "height": 600,
+        "top": 89,
+        "right": 390,
+        "bottom": 689,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 277.25,
+          "y": 151.30434782608694,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 277.25,
+          "y": 448.69565217391306,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 112.75,
+          "y": 151.30434782608694,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 112.75,
+          "y": 448.69565217391306,
+          "team": 1
+        }
+      ],
+      "leftTeam": "● ルビー"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 2,
+      "width": 390,
+      "height": 740,
+      "team": 0,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 390,
+        "height": 600,
+        "top": 89,
+        "right": 390,
+        "bottom": 689,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 112.75,
+          "y": 448.69565217391306,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 112.75,
+          "y": 151.30434782608694,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 277.25,
+          "y": 448.69565217391306,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 277.25,
+          "y": 151.30434782608694,
+          "team": 1
+        }
+      ],
+      "leftTeam": "◆ サファイア"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 3,
+      "width": 390,
+      "height": 740,
+      "team": 1,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 390,
+        "height": 600,
+        "top": 89,
+        "right": 390,
+        "bottom": 689,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 277.25,
+          "y": 151.30434782608694,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 277.25,
+          "y": 448.69565217391306,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 112.75,
+          "y": 151.30434782608694,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 112.75,
+          "y": 448.69565217391306,
+          "team": 1
+        }
+      ],
+      "leftTeam": "● ルビー"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 0,
+      "width": 320,
+      "height": 568,
+      "team": 0,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 320,
+        "height": 428,
+        "top": 89,
+        "right": 320,
+        "bottom": 517,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 93.0625,
+          "y": 320.0695652173913,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 93.0625,
+          "y": 107.93043478260864,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 226.9375,
+          "y": 320.0695652173913,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 226.9375,
+          "y": 107.93043478260864,
+          "team": 1
+        }
+      ],
+      "leftTeam": "◆ サファイア"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 1,
+      "width": 320,
+      "height": 568,
+      "team": 1,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 320,
+        "height": 428,
+        "top": 89,
+        "right": 320,
+        "bottom": 517,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 226.9375,
+          "y": 107.93043478260864,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 226.9375,
+          "y": 320.0695652173913,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 93.0625,
+          "y": 107.93043478260864,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 93.0625,
+          "y": 320.0695652173913,
+          "team": 1
+        }
+      ],
+      "leftTeam": "● ルビー"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 2,
+      "width": 320,
+      "height": 568,
+      "team": 0,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 320,
+        "height": 428,
+        "top": 89,
+        "right": 320,
+        "bottom": 517,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 93.0625,
+          "y": 320.0695652173913,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 93.0625,
+          "y": 107.93043478260864,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 226.9375,
+          "y": 320.0695652173913,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 226.9375,
+          "y": 107.93043478260864,
+          "team": 1
+        }
+      ],
+      "leftTeam": "◆ サファイア"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 3,
+      "width": 320,
+      "height": 568,
+      "team": 1,
+      "stage": {
+        "x": 0,
+        "y": 89,
+        "width": 320,
+        "height": 428,
+        "top": 89,
+        "right": 320,
+        "bottom": 517,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 226.9375,
+          "y": 107.93043478260864,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 226.9375,
+          "y": 320.0695652173913,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 93.0625,
+          "y": 107.93043478260864,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 93.0625,
+          "y": 320.0695652173913,
+          "team": 1
+        }
+      ],
+      "leftTeam": "● ルビー"
+    },
+    {
+      "viewport": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 0,
+      "width": 740,
+      "height": 390,
+      "team": 0,
+      "stage": {
+        "x": 0,
+        "y": 70,
+        "width": 740,
+        "height": 285,
+        "top": 70,
+        "right": 740,
+        "bottom": 355,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 211.1875,
+          "y": 210.16304347826087,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 211.1875,
+          "y": 74.83695652173913,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 528.8125,
+          "y": 210.16304347826087,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 528.8125,
+          "y": 74.83695652173913,
+          "team": 1
+        }
+      ],
+      "leftTeam": "◆ サファイア"
+    },
+    {
+      "viewport": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 1,
+      "width": 740,
+      "height": 390,
+      "team": 1,
+      "stage": {
+        "x": 0,
+        "y": 70,
+        "width": 740,
+        "height": 285,
+        "top": 70,
+        "right": 740,
+        "bottom": 355,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 528.8125,
+          "y": 74.83695652173913,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 528.8125,
+          "y": 210.16304347826087,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 211.1875,
+          "y": 74.83695652173913,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 211.1875,
+          "y": 210.16304347826087,
+          "team": 1
+        }
+      ],
+      "leftTeam": "● ルビー"
+    },
+    {
+      "viewport": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 2,
+      "width": 740,
+      "height": 390,
+      "team": 0,
+      "stage": {
+        "x": 0,
+        "y": 70,
+        "width": 740,
+        "height": 285,
+        "top": 70,
+        "right": 740,
+        "bottom": 355,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 211.1875,
+          "y": 210.16304347826087,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 211.1875,
+          "y": 74.83695652173913,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 528.8125,
+          "y": 210.16304347826087,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 528.8125,
+          "y": 74.83695652173913,
+          "team": 1
+        }
+      ],
+      "leftTeam": "◆ サファイア"
+    },
+    {
+      "viewport": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 3,
+      "width": 740,
+      "height": 390,
+      "team": 1,
+      "stage": {
+        "x": 0,
+        "y": 70,
+        "width": 740,
+        "height": 285,
+        "top": 70,
+        "right": 740,
+        "bottom": 355,
+        "left": 0
+      },
+      "attack": "↑ 上へ攻撃",
+      "points": [
+        {
+          "seat": 0,
+          "x": 528.8125,
+          "y": 74.83695652173913,
+          "team": 0
+        },
+        {
+          "seat": 1,
+          "x": 528.8125,
+          "y": 210.16304347826087,
+          "team": 1
+        },
+        {
+          "seat": 2,
+          "x": 211.1875,
+          "y": 74.83695652173913,
+          "team": 0
+        },
+        {
+          "seat": 3,
+          "x": 211.1875,
+          "y": 210.16304347826087,
+          "team": 1
+        }
+      ],
+      "leftTeam": "● ルビー"
+    }
+  ],
+  "checks": [
+    "All four seats on both teams see their own two strikers below center, own score first and attack up; 12 viewport/seat combinations fit.",
+    "Native touch up/right shots have identical screen direction for sapphire and ruby; all four keyboard directions match too. Short drags cancel, touch cancel stops braking, cooldown prevents duplicates.",
+    "A second finger cannot fire the primary striker, and disconnected input is rejected.",
+    "Lobby wording matches both local perspectives; team/propeller/2x options and result/replay controls remain available."
+  ],
+  "errors": [],
+  "failed": [],
+  "browserVersion": "153.0.8010.0"
+}

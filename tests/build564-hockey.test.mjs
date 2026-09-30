@@ -4,7 +4,6 @@ import { readFile } from 'node:fs/promises';
 import { HOCKEY564 as C, makeHockey564, startHockey564, advanceHockey564,
   physicsHockey564, pairHockey564, finishHockey564, publicHockey564, launch564,
   canShoot564, input564, botHockey564 } from '../src/ricochet550/Hockey564.js';
-import { launch563 } from '../src/ricochet550/Goals563.js';
 import { members } from '../tools/build563/fixture.mjs';
 import { room } from '../tools/build563/wire-fixture.mjs';
 
@@ -29,11 +28,11 @@ test('one to four people fill exactly two teams; player colors and selected mons
   }
 });
 
-test('launch, momentum, reload and cancel retain the exact Build563 behavior',()=>{
+test('launch uses reduced residual drift and fine control; reload, sequencing and cancel remain valid',()=>{
   const g=game(),p=g.players[0];p.vx=3;p.vy=-2;
-  assert(launch564(g,p,.7,.4));const speed=7+15*.7+13*.7*.7;
-  assert(Math.abs(p.vx-(3+Math.sin(.4)*speed))<1e-9);
-  assert(Math.abs(p.vy-(-2+Math.cos(.4)*speed))<1e-9);
+  assert(launch564(g,p,.7,.4));const speed=3+14*.7+18*.7*.7;
+  assert(Math.abs(p.vx-(3*.25+Math.sin(.4)*speed))<1e-9);
+  assert(Math.abs(p.vy-(-2*.25+Math.cos(.4)*speed))<1e-9);
   assert.equal(p.nextShotAt563-g.simAt,1250);assert(!canShoot564(g,p,g.simAt+1249));assert(canShoot564(g,p,g.simAt+1250));
   g.simAt+=1250;assert(input564(g,p,{seq:1,round:1,shot:1,action:'pull',angle:0,power:.9}));
   assert(input564(g,p,{seq:2,round:1,shot:1,action:'cancel'}));assert(!p.pulling);assert.equal(p.shots555,1);
@@ -94,7 +93,7 @@ test('all four snapshots agree on team scores, survive save/restore, and old rul
   const snapshots=f.p.members.map(p=>f.a.snapshot(f.c,f.saved(),p.playerId));
   for(const s of snapshots){assert.deepEqual(s.teams564.map(t=>t.score),[1,0]);assert.equal(s.members.filter(m=>m.team564===0).length,2);assert(!('seed' in s));assert(s.members.every(m=>!('owned' in m)));}
   f.c[f.a.runtime]=new Map();f.c.data[f.a.rooms].TEST=JSON.parse(JSON.stringify(f.saved()));f.tick(100);assert.equal(f.g().teams564[0].score,1);
-  f.saved().rules550=7;f.tick(20);assert.equal(f.saved().phase,'lobby');assert.equal(f.saved().rules550,9);assert(f.p.members.every(p=>!p.ready));
+  f.saved().rules550=7;f.tick(20);assert.equal(f.saved().phase,'lobby');assert.equal(f.saved().rules550,10);assert(f.p.members.every(p=>!p.ready));
 });
 
 test('AI assigns one attacker and one defender; finite ninety-second matches finish across seeds',()=>{
@@ -112,7 +111,7 @@ test('AI assigns one attacker and one defender; finite ninety-second matches fin
 });
 
 test('active facade, client/server protocol and menu all select hockey',async()=>{
-  const rules=await import('../src/ricochet550/Rules550.js');assert.equal(rules.RICOCHET550.version,9);
+  const rules=await import('../src/ricochet550/Rules550.js');assert.equal(rules.RICOCHET550.version,10);
   const menu=(await import('../src/party/PartyGames462.js')).PARTY_GAMES462.find(g=>g.id==='pinball');assert.equal(menu.name,'人間エアホッケー！');
-  for(const path of ['src/race/RaceClient451.js','online-server/src/RaceCoordinator451.js'])assert((await readFile(new URL('../'+path,import.meta.url),'utf8')).includes('ricochetVersion550:9'));
+  for(const path of ['src/race/RaceClient451.js','online-server/src/RaceCoordinator451.js'])assert((await readFile(new URL('../'+path,import.meta.url),'utf8')).includes('ricochetVersion550:10'));
 });
