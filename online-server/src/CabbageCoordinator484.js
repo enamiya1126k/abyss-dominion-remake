@@ -1,13 +1,15 @@
 import{randomBytes}from'node:crypto';
-import{CABBAGE484 as RULES,makeCabbage484,startCabbage484,tap484,advanceCabbage484}from'../../src/cabbage/Rules484.js';
+import{CABBAGE484 as RULES,makeCabbage484,startCabbage484,tap484,stroke567,advanceCabbage484}from'../../src/cabbage/Rules484.js';
 export const cabbageFor484=(c,id)=>Object.values(c.data.cabbageRooms484??{}).find(g=>g.members.some(m=>m.playerId===id&&!m.departed))??null;
-export function createCabbage484(c,p,members){return makeCabbage484({id:`cb484-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,members,now:c.now(),seed:randomBytes(4).readUInt32LE()})}
+export function createCabbage484(c,p,members){return makeCabbage484({id:`cb484-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,members,controlVersion567:1,now:c.now(),seed:randomBytes(4).readUInt32LE()})}
 export function queueCabbage484(c,session,m){
  const g=cabbageFor484(c,session.playerId),p=g?.players.find(p=>p.playerId===session.playerId&&!p.ai);
- if(!g||!p||m.gameId!==g.id||!['countdown','playing'].includes(g.phase))return;
- if(!Array.isArray(m.taps)||m.taps.length>RULES.maxBatch)return;
+ if(session.connected===false||!g||!p||m.gameId!==g.id||!['countdown','playing'].includes(g.phase))return;
+ const swipe=g.controlVersion567===1;
+ if(swipe&&(m.op!=='cabbageStroke567'||m.cabbageSwipe567!==1)||!swipe&&m.op==='cabbageStroke567')return;
+ const inputs=swipe?m.strokes:m.taps;if(!Array.isArray(inputs)||inputs.length>RULES.maxBatch)return;
  c.cabbageQueue484??=new Map();const key=g.id+':'+p.playerId,list=c.cabbageQueue484.get(key)??[];
- for(const t of m.taps){if(list.length>=RULES.maxQueue)break;if(!t||!Number.isSafeInteger(t.seq)||t.seq<=p.lastSeq||t.seq>RULES.maxSequence||!['left','right'].includes(t.side)||!Number.isFinite(t.at)||list.some(x=>x.seq===t.seq))continue;list.push({seq:t.seq,side:t.side,at:t.at,received:c.now()})}
+ for(const t of inputs){if(list.length>=RULES.maxQueue)break;if(!t||!Number.isSafeInteger(t.seq)||t.seq<=p.lastSeq||t.seq>RULES.maxSequence||!(swipe?['lift','cut','cancel'].includes(t.kind):['left','right'].includes(t.side))||!Number.isFinite(t.at)||list.some(x=>x.seq===t.seq))continue;list.push({seq:t.seq,...(swipe?{kind:t.kind}:{side:t.side}),at:t.at,received:c.now()})}
  if(list.length)c.cabbageQueue484.set(key,list);
 }
 export function handleCabbage484(c,session,m){
@@ -22,7 +24,9 @@ export function handleCabbage484(c,session,m){
   if(g.hostId!==session.playerId)throw Error('部屋主が開始できます');if(g.phase!=='lobby')return true;
   if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員が魔物を選んで「準備OK」を押してください');
   if(m.cabbageScoring491!==1||p.members.some(x=>x.cabbageVersion484!==1||x.cabbageScoring491!==1))throw Error('全員がBuild491へ更新してから開始してください');
+  if((g.controlVersion567===1||m.cabbageSwipe567===1)&&(m.cabbageSwipe567!==1||p.members.some(x=>x.cabbageSwipe567!==1)))throw Error('縦スライド操作には全員のBuild567更新が必要です');
   if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかの対戦の終了を待っています');
+  if(m.cabbageSwipe567===1)g.controlVersion567=1;
   g.aiColors500={...(p.aiColors500??{})};startCabbage484(g,c.now());
  }else throw Error('未対応の操作です');
  g.updatedAt=c.now();g.revision++;return true;
@@ -33,7 +37,7 @@ export function advanceCabbages484(c){
  if(!active.length&&!expired.length)return;
  const consumed=[];
  c.transaction(()=>{
-  for(const g of active){for(const p of g.players.filter(x=>!x.ai)){const key=g.id+':'+p.playerId,list=c.cabbageQueue484?.get(key)??[];for(const t of list.sort((a,b)=>a.seq-b.seq))tap484(g,p,t,t.received);consumed.push(key)}advanceCabbage484(g,now)}
+  for(const g of active){for(const p of g.players.filter(x=>!x.ai)){const key=g.id+':'+p.playerId,list=c.cabbageQueue484?.get(key)??[];for(const t of list.sort((a,b)=>a.seq-b.seq))(g.controlVersion567===1?stroke567:tap484)(g,p,t,t.received);consumed.push(key)}advanceCabbage484(g,now)}
   for(const g of expired){delete c.data.cabbageRooms484[g.code];const p=Object.values(c.data.parties462??{}).find(p=>p.id===g.partyId462);if(p){p.game=null;p.raceCode=null;p.members.forEach(m=>m.ready=false)}}
  });
  for(const key of consumed)c.cabbageQueue484?.delete(key);

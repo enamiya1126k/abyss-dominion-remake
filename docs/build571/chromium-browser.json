@@ -1,0 +1,25 @@
+{
+  "errors": [],
+  "failed": [],
+  "sizes": [
+    {
+      "width": 390,
+      "height": 740,
+      "page": 390,
+      "bottom": 740
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "page": 320,
+      "bottom": 568
+    }
+  ],
+  "checks": [
+    "390/320px touch: new item atlas, stock-to-multiplier labels, gear scroll, barrier, hand selection; no final-distance preview or calculation formula",
+    "run multipliers appear in sequence without disclosing final distance; physical dice stay 1..6 while adjusted values exceed 6",
+    "52 item catalogue with 12 new sprites; old server start blocked"
+  ],
+  "nativeIPhone": false,
+  "scope": "Production luck rules/view/styles/art with a local fixture; party lounge stubbed."
+}

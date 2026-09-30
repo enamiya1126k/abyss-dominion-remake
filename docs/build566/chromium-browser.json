@@ -1,0 +1,246 @@
+{
+  "scope": "Production crane rules/view/art/input, isolated outer party roster; production coordinator and four sockets tested separately.",
+  "hardwareIPhone": false,
+  "checks": [
+    "All four seats rotate to the bottom and fit 390×740, 320×568 and 740×390 without overflow.",
+    "Native CDP touch fires once in the intended direction; busy claw blocks repeats; touch cancellation does not shoot.",
+    "Rotated-seat aiming and keyboard cursor/fire use the same authoritative angles.",
+    "Touch steals the returning big chest; only the new owner receives +12; a stolen mimic bites for −4.",
+    "Three-human/one-AI roster, companion picker, tied result and host-only replay controls render.",
+    "Reduced motion removes bite shake and animated canvas bursts.",
+    "Network loss is visible; incompatible room versions show the update message."
+  ],
+  "sizes": [
+    {
+      "width": 390,
+      "height": 740,
+      "self": 0,
+      "scroll": 390,
+      "stage": {
+        "x": 0,
+        "y": 172.6875,
+        "w": 390,
+        "h": 501.8125,
+        "bottom": 674.5
+      },
+      "controlBottom": 740,
+      "own": {
+        "x": 195,
+        "y": 452,
+        "seat": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "self": 1,
+      "scroll": 390,
+      "stage": {
+        "x": 0,
+        "y": 172.6875,
+        "w": 390,
+        "h": 501.8125,
+        "bottom": 674.5
+      },
+      "controlBottom": 740,
+      "own": {
+        "x": 195,
+        "y": 452,
+        "seat": 1
+      }
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "self": 2,
+      "scroll": 390,
+      "stage": {
+        "x": 0,
+        "y": 172.6875,
+        "w": 390,
+        "h": 501.8125,
+        "bottom": 674.5
+      },
+      "controlBottom": 740,
+      "own": {
+        "x": 195.00000000000003,
+        "y": 452,
+        "seat": 2
+      }
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "self": 3,
+      "scroll": 390,
+      "stage": {
+        "x": 0,
+        "y": 172.6875,
+        "w": 390,
+        "h": 501.8125,
+        "bottom": 674.5
+      },
+      "controlBottom": 740,
+      "own": {
+        "x": 195.00000000000003,
+        "y": 452,
+        "seat": 3
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "self": 0,
+      "scroll": 320,
+      "stage": {
+        "x": 0,
+        "y": 135.078125,
+        "w": 320,
+        "h": 381.921875,
+        "bottom": 517
+      },
+      "controlBottom": 568,
+      "own": {
+        "x": 160,
+        "y": 332,
+        "seat": 0
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "self": 1,
+      "scroll": 320,
+      "stage": {
+        "x": 0,
+        "y": 135.078125,
+        "w": 320,
+        "h": 381.921875,
+        "bottom": 517
+      },
+      "controlBottom": 568,
+      "own": {
+        "x": 160,
+        "y": 332,
+        "seat": 1
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "self": 2,
+      "scroll": 320,
+      "stage": {
+        "x": 0,
+        "y": 135.078125,
+        "w": 320,
+        "h": 381.921875,
+        "bottom": 517
+      },
+      "controlBottom": 568,
+      "own": {
+        "x": 160.00000000000003,
+        "y": 332,
+        "seat": 2
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "self": 3,
+      "scroll": 320,
+      "stage": {
+        "x": 0,
+        "y": 135.078125,
+        "w": 320,
+        "h": 381.921875,
+        "bottom": 517
+      },
+      "controlBottom": 568,
+      "own": {
+        "x": 160.00000000000003,
+        "y": 332,
+        "seat": 3
+      }
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "self": 0,
+      "scroll": 740,
+      "stage": {
+        "x": 205,
+        "y": 40,
+        "w": 535,
+        "h": 350,
+        "bottom": 390
+      },
+      "controlBottom": 390,
+      "own": {
+        "x": 267.5,
+        "y": 300,
+        "seat": 0
+      }
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "self": 1,
+      "scroll": 740,
+      "stage": {
+        "x": 205,
+        "y": 40,
+        "w": 535,
+        "h": 350,
+        "bottom": 390
+      },
+      "controlBottom": 390,
+      "own": {
+        "x": 267.5,
+        "y": 300,
+        "seat": 1
+      }
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "self": 2,
+      "scroll": 740,
+      "stage": {
+        "x": 205,
+        "y": 40,
+        "w": 535,
+        "h": 350,
+        "bottom": 390
+      },
+      "controlBottom": 390,
+      "own": {
+        "x": 267.50000000000006,
+        "y": 300,
+        "seat": 2
+      }
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "self": 3,
+      "scroll": 740,
+      "stage": {
+        "x": 205,
+        "y": 40,
+        "w": 535,
+        "h": 350,
+        "bottom": 390
+      },
+      "controlBottom": 390,
+      "own": {
+        "x": 267.50000000000006,
+        "y": 300,
+        "seat": 3
+      }
+    }
+  ],
+  "errors": [],
+  "failed": [],
+  "browserVersion": "153.0.8010.0"
+}

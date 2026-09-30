@@ -1,0 +1,8 @@
+import {createRequire} from 'node:module';import {mkdir,rm} from 'node:fs/promises';import {execFileSync} from 'node:child_process';import {createServer} from './preview.mjs';
+const {chromium}=createRequire(import.meta.url)('playwright'),server=createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));const dir='docs/build566/frames';await mkdir(dir,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:process.env.QA_CHROMIUM??'/tmp/chromium',args:['--no-sandbox']});
+try{const page=await browser.newPage({viewport:{width:390,height:740},isMobile:true,hasTouch:true,deviceScaleFactor:1});await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.ready);await page.evaluate(()=>document.fonts.ready);let frame=0;
+ for(const mimic of [false,true]){await page.evaluate(m=>stealDemo(m),mimic);await page.waitForTimeout(100);for(let i=0;i<65;i++){if(i===5){const q=await page.evaluate(()=>targetPoint(0,-2));await page.touchscreen.tap(q.x,q.y);}if(i>5)await page.evaluate(()=>advance(100));await page.waitForTimeout(55);await page.screenshot({path:dir+'/'+String(frame++).padStart(3,'0')+'.png'});}}
+ execFileSync('ffmpeg',['-hide_banner','-loglevel','error','-y','-framerate','10','-i',dir+'/%03d.png','-vf','fps=10,scale=390:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=160[p];[s1][p]paletteuse=dither=bayer:bayer_scale=3','-loop','0','docs/build566/snatch-demo.gif']);
+ console.log(JSON.stringify({frames:frame,gif:'docs/build566/snatch-demo.gif',fixture:'Deterministic presentation setup; production touch, motion, capture, scoring and bite effects.'}));
+}finally{await browser.close();await new Promise(r=>server.close(r));await rm(dir,{recursive:true,force:true});}

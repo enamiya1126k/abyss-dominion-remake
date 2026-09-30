@@ -1,11 +1,12 @@
 import {
   PINBALL563, makeGoal563, startGoal563, random563, event563,
-  canShoot563, launch563, inputGoal563, limit563, pairGoal563,
+  canShoot563, inputGoal563, limit563, pairGoal563,
   rotorGoal563, publicGoal563, signatureGoal563,
 } from './Goals563.js';
+import {HANDLING568, launchVelocity568} from './Control568.js';
 
-// Keep the Build563 launch impulse, momentum, drag, reload and input contract.
-export const HOCKEY564 = Object.freeze({ ...PINBALL563, version: 9,
+// Keep the slingshot, full-power impulse and reload; make small corrections controllable.
+export const HOCKEY564 = Object.freeze({ ...PINBALL563, version: 10,
   radius: .8, gemRadius: .42, goalHalfWidth: 3.2, goalDepth: .9,
   postRadius: .14, respawn: 2000, passBoost: .05 });
 const C = HOCKEY564, clamp = (n, a, b) => Math.max(a, Math.min(b, n));
@@ -15,8 +16,23 @@ export const TEAM564 = Object.freeze([
 ]);
 export { signatureGoal563 as signature564 };
 export const canShoot564 = (g, p, at = g.simAt) => !!g.gem && canShoot563(g, p, at);
-export const launch564 = (g, p, power, angle) => canShoot564(g, p) && launch563(g, p, power, angle);
-export const input564 = (g, p, message) => canShoot564(g, p) && inputGoal563(g, p, message);
+export function launch564(g, p, power, angle) {
+  if (!canShoot564(g, p) || !Number.isFinite(power) || power < .08 || power > 1 ||
+    !Number.isFinite(angle) || Math.abs(angle) > Math.PI) return false;
+  const carryX = p.vx, carryY = p.vy;
+  Object.assign(p, launchVelocity568(p, power, angle, C.maxSpeed));
+  p.nextShotAt563 = g.simAt + C.reload; p.shots555++; p.pulling = false; p.power = 0;
+  event563(g, 'launch', {seat:p.seat, x:p.x, y:p.y, carryX, carryY, vx:p.vx, vy:p.vy});
+  return true;
+}
+export function input564(g, p, message) {
+  if (!canShoot564(g, p)) return false;
+  if (message.action !== 'shoot') return inputGoal563(g, p, message);
+  if (!Number.isSafeInteger(message.seq) || message.seq <= p.lastSeq || message.round !== 1 ||
+    message.shot !== p.shots555 || !launch564(g, p, message.power, message.angle)) return false;
+  p.lastSeq = message.seq;
+  return true;
+}
 export const power565 = gem => 1 + Math.max(0, gem?.charge565 ?? 0) * C.passBoost;
 export const speed565 = g => g.hockey565?.speed === 2 ? 2 : 1;
 export const goals564 = () => [0, 1].map(team => ({ team, x: 0,
@@ -106,7 +122,8 @@ function wall(g, p, nx, ny, depth) {
   p.x += nx * depth; p.y += ny * depth;
   const v = p.vx * nx + p.vy * ny;
   if (v >= 0) return;
-  p.vx -= 1.9 * v * nx; p.vy -= 1.9 * v * ny;
+  const bounce = p === g.gem ? .9 : HANDLING568.railBounce;
+  p.vx -= (1 + bounce) * v * nx; p.vy -= (1 + bounce) * v * ny;
   const key = 'w' + (p.seat ?? 'gem');
   if (-v > 3 && g.simAt - (g.contacts[key] ?? -1e6) >= 110) {
     g.contacts[key] = g.simAt;
@@ -204,7 +221,7 @@ export function physicsHockey564(g, dt = C.step / 1000) {
     g.rotor.angle = (g.rotor.angle + g.rotor.omega * h) % (Math.PI * 2);
     g.rotor.omega *= Math.exp(-.35 * h);
     for (const p of bodies) {
-      const drag = p === g.gem ? .52 : .78;
+      const drag = p === g.gem ? .52 : p.pulling ? HANDLING568.aimDrag : .78;
       p.vx *= Math.exp(-drag * h); p.vy *= Math.exp(-drag * h);
       p.x += p.vx * h; p.y += p.vy * h;
     }
@@ -264,6 +281,11 @@ export function botHockey564(g, p) {
     const onGoalSide = (p.x - gem.x) * dx + (p.y - gem.y) * dy < -.15;
     shoot = onGoalSide && Math.hypot(p.x - gem.x, p.y - gem.y) < 3.4;
     target = shoot ? { x: gem.x + gem.vx * .09, y: gem.y + gem.vy * .09 } : behind;
+    // Reposition around the puck instead of driving through it toward our own goal.
+    if (!shoot && !onGoalSide && Math.abs(p.x - gem.x) < 2.1) {
+      const side = Math.abs(gem.x) > 4.8 ? -Math.sign(gem.x) : p.x < gem.x ? -1 : 1;
+      target = {x: clamp(gem.x + side * 2.25, -7, 7), y: home(p.y)};
+    }
   } else {
     // One partner stays between the puck and their own goal instead of both chasing.
     target = { x: clamp(gem.x * (striking ? .7 : .42), -5.4, 5.4),
@@ -274,9 +296,9 @@ export function botHockey564(g, p) {
   const tx = target.x - p.x, ty = target.y - p.y, dist = Math.hypot(tx, ty);
   if (!shoot && dist < 1.5 && Math.hypot(p.vx, p.vy) < 3) return;
   const desiredSpeed = shoot ? 19 + random563(g) * 6 : clamp(dist * 1.35, 5, 15);
-  const vx = tx / (dist || 1) * desiredSpeed - p.vx * .85;
-  const vy = ty / (dist || 1) * desiredSpeed - p.vy * .85;
-  const impulse = Math.hypot(vx, vy), power = clamp((-15 + Math.sqrt(225 + 52 * Math.max(0, impulse - 7))) / 26, .08, 1);
+  const vx = tx / (dist || 1) * desiredSpeed - p.vx * HANDLING568.carry;
+  const vy = ty / (dist || 1) * desiredSpeed - p.vy * HANDLING568.carry;
+  const impulse = Math.hypot(vx, vy), power = clamp((-14 + Math.sqrt(196 + 72 * Math.max(0, impulse - 3))) / 36, .08, 1);
   const angle = Math.atan2(vx, vy) + (random563(g) - .5) * (shoot ? .06 : .1);
   return { angle: Math.atan2(Math.sin(angle), Math.cos(angle)), power };
 }

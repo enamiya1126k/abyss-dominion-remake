@@ -1,0 +1,401 @@
+{
+  "hardwareIPhone": false,
+  "scope": "Production bomb view, rules and touch; outside roster isolated",
+  "sizes": [
+    {
+      "size": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 0,
+      "width": 390,
+      "height": 740,
+      "stage": {
+        "x": 0,
+        "y": 186.796875,
+        "width": 390,
+        "height": 441.203125,
+        "top": 186.796875,
+        "right": 390,
+        "bottom": 628,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 628,
+        "width": 390,
+        "height": 112,
+        "top": 628,
+        "right": 390,
+        "bottom": 740,
+        "left": 0
+      },
+      "own": "0",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 1,
+      "width": 390,
+      "height": 740,
+      "stage": {
+        "x": 0,
+        "y": 186.796875,
+        "width": 390,
+        "height": 441.203125,
+        "top": 186.796875,
+        "right": 390,
+        "bottom": 628,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 628,
+        "width": 390,
+        "height": 112,
+        "top": 628,
+        "right": 390,
+        "bottom": 740,
+        "left": 0
+      },
+      "own": "1",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 2,
+      "width": 390,
+      "height": 740,
+      "stage": {
+        "x": 0,
+        "y": 186.796875,
+        "width": 390,
+        "height": 441.203125,
+        "top": 186.796875,
+        "right": 390,
+        "bottom": 628,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 628,
+        "width": 390,
+        "height": 112,
+        "top": 628,
+        "right": 390,
+        "bottom": 740,
+        "left": 0
+      },
+      "own": "2",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 740
+      },
+      "self": 3,
+      "width": 390,
+      "height": 740,
+      "stage": {
+        "x": 0,
+        "y": 186.796875,
+        "width": 390,
+        "height": 441.203125,
+        "top": 186.796875,
+        "right": 390,
+        "bottom": 628,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 628,
+        "width": 390,
+        "height": 112,
+        "top": 628,
+        "right": 390,
+        "bottom": 740,
+        "left": 0
+      },
+      "own": "3",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 0,
+      "width": 320,
+      "height": 568,
+      "stage": {
+        "x": 0,
+        "y": 124.59375,
+        "width": 320,
+        "height": 369.90625,
+        "top": 124.59375,
+        "right": 320,
+        "bottom": 494.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 494.5,
+        "width": 320,
+        "height": 73.5,
+        "top": 494.5,
+        "right": 320,
+        "bottom": 568,
+        "left": 0
+      },
+      "own": "0",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 1,
+      "width": 320,
+      "height": 568,
+      "stage": {
+        "x": 0,
+        "y": 124.59375,
+        "width": 320,
+        "height": 369.90625,
+        "top": 124.59375,
+        "right": 320,
+        "bottom": 494.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 494.5,
+        "width": 320,
+        "height": 73.5,
+        "top": 494.5,
+        "right": 320,
+        "bottom": 568,
+        "left": 0
+      },
+      "own": "1",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 2,
+      "width": 320,
+      "height": 568,
+      "stage": {
+        "x": 0,
+        "y": 124.59375,
+        "width": 320,
+        "height": 369.90625,
+        "top": 124.59375,
+        "right": 320,
+        "bottom": 494.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 494.5,
+        "width": 320,
+        "height": 73.5,
+        "top": 494.5,
+        "right": 320,
+        "bottom": 568,
+        "left": 0
+      },
+      "own": "2",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 568
+      },
+      "self": 3,
+      "width": 320,
+      "height": 568,
+      "stage": {
+        "x": 0,
+        "y": 124.59375,
+        "width": 320,
+        "height": 369.90625,
+        "top": 124.59375,
+        "right": 320,
+        "bottom": 494.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 494.5,
+        "width": 320,
+        "height": 73.5,
+        "top": 494.5,
+        "right": 320,
+        "bottom": 568,
+        "left": 0
+      },
+      "own": "3",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 0,
+      "width": 740,
+      "height": 390,
+      "stage": {
+        "x": 0,
+        "y": 129.59375,
+        "width": 740,
+        "height": 186.90625,
+        "top": 129.59375,
+        "right": 740,
+        "bottom": 316.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 316.5,
+        "width": 740,
+        "height": 73.5,
+        "top": 316.5,
+        "right": 740,
+        "bottom": 390,
+        "left": 0
+      },
+      "own": "0",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 1,
+      "width": 740,
+      "height": 390,
+      "stage": {
+        "x": 0,
+        "y": 129.59375,
+        "width": 740,
+        "height": 186.90625,
+        "top": 129.59375,
+        "right": 740,
+        "bottom": 316.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 316.5,
+        "width": 740,
+        "height": 73.5,
+        "top": 316.5,
+        "right": 740,
+        "bottom": 390,
+        "left": 0
+      },
+      "own": "1",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 2,
+      "width": 740,
+      "height": 390,
+      "stage": {
+        "x": 0,
+        "y": 129.59375,
+        "width": 740,
+        "height": 186.90625,
+        "top": 129.59375,
+        "right": 740,
+        "bottom": 316.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 316.5,
+        "width": 740,
+        "height": 73.5,
+        "top": 316.5,
+        "right": 740,
+        "bottom": 390,
+        "left": 0
+      },
+      "own": "2",
+      "chips": 3,
+      "bombs": 3
+    },
+    {
+      "size": {
+        "width": 740,
+        "height": 390
+      },
+      "self": 3,
+      "width": 740,
+      "height": 390,
+      "stage": {
+        "x": 0,
+        "y": 129.59375,
+        "width": 740,
+        "height": 186.90625,
+        "top": 129.59375,
+        "right": 740,
+        "bottom": 316.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 316.5,
+        "width": 740,
+        "height": 73.5,
+        "top": 316.5,
+        "right": 740,
+        "bottom": 390,
+        "left": 0
+      },
+      "own": "3",
+      "chips": 3,
+      "bombs": 3
+    }
+  ],
+  "checks": [
+    "3 bomb selection and pass on all seats/sizes",
+    "hidden digits and no deadline in state",
+    "disconnect disables passing",
+    "exploded holder loses all round points and redistributes other bombs",
+    "lobby rules and result",
+    "reduced motion"
+  ],
+  "errors": [],
+  "failed": [],
+  "browserVersion": "153.0.8010.0"
+}

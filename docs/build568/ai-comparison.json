@@ -1,0 +1,111 @@
+{
+  "scope": "Deterministic AI matches, not human playtesting. Same 12 seeds per propeller/speed combination; changes can alter later random decisions.",
+  "before": [
+    {
+      "rotor": false,
+      "speed": 1,
+      "matches": 12,
+      "goals": 56,
+      "ownGoals": 28,
+      "passes": 102,
+      "teamGoals": [
+        32,
+        24
+      ],
+      "ownGoalFraction": 0.5
+    },
+    {
+      "rotor": false,
+      "speed": 2,
+      "matches": 12,
+      "goals": 89,
+      "ownGoals": 50,
+      "passes": 109,
+      "teamGoals": [
+        42,
+        47
+      ],
+      "ownGoalFraction": 0.5617977528089888
+    },
+    {
+      "rotor": true,
+      "speed": 1,
+      "matches": 12,
+      "goals": 44,
+      "ownGoals": 36,
+      "passes": 121,
+      "teamGoals": [
+        25,
+        19
+      ],
+      "ownGoalFraction": 0.8181818181818182
+    },
+    {
+      "rotor": true,
+      "speed": 2,
+      "matches": 12,
+      "goals": 62,
+      "ownGoals": 50,
+      "passes": 114,
+      "teamGoals": [
+        35,
+        27
+      ],
+      "ownGoalFraction": 0.8064516129032258
+    }
+  ],
+  "after": [
+    {
+      "rotor": false,
+      "speed": 1,
+      "matches": 12,
+      "goals": 32,
+      "ownGoals": 12,
+      "passes": 103,
+      "teamGoals": [
+        13,
+        19
+      ],
+      "ownGoalFraction": 0.375
+    },
+    {
+      "rotor": false,
+      "speed": 2,
+      "matches": 12,
+      "goals": 67,
+      "ownGoals": 26,
+      "passes": 83,
+      "teamGoals": [
+        25,
+        42
+      ],
+      "ownGoalFraction": 0.3880597014925373
+    },
+    {
+      "rotor": true,
+      "speed": 1,
+      "matches": 12,
+      "goals": 36,
+      "ownGoals": 23,
+      "passes": 93,
+      "teamGoals": [
+        18,
+        18
+      ],
+      "ownGoalFraction": 0.6388888888888888
+    },
+    {
+      "rotor": true,
+      "speed": 2,
+      "matches": 12,
+      "goals": 57,
+      "ownGoals": 42,
+      "passes": 90,
+      "teamGoals": [
+        28,
+        29
+      ],
+      "ownGoalFraction": 0.7368421052631579
+    }
+  ]
+}

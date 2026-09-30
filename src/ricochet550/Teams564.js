@@ -8,7 +8,7 @@ export function teamPicker564(c, g) {
     const people = g.members.filter(p => !p.departed && map.get(p.playerId) === t.id);
     const mine = map.get(id) === t.id;
     return `<button data-rc-team="${t.id}" aria-pressed="${mine}" style="--team:${t.color}" ${people.length >= 2 && !mine ? 'disabled' : ''}>
-      <b>${t.mark} ${t.name}</b><small>${t.id === 0 ? '↑ 上のゴールを狙う' : '↓ 下のゴールを狙う'}</small>
+      <b>${t.mark} ${t.name}</b><small>自分の画面では下側 · ↑ 上へ攻撃</small>
       ${people.map(p => `<span style="--player:${color(p)}">${avatar(c,p)}${esc(p.playerId === id ? 'あなた' : p.name)}</span>`).join('')}
       ${Array.from({length:2-people.length},()=>'<span class="hk-ai564">空席はAI</span>').join('')}
     </button>`;
@@ -21,7 +21,7 @@ export function teamScoreboard564(c, g) {
     const t = g.teams564[id];
     return `<article style="--team:${t.color}"><div><b>${t.mark} ${t.name}</b><small>${g.players.filter(p => p.team564 === id).map(p => `<span style="--player:${color(p)}">${esc(p.playerId === c.transport.selfId ? 'YOU' : p.name)}</span>`).join(' / ')}</small></div><strong data-hk-score="${id}">${t.score}</strong></article>`;
   });
-  return `<div class="hk-scorebar565" aria-label="チーム得点">${cards[0]}<div class="hk-clock565"><strong data-rc-time>90</strong><small>${myTeam===0?'↑ 上':'↓ 下'}へ攻撃</small></div>${cards[1]}</div>`;
+  return `<div class="hk-scorebar565" aria-label="チーム得点">${cards[0]}<div class="hk-clock565"><strong data-rc-time>90</strong><small>↑ 上へ攻撃</small></div>${cards[1]}</div>`;
 }
 
 export function modePicker565(c, g) {

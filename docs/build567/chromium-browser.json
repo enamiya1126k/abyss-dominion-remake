@@ -1,0 +1,109 @@
+{
+  "scope": "Production cabbage view, rules, gesture binding, atlas art and bounded debris physics; isolated outer party roster. Four real sockets/coordinator tested separately.",
+  "nativeIPhoneTested": false,
+  "sizes": [
+    {
+      "width": 390,
+      "height": 740,
+      "scroll": 740,
+      "stage": {
+        "x": 0,
+        "y": 211.71875,
+        "width": 390,
+        "height": 462.78125,
+        "top": 211.71875,
+        "right": 390,
+        "bottom": 674.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 674.5,
+        "width": 390,
+        "height": 65.5,
+        "top": 674.5,
+        "right": 390,
+        "bottom": 740,
+        "left": 0
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scroll": 568,
+      "stage": {
+        "x": 0,
+        "y": 150.34375,
+        "width": 320,
+        "height": 362.15625,
+        "top": 150.34375,
+        "right": 320,
+        "bottom": 512.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 512.5,
+        "width": 320,
+        "height": 55.5,
+        "top": 512.5,
+        "right": 320,
+        "bottom": 568,
+        "left": 0
+      }
+    },
+    {
+      "width": 740,
+      "height": 390,
+      "scroll": 390,
+      "stage": {
+        "x": 165,
+        "y": 42,
+        "width": 575,
+        "height": 348,
+        "top": 42,
+        "right": 740,
+        "bottom": 390,
+        "left": 165
+      },
+      "footer": {
+        "x": 0,
+        "y": 349.203125,
+        "width": 165,
+        "height": 40.796875,
+        "top": 349.203125,
+        "right": 165,
+        "bottom": 390,
+        "left": 0
+      }
+    }
+  ],
+  "checks": [
+    "390×740, 320×568 and landscape 740×390 fit the viewport; left/right buttons removed and stage is the touch surface.",
+    "Native CDP touch tracks the blade mid-stroke before any score; one full downstroke scores exactly once, held blade and taps cannot repeat.",
+    "Upstroke and waiting never score or damage; keyboard ↑/↓ uses same rules; ←/→/A/D removed; red-cue downstroke costs exactly 80 and damages the board.",
+    "Touch cancellation produces no cut; a second finger cannot move or score with the primary knife.",
+    "Disconnected input is blocked; reduced motion keeps essential blade tracking and scoring while omitting debris.",
+    "Native touch fallback without PointerEvent cuts once and suppresses compatibility clicks.",
+    "40-body cap stressed at 4× CPU slowdown; physics and blade remain local, gesture messages never contain particle state."
+  ],
+  "errors": [],
+  "failed": [],
+  "browserVersion": "153.0.8010.0",
+  "protocolFields": [
+    "at",
+    "kind",
+    "seq"
+  ],
+  "stress": {
+    "cpuSlowdown": 4,
+    "frames": 100,
+    "meanDrawAndTickMs": 3.913999999999069,
+    "p95DrawAndTickMs": 6.800000000279397,
+    "maxBodies": 40,
+    "bodiesAfter": 40,
+    "frameIntervalP95": 49.200000000186265,
+    "adaptiveLite": false,
+    "meanFrameInterval": 29.57600000000093
+  }
+}

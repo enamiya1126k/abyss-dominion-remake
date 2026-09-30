@@ -1,11 +1,12 @@
 import { HOCKEY564 as C, TEAM564, power565 } from './Hockey564.js';
 import { color563 } from '../party/Arcade563.js';
+import {viewPosition568, launchDirection568} from './Control568.js';
 const TAU=Math.PI*2,images=new Map(),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function image(name){if(!images.has(name)){const im=new Image();im.src=new URL('../../assets/'+name,import.meta.url).href;images.set(name,im);}return images.get(name);}
 const ready=im=>im.complete&&im.naturalWidth;
 export const board564=canvas=>({canvas,c:canvas.getContext('2d'),width:1,height:1,sx:1,sy:1,padX:7,padY:24,points:[],trail:[]});
 export function resize564(r,w,h,dpr=1){r.width=Math.max(1,w);r.height=Math.max(1,h);r.dpr=Math.min(dpr,2);r.canvas.width=Math.round(w*r.dpr);r.canvas.height=Math.round(h*r.dpr);r.padY=clamp(h*.044,18,28);r.sx=(w-r.padX*2)/C.width;r.sy=(h-r.padY*2)/C.height;r.surfaceKey=null;r.trail=[];}
-export const point564=(r,p)=>({x:r.width/2+p.x*r.sx,y:r.height-r.padY-p.y*r.sy});
+export const point564=(r,p)=>{const q=viewPosition568(p,C.height,r.team568);return{x:r.width/2+q.x*r.sx,y:r.height-r.padY-q.y*r.sy};};
 function circle(c,x,y,r,fill,stroke,width=1){c.beginPath();c.arc(x,y,Math.max(.1,r),0,TAU);if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=width;c.stroke();}}
 function text(c,str,x,y,size,color='#fce6b3'){c.font=`800 ${size}px "Noto Sans JP",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;c.strokeStyle='#051b18';c.strokeText(str,x,y);c.fillStyle=color;c.fillText(str,x,y);}
 function metal(c,x,y,w,h){const grad=c.createLinearGradient(x,y,x+w,y+h);for(const [at,color]of[[0,'#f3d999'],[.18,'#a8844a'],[.37,'#41351f'],[.58,'#dfba70'],[.8,'#6b4e2e'],[1,'#efcf90']])grad.addColorStop(at,color);return grad;}
@@ -21,7 +22,7 @@ function surface(r,g,self){
  c.fillStyle='#13231c';c.fillRect(px,3,w-px*2,py-6);c.fillRect(px,h-py+3,w-px*2,py-6);c.strokeStyle='#ead29b77';c.lineWidth=1;c.strokeRect(2,2,w-4,h-4);c.strokeStyle='#fff1c755';c.strokeRect(px,py,w-px*2,h-py*2);
  for(let y=45;y<h-30;y+=65)for(const x of[3.5,w-3.5]){circle(c,x,y,1.6,'#1b2116');circle(c,x-.3,y-.5,.7,'#edcf92');}
  for(const goal of g.goals){
-  const front=point564(r,goal),left=point564(r,{x:-goal.halfWidth,y:goal.y}).x,right=point564(r,{x:goal.halfWidth,y:goal.y}).x,top=goal.team===1,gy=top?0:front.y,gw=right-left,t=TEAM564[goal.team];
+  const front=point564(r,goal),edges=[-goal.halfWidth,goal.halfWidth].map(x=>point564(r,{x,y:goal.y}).x),left=Math.min(...edges),right=Math.max(...edges),top=goal.team!==team,gy=top?0:front.y,gw=right-left,t=TEAM564[goal.team];
   c.fillStyle='#020807';c.fillRect(left,gy,gw,py);c.save();c.beginPath();c.rect(left-4,gy,gw+8,py);c.clip();
   if(ready(goalArt)){c.translate(w/2,top?py/2:h-py/2);if(!top)c.rotate(Math.PI);c.drawImage(goalArt,-gw*.56,-py*.7,gw*1.12,py*1.4);}c.restore();
   const well=c.createLinearGradient(0,gy,0,gy+py);well.addColorStop(top?0:1,'#000a');well.addColorStop(top?1:0,'#04131022');c.fillStyle=well;c.fillRect(left,gy,gw,py);
@@ -43,6 +44,7 @@ function particles(r,g,u,at){const c=r.c;for(const e of g.events){
  if(!u.reduced){const rays=goal?28:pass?12:5;for(let i=0;i<rays;i++){const a=i*TAU/rays+e.id*.71,dist=(goal?20:6)+t*(goal?180:25)*(1+.25*Math.sin(i*7)),x=q.x+Math.cos(a)*dist,y=q.y+Math.sin(a)*dist;c.strokeStyle=i%3?color:'#fff6d7';c.lineWidth=goal?2.4:1.5;c.beginPath();c.moveTo(x,y);c.lineTo(x+Math.cos(a)*(goal?10:4),y+Math.sin(a)*(goal?10:4));c.stroke();}}c.restore();
 }}
 export function paintBoard564(r,g,self,u,at){
+ const team=g.players.find(p=>p.playerId===self)?.team564??0;if(r.team568!==team){r.team568=team;r.trail=[];r.surfaceKey=null;}
  const c=r.c,w=r.width,h=r.height,s=Math.min(r.sx,r.sy),dt=clamp((at-g.serverAt)/1000,0,.04);surface(r,g,self);c.setTransform(r.dpr,0,0,r.dpr,0,0);c.clearRect(0,0,w,h);c.drawImage(r.surface,0,0,w,h);rotor(r,g);r.points=[];
  const striker=image('hockey565/striker.webp');for(const p of g.players){
   const low=p.team564===0?p.r:C.height/2+p.r,high=p.team564===0?C.height/2-p.r:C.height-p.r,q=point564(r,{x:clamp(p.x+p.vx*dt,-C.width/2+p.r,C.width/2-p.r),y:clamp(p.y+p.vy*dt,low,high)}),radius=p.r*s,mine=p.playerId===self,team=TEAM564[p.team564],reload=clamp((p.nextShotAt563-at)/C.reload,0,1);
@@ -59,5 +61,5 @@ export function paintBoard564(r,g,self,u,at){
   if(charged){circle(c,q.x,q.y,radius+3,null,color,1);text(c,'×'+power.toFixed(2),q.x,q.y-radius-10,10,color);}
  }else r.trail=[];
  particles(r,g,u,at);
- const p=g.players.find(p=>p.playerId===self),q=r.points.find(q=>q.seat===p?.seat);if(p&&q&&u.pull){const dx=Math.sin(u.pull.angle),dy=-Math.cos(u.pull.angle),len=24+u.pull.power*55;c.save();c.strokeStyle='#ffe5a0';c.lineWidth=4;c.lineCap='round';c.beginPath();c.moveTo(q.x-dx*(15+u.pull.power*30),q.y-dy*(15+u.pull.power*30));c.lineTo(q.x,q.y);c.stroke();c.lineWidth=2;c.beginPath();c.moveTo(q.x+dx*22,q.y+dy*22);c.lineTo(q.x+dx*len,q.y+dy*len);c.stroke();c.translate(q.x+dx*len,q.y+dy*len);c.rotate(Math.atan2(dy,dx));c.beginPath();c.moveTo(7,0);c.lineTo(-5,-5);c.lineTo(-5,5);c.closePath();c.fillStyle='#fff1c4';c.fill();c.restore();}
+ const p=g.players.find(p=>p.playerId===self),q=r.points.find(q=>q.seat===p?.seat);if(p&&q&&u.pull?.power>0){const direction=launchDirection568(p,u.pull,r,team),dx=direction.x,dy=direction.y,len=28+u.pull.power*60;c.save();c.strokeStyle='#ffe5a0';c.lineWidth=4;c.lineCap='round';c.beginPath();c.moveTo(q.x-dx*(15+u.pull.power*30),q.y-dy*(15+u.pull.power*30));c.lineTo(q.x,q.y);c.stroke();c.lineWidth=2.5;c.beginPath();c.moveTo(q.x+dx*22,q.y+dy*22);c.lineTo(q.x+dx*len,q.y+dy*len);c.stroke();c.translate(q.x+dx*len,q.y+dy*len);c.rotate(Math.atan2(dy,dx));c.beginPath();c.moveTo(8,0);c.lineTo(-5,-5);c.lineTo(-5,5);c.closePath();c.fillStyle='#fff1c4';c.fill();c.restore();}
 }
