@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: all fifteen boundaries are exact, including decimal strings beyond safe Number range
+ok 1 - all fifteen boundaries are exact, including decimal strings beyond safe Number range
+  ---
+  duration_ms: 1.818326
+  type: 'test'
+  ...
+# Subtest: every viewer follows their own distance, independently of the leader and the minimap
+ok 2 - every viewer follows their own distance, independently of the leader and the minimap
+  ---
+  duration_ms: 3.365089
+  type: 'test'
+  ...
+# Subtest: the user screenshot distances enter the stratosphere and space, not stadium
+ok 3 - the user screenshot distances enter the stratosphere and space, not stadium
+  ---
+  duration_ms: 0.742428
+  type: 'test'
+  ...
+# Subtest: ordinary crossings begin at their actual marker crossing and fade for at most 180ms
+ok 4 - ordinary crossings begin at their actual marker crossing and fade for at most 180ms
+  ---
+  duration_ms: 26.289324
+  type: 'test'
+  ...
+# Subtest: a huge jump reveals every intermediate world without adding run time
+ok 5 - a huge jump reveals every intermediate world without adding run time
+  ---
+  duration_ms: 3.023494
+  type: 'test'
+  ...
+# Subtest: scenery never leads physical distance during a forward run
+ok 6 - scenery never leads physical distance during a forward run
+  ---
+  duration_ms: 29.645889
+  type: 'test'
+  ...
+# Subtest: reverse travel descends through worlds, handles exact boundaries, and ends at the real destination
+ok 7 - reverse travel descends through worlds, handles exact boundaries, and ends at the real destination
+  ---
+  duration_ms: 1.938341
+  type: 'test'
+  ...
+# Subtest: very late crossings, stationary scores and already-galactic scores cannot queue transitions after the run
+ok 8 - very late crossings, stationary scores and already-galactic scores cannot queue transitions after the run
+  ---
+  duration_ms: 2.276767
+  type: 'test'
+  ...
+# Subtest: late join is derived from shared run time without replay state; reduced motion jumps directly
+ok 9 - late join is derived from shared run time without replay state; reduced motion jumps directly
+  ---
+  duration_ms: 1.718863
+  type: 'test'
+  ...
+# Subtest: all presentation phases keep exact camera, flowing markers, offsets and distance gaps untouched
+ok 10 - all presentation phases keep exact camera, flowing markers, offsets and distance gaps untouched
+  ---
+  duration_ms: 1.62456
+  type: 'test'
+  ...
+# Subtest: background loader caps downloads at two, prioritizes the current world and caches completed images
+ok 11 - background loader caps downloads at two, prioritizes the current world and caches completed images
+  ---
+  duration_ms: 2.06154
+  type: 'test'
+  ...
+# Subtest: failed and timed-out scenery uses fallback, allows remaining downloads and retries explicitly
+ok 12 - failed and timed-out scenery uses fallback, allows remaining downloads and retries explicitly
+  ---
+  duration_ms: 0.336053
+  type: 'test'
+  ...
+# Subtest: leaving the game cancels downloads, timers and callbacks; reopening resumes only missing assets
+ok 13 - leaving the game cancels downloads, timers and callbacks; reopening resumes only missing assets
+  ---
+  duration_ms: 0.207414
+  type: 'test'
+  ...
+# Subtest: async decode completion after disposal cannot repaint a dead game
+ok 14 - async decode completion after disposal cannot repaint a dead game
+  ---
+  duration_ms: 0.240523
+  type: 'test'
+  ...
+# Subtest: only two three-depth world slots are used; existing markers, runners and controls remain separate
+ok 15 - only two three-depth world slots are used; existing markers, runners and controls remain separate
+  ---
+  duration_ms: 0.238153
+  type: 'test'
+  ...
+# Subtest: crossfade retains continuous world offsets for both worlds, falls back on failure and caches writes
+ok 16 - crossfade retains continuous world offsets for both worlds, falls back on failure and caches writes
+  ---
+  duration_ms: 4.183762
+  type: 'test'
+  ...
+# Subtest: generated assets fully decode with documented hashes and a consistent panoramic aspect
+ok 17 - generated assets fully decode with documented hashes and a consistent panoramic aspect
+  ---
+  duration_ms: 728.931661
+  type: 'test'
+  ...
+# Subtest: the victory background uses the winning distance and safely falls back to the original stadium
+ok 18 - the victory background uses the winning distance and safely falls back to the original stadium
+  ---
+  duration_ms: 5.240879
+  type: 'test'
+  ...
+# Subtest: live View511 paints the local space world, preserves ±1000m camera, stops idle writes and cleans up
+ok 19 - live View511 paints the local space world, preserves ±1000m camera, stops idle writes and cleans up
+  ---
+  duration_ms: 22.665213
+  type: 'test'
+  ...
+# Subtest: integrated render crosses all worlds while retaining the existing finite RAF and hidden-tab suspension
+ok 20 - integrated render crosses all worlds while retaining the existing finite RAF and hidden-tab suspension
+  ---
+  duration_ms: 9.344804
+  type: 'test'
+  ...
+# Subtest: confirmed choice responds once for each of four identical boxes
+ok 21 - confirmed choice responds once for each of four identical boxes
+  ---
+  duration_ms: 1.625504
+  type: 'test'
+  ...
+# Subtest: only real four-card hand following same-round chest opens
+ok 22 - only real four-card hand following same-round chest opens
+  ---
+  duration_ms: 0.219647
+  type: 'test'
+  ...
+# Subtest: late join, another room or another round never replays opening
+ok 23 - late join, another room or another round never replays opening
+  ---
+  duration_ms: 0.588509
+  type: 'test'
+  ...
+# Subtest: cleanup cancels all animations and removes overlay without timers
+ok 24 - cleanup cancels all animations and removes overlay without timers
+  ---
+  duration_ms: 1.879234
+  type: 'test'
+  ...
+# Subtest: current cache includes the opening module, view and style
+ok 25 - current cache includes the opening module, view and style
+  ---
+  duration_ms: 26.523921
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1068.344858

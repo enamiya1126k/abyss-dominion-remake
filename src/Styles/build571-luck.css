@@ -17,3 +17,13 @@
 @media(prefers-reduced-motion:reduce){.lk511 .lk-cast-ring508{animation:none}}
 
 .lk511 .lk-world-label512,.lk511 .lk-locator511>small{font-family:inherit}
+/* Build574: one bounded, noninteractive chest reveal using existing art. */
+.lk-opening574{position:absolute;inset:0;z-index:9;pointer-events:none;overflow:hidden;contain:layout paint}
+.lk-open-chest574{position:absolute;width:104px;height:104px;left:50%;top:50%;transform:translate(-50%,-35%)}
+.lk-open-chest574 .lk-art507{position:absolute;inset:0;width:104px;height:104px}
+.lk-chest-base574{clip-path:inset(44% 0 0)}
+.lk-chest-lid574{clip-path:inset(0 0 55%);transform-origin:18% 44%}
+.lk-chest-glow574{position:absolute;left:50%;top:50%;width:220px;height:180px;background:radial-gradient(ellipse,#fff4c3aa,#eaca4c55 35%,transparent 70%);opacity:0}
+.lk-loot574{position:absolute;left:50%;top:43%;width:47px;height:55px;display:grid;place-items:center;border:1px solid #f8d78f;border-radius:9px;background:linear-gradient(150deg,#44694d,#102f29);box-shadow:0 0 12px #f3d78266}
+.lk-loot574 .lk-art508{width:42px;height:42px}
+@media(prefers-reduced-motion:reduce){.lk-opening574{display:none}}
