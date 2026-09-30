@@ -1,0 +1,244 @@
+TAP version 13
+# Subtest: pinball: actual party creation/ready/start gates, old version rejected
+ok 1 - pinball: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 7.024949
+  type: 'test'
+  ...
+# Subtest: bomb: actual party creation/ready/start gates, old version rejected
+ok 2 - bomb: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 1.411349
+  type: 'test'
+  ...
+# Subtest: tetra: actual party creation/ready/start gates, old version rejected
+ok 3 - tetra: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 4.444563
+  type: 'test'
+  ...
+# Subtest: hide: actual party creation/ready/start gates, old version rejected
+ok 4 - hide: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 78.424292
+  type: 'test'
+  ...
+# Subtest: pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+ok 5 - pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+  ---
+  duration_ms: 77.032774
+  type: 'test'
+  ...
+# Subtest: bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+ok 6 - bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+  ---
+  duration_ms: 21.516249
+  type: 'test'
+  ...
+# Subtest: hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+ok 7 - hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+  ---
+  duration_ms: 299.49477
+  type: 'test'
+  ...
+# Subtest: all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+ok 8 - all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+  ---
+  duration_ms: 349.723047
+  type: 'test'
+  ...
+# Subtest: four independent WebSocket clients: production queues/frames for all four games
+ok 9 - four independent WebSocket clients: production queues/frames for all four games
+  ---
+  duration_ms: 893.506327
+  type: 'test'
+  ...
+# Subtest: swipe: one downstroke, then a full lift; hold, repeated down and old taps cannot farm points
+ok 10 - swipe: one downstroke, then a full lift; hold, repeated down and old taps cannot farm points
+  ---
+  duration_ms: 2.627496
+  type: 'test'
+  ...
+# Subtest: swipe: stop charges each completed downstroke, while lift and stillness are safe; destruction persists
+ok 11 - swipe: stop charges each completed downstroke, while lift and stillness are safe; destruction persists
+  ---
+  duration_ms: 0.47057
+  type: 'test'
+  ...
+# Subtest: swipe: input deduplication, ordering, late packets, cancellation and timing survive serialization
+ok 12 - swipe: input deduplication, ordering, late packets, cancellation and timing survive serialization
+  ---
+  duration_ms: 2.038827
+  type: 'test'
+  ...
+# Subtest: swipe: relative finger tracking, hysteresis, release and a new touch preserve one-cut-per-cycle
+ok 13 - swipe: relative finger tracking, hysteresis, release and a new touch preserve one-cut-per-cycle
+  ---
+  duration_ms: 1.507298
+  type: 'test'
+  ...
+# Subtest: swipe: prediction and resend stay equal to authoritative score at 300ms each-way latency and 250ms ticks
+ok 14 - swipe: prediction and resend stay equal to authoritative score at 300ms each-way latency and 250ms ticks
+  ---
+  duration_ms: 6.466088
+  type: 'test'
+  ...
+# Subtest: swipe: all AI chefs obey the same downstroke rule and the match seals after 45 seconds
+ok 15 - swipe: all AI chefs obey the same downstroke rule and the match seals after 45 seconds
+  ---
+  duration_ms: 1.256757
+  type: 'test'
+  ...
+# Subtest: debris: gravity, contact bounce, rolling friction and sleep; a collapsed board wakes settled pieces
+ok 16 - debris: gravity, contact bounce, rolling friction and sleep; a collapsed board wakes settled pieces
+  ---
+  duration_ms: 1.220648
+  type: 'test'
+  ...
+# Subtest: debris: rapid cutting has a fixed memory/work limit and no nonfinite state after stalled frames
+ok 17 - debris: rapid cutting has a fixed memory/work limit and no nonfinite state after stalled frames
+  ---
+  duration_ms: 9.503429
+  type: 'test'
+  ...
+# Subtest: knife contact and cut plane coincide at every viewport, mince stage and destruction depth
+ok 18 - knife contact and cut plane coincide at every viewport, mince stage and destruction depth
+  ---
+  duration_ms: 1.042162
+  type: 'test'
+  ...
+# Subtest: both teams see their own goal and every teammate below center; coordinates rotate exactly 180 degrees
+ok 19 - both teams see their own goal and every teammate below center; coordinates rotate exactly 180 degrees
+  ---
+  duration_ms: 2.846016
+  type: 'test'
+  ...
+# Subtest: diagonal and cardinal pulls map screen direction into mirrored world shots without changing power
+ok 20 - diagonal and cardinal pulls map screen direction into mirrored world shots without changing power
+  ---
+  duration_ms: 0.662622
+  type: 'test'
+  ...
+# Subtest: up-arrow attacks for either team and the launch preview includes the same residual velocity as the server
+ok 21 - up-arrow attacks for either team and the launch preview includes the same residual velocity as the server
+  ---
+  duration_ms: 1.227627
+  type: 'test'
+  ...
+# Subtest: small pulls make small corrections, full strength remains 35, and repeated shots cannot bypass reload
+ok 22 - small pulls make small corrections, full strength remains 35, and repeated shots cannot bypass reload
+  ---
+  duration_ms: 0.891959
+  type: 'test'
+  ...
+# Subtest: aiming brakes a moving striker for either team; cancelling restores normal glide without firing
+ok 23 - aiming brakes a moving striker for either team; cancelling restores normal glide without firing
+  ---
+  duration_ms: 3.154313
+  type: 'test'
+  ...
+# Subtest: center and side rails stop the return ricochet while pucks retain their bank-shot bounce
+ok 24 - center and side rails stop the return ricochet while pucks retain their bank-shot bounce
+  ---
+  duration_ms: 1.62182
+  type: 'test'
+  ...
+# Subtest: a hard center-line rebound no longer knocks a stationary puck into our own goal
+ok 25 - a hard center-line rebound no longer knocks a stationary puck into our own goal
+  ---
+  duration_ms: 11.152453
+  type: 'test'
+  ...
+# Subtest: AI behind the puck takes a sideways route instead of driving it toward home
+ok 26 - AI behind the puck takes a sideways route instead of driving it toward home
+  ---
+  duration_ms: 0.872967
+  type: 'test'
+  ...
+# Subtest: old clients cannot start updated hockey; server snapshots keep world positions for all four viewers
+ok 27 - old clients cannot start updated hockey; server snapshots keep world positions for all four viewers
+  ---
+  duration_ms: 33.652794
+  type: 'test'
+  ...
+# Subtest: the real party menu admits the updated server and rejects the old version before sending a game change
+ok 28 - the real party menu admits the updated server and rejects the old version before sending a game change
+  ---
+  duration_ms: 0.739812
+  type: 'test'
+  ...
+# Subtest: rounds spawn 1, 2, 3 independently numbered bombs
+ok 29 - rounds spawn 1, 2, 3 independently numbered bombs
+  ---
+  duration_ms: 3.836896
+  type: 'test'
+  ...
+# Subtest: 100ms per bomb adds exactly one point, including multiple ownership
+ok 30 - 100ms per bomb adds exactly one point, including multiple ownership
+  ---
+  duration_ms: 0.653941
+  type: 'test'
+  ...
+# Subtest: passing excludes travel time from recipient holding points and locks only that bomb
+ok 31 - passing excludes travel time from recipient holding points and locks only that bomb
+  ---
+  duration_ms: 0.92231
+  type: 'test'
+  ...
+# Subtest: ownership, duplicate sequence, stale round and unknown bomb rejected
+ok 32 - ownership, duplicate sequence, stale round and unknown bomb rejected
+  ---
+  duration_ms: 0.766398
+  type: 'test'
+  ...
+# Subtest: public state never reveals hidden deadlines, bot schedule or random seed
+ok 33 - public state never reveals hidden deadlines, bot schedule or random seed
+  ---
+  duration_ms: 3.202642
+  type: 'test'
+  ...
+# Subtest: same-time explosions remove every victim; leftover bombs transfer away from dead holders
+ok 34 - same-time explosions remove every victim; leftover bombs transfer away from dead holders
+  ---
+  duration_ms: 0.752553
+  type: 'test'
+  ...
+# Subtest: explosion forfeits only current-round points; survival banks hold points plus 30
+ok 35 - explosion forfeits only current-round points; survival banks hold points plus 30
+  ---
+  duration_ms: 0.498098
+  type: 'test'
+  ...
+# Subtest: initial allocation prioritizes lowest lifetime holding time, with distinct owners
+ok 36 - initial allocation prioritizes lowest lifetime holding time, with distinct owners
+  ---
+  duration_ms: 1.383384
+  type: 'test'
+  ...
+# Subtest: simulation gap shifts private and public clocks without phantom scoring
+ok 37 - simulation gap shifts private and public clocks without phantom scoring
+  ---
+  duration_ms: 1.182488
+  type: 'test'
+  ...
+# Subtest: AI and disconnect takeover complete all 3 rounds deterministically over 100 seeds
+ok 38 - AI and disconnect takeover complete all 3 rounds deterministically over 100 seeds
+  ---
+  duration_ms: 96.971691
+  type: 'test'
+  ...
+# Subtest: Build569 canonical imports, stylesheet, offline assets and protocol gates agree
+ok 39 - Build569 canonical imports, stylesheet, offline assets and protocol gates agree
+  ---
+  duration_ms: 25.076448
+  type: 'test'
+  ...
+1..39
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1869.880563
