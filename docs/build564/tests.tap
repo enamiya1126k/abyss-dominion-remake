@@ -1,0 +1,239 @@
+TAP version 13
+# Subtest: pinball: 90 seconds, four goals, collidable players before shooting, momentum adds
+ok 1 - pinball: 90 seconds, four goals, collidable players before shooting, momentum adds
+  ---
+  duration_ms: 4.003905
+  type: 'test'
+  ...
+# Subtest: pinball: passive rotor rests until impact and exchanges angular momentum
+ok 2 - pinball: passive rotor rests until impact and exchanges angular momentum
+  ---
+  duration_ms: 3.5651
+  type: 'test'
+  ...
+# Subtest: pinball: goal owner scores; gem respawns without resetting positions; final gems worth2
+ok 3 - pinball: goal owner scores; gem respawns without resetting positions; final gems worth2
+  ---
+  duration_ms: 5.786903
+  type: 'test'
+  ...
+# Subtest: pinball: shot nonce, cooldown, invalid values and cancelled pull
+ok 4 - pinball: shot nonce, cooldown, invalid values and cancelled pull
+  ---
+  duration_ms: 0.874638
+  type: 'test'
+  ...
+# Subtest: pinball: max speed never tunnels out; seeded 90/150 second games finish with meaningful scores
+ok 5 - pinball: max speed never tunnels out; seeded 90/150 second games finish with meaningful scores
+  ---
+  duration_ms: 2141.274304
+  type: 'test'
+  ...
+# Subtest: bomb: pass preserves fuse, locks receiver, cannot pass to dead/self or with stale bomb
+ok 6 - bomb: pass preserves fuse, locks receiver, cannot pass to dead/self or with stale bomb
+  ---
+  duration_ms: 1.659251
+  type: 'test'
+  ...
+# Subtest: bomb: future queued tap waits for authoritative clock, not dropped one tick early
+ok 7 - bomb: future queued tap waits for authoritative clock, not dropped one tick early
+  ---
+  duration_ms: 0.54347
+  type: 'test'
+  ...
+# Subtest: bomb: exact fuse explosion eliminates only holder; survivors score once; next bomb excludes victim
+ok 8 - bomb: exact fuse explosion eliminates only holder; survivors score once; next bomb excludes victim
+  ---
+  duration_ms: 1.451969
+  type: 'test'
+  ...
+# Subtest: bomb: 30 seeded AI matches complete3rounds; totals18, each score≤9, no fixed winner
+ok 9 - bomb: 30 seeded AI matches complete3rounds; totals18, each score≤9, no fixed winner
+  ---
+  duration_ms: 49.364853
+  type: 'test'
+  ...
+# Subtest: tetra: first sea is stable; tap and drag resolve to the same assisted endpoint
+ok 10 - tetra: first sea is stable; tap and drag resolve to the same assisted endpoint
+  ---
+  duration_ms: 4.603339
+  type: 'test'
+  ...
+# Subtest: tetra: last safe pad return; submerged/occupied pad falls back to checkpoint
+ok 11 - tetra: last safe pad return; submerged/occupied pad falls back to checkpoint
+  ---
+  duration_ms: 1.557408
+  type: 'test'
+  ...
+# Subtest: tetra: 20 seeded courses are traversable, all AI finish or reach advanced checkpoints
+ok 12 - tetra: 20 seeded courses are traversable, all AI finish or reach advanced checkpoints
+  ---
+  duration_ms: 280.060809
+  type: 'test'
+  ...
+# Subtest: hide: tap furniture approaches and checks once, without repeated charge consumption
+ok 13 - hide: tap furniture approaches and checks once, without repeated charge consumption
+  ---
+  duration_ms: 83.318667
+  type: 'test'
+  ...
+# Subtest: hide: invisible furniture cannot be automatically chased or checked
+ok 14 - hide: invisible furniture cannot be automatically chased or checked
+  ---
+  duration_ms: 49.280756
+  type: 'test'
+  ...
+# Subtest: hide: private hider coordinates and disguise owners are absent from hunter snapshot
+ok 15 - hide: private hider coordinates and disguise owners are absent from hunter snapshot
+  ---
+  duration_ms: 47.104737
+  type: 'test'
+  ...
+# Subtest: hide: default target comes from visible public mission state; all routes reachable
+ok 16 - hide: default target comes from visible public mission state; all routes reachable
+  ---
+  duration_ms: 169.29904
+  type: 'test'
+  ...
+# Subtest: hide: living without escape loses;3of5 opens two exits and either exit wins
+ok 17 - hide: living without escape loses;3of5 opens two exits and either exit wins
+  ---
+  duration_ms: 155.921605
+  type: 'test'
+  ...
+# Subtest: tetra: a jump arriving on a dry tip during a wave is judged by landing, not killed before arrival
+ok 18 - tetra: a jump arriving on a dry tip during a wave is judged by landing, not killed before arrival
+  ---
+  duration_ms: 1.824951
+  type: 'test'
+  ...
+# Subtest: pinball: actual party creation/ready/start gates, old version rejected
+ok 19 - pinball: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 8.005593
+  type: 'test'
+  ...
+# Subtest: bomb: actual party creation/ready/start gates, old version rejected
+ok 20 - bomb: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 1.036142
+  type: 'test'
+  ...
+# Subtest: tetra: actual party creation/ready/start gates, old version rejected
+ok 21 - tetra: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 3.546426
+  type: 'test'
+  ...
+# Subtest: hide: actual party creation/ready/start gates, old version rejected
+ok 22 - hide: actual party creation/ready/start gates, old version rejected
+  ---
+  duration_ms: 97.898789
+  type: 'test'
+  ...
+# Subtest: pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+ok 23 - pinball: queued duplicates do not fire again; reload learns reserved sequence; auto takeover returns control
+  ---
+  duration_ms: 83.010452
+  type: 'test'
+  ...
+# Subtest: bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+ok 24 - bomb: sender ownership, round/bomb identity, receiver lock, restart snapshot
+  ---
+  duration_ms: 12.032468
+  type: 'test'
+  ...
+# Subtest: hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+ok 25 - hide: only visible furniture can be reserved; manual movement cancels; private frames hide owners
+  ---
+  duration_ms: 319.713038
+  type: 'test'
+  ...
+# Subtest: all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+ok 26 - all four minigames remain listed; old retired GP stays removed; legacy active rooms migrate safely
+  ---
+  duration_ms: 254.344138
+  type: 'test'
+  ...
+# Subtest: four independent WebSocket clients: production queues/frames for all four games
+ok 27 - four independent WebSocket clients: production queues/frames for all four games
+  ---
+  duration_ms: 871.687754
+  type: 'test'
+  ...
+# Subtest: the live import map, offline cache and version advertise every hockey module consistently
+ok 28 - the live import map, offline cache and version advertise every hockey module consistently
+  ---
+  duration_ms: 50.228089
+  type: 'test'
+  ...
+# {"aiMatches":32,"totalGoals":209,"teamGoals":[106,103]}
+# Subtest: one to four people fill exactly two teams; player colors and selected monsters survive
+ok 29 - one to four people fill exactly two teams; player colors and selected monsters survive
+  ---
+  duration_ms: 6.974423
+  type: 'test'
+  ...
+# Subtest: launch, momentum, reload and cancel retain the exact Build563 behavior
+ok 30 - launch, momentum, reload and cancel retain the exact Build563 behavior
+  ---
+  duration_ms: 1.275783
+  type: 'test'
+  ...
+# Subtest: only a complete puck crossing inside either goal scores for the opposite team
+ok 31 - only a complete puck crossing inside either goal scores for the opposite team
+  ---
+  duration_ms: 2.246967
+  type: 'test'
+  ...
+# Subtest: own goals credit opponents, assists only credit a recent teammate, positions continue after goals
+ok 32 - own goals credit opponents, assists only credit a recent teammate, positions continue after goals
+  ---
+  duration_ms: 0.786856
+  type: 'test'
+  ...
+# Subtest: wall banks, goalposts, both teams and the collision-driven rotor remain physical
+ok 33 - wall banks, goalposts, both teams and the collision-driven rotor remain physical
+  ---
+  duration_ms: 1.4194
+  type: 'test'
+  ...
+# Subtest: final fifteen seconds are two points; deadline seals the result for both teammates
+ok 34 - final fifteen seconds are two points; deadline seals the result for both teammates
+  ---
+  duration_ms: 0.94188
+  type: 'test'
+  ...
+# Subtest: team selection is authenticated, capacity-limited, locked during play and preserved for a rematch
+ok 35 - team selection is authenticated, capacity-limited, locked during play and preserved for a rematch
+  ---
+  duration_ms: 21.442693
+  type: 'test'
+  ...
+# Subtest: all four snapshots agree on team scores, survive save/restore, and old rules return to lobby
+ok 36 - all four snapshots agree on team scores, survive save/restore, and old rules return to lobby
+  ---
+  duration_ms: 23.560701
+  type: 'test'
+  ...
+# Subtest: AI assigns one attacker and one defender; finite ninety-second matches finish across seeds
+ok 37 - AI assigns one attacker and one defender; finite ninety-second matches finish across seeds
+  ---
+  duration_ms: 3099.452573
+  type: 'test'
+  ...
+# Subtest: active facade, client/server protocol and menu all select hockey
+ok 38 - active facade, client/server protocol and menu all select hockey
+  ---
+  duration_ms: 10.054886
+  type: 'test'
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3284.518001

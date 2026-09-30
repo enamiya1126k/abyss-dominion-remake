@@ -1,0 +1,202 @@
+{
+  "build": 564,
+  "version": "3.1.243",
+  "baseBuilds": [
+    563
+  ],
+  "sourceCommit": "72c63563787f2ab5b2e519e86551065da7830ff4",
+  "requiredServerRestart": true,
+  "type": "patch",
+  "tests": {
+    "node": 38,
+    "aiMatches": 32,
+    "aiTeamGoals": [
+      106,
+      103
+    ],
+    "webSocketClients": 4,
+    "browser": "153.0.8010.0",
+    "viewports": [
+      [
+        390,
+        740
+      ],
+      [
+        320,
+        568
+      ],
+      [
+        740,
+        390
+      ]
+    ],
+    "nativeIPhoneTested": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD564.md",
+      "size": 3461,
+      "sha256": "e4fae104da8702145d999eb8ca2c2408f0c17bf48165217f7768054189e7def5"
+    },
+    {
+      "path": "docs/build564/QA.md",
+      "size": 3015,
+      "sha256": "2edc515d99e539b41ea96adf01354562b9e94bf18bb81e5185e7caf6f7a7c25f"
+    },
+    {
+      "path": "docs/build564/chromium-browser.json",
+      "size": 2433,
+      "sha256": "aa735f219792dacba2807a105d4edc86eff9bc6c79a3322ebbc7659c5a15a821"
+    },
+    {
+      "path": "docs/build564/chromium-lobby.png",
+      "size": 1141353,
+      "sha256": "d4db50e2836a91a361aec0693738db3c78e997cb0fff70a7385e988786c27b1d"
+    },
+    {
+      "path": "docs/build564/chromium-mobile.png",
+      "size": 1413421,
+      "sha256": "8e0c807e572abe47e290c193b2239e8028102b18e258e5513148842e035fdeb4"
+    },
+    {
+      "path": "docs/build564/chromium-result.png",
+      "size": 490922,
+      "sha256": "46d7caa2198802c1e85363c88d86f4082a62cac2e5c7df1d20c9f7adef3836ad"
+    },
+    {
+      "path": "docs/build564/tests.tap",
+      "size": 9188,
+      "sha256": "6bf7c675bdb751b32965ef33798df200923ccb649c31972d71bbabb9303e06cf"
+    },
+    {
+      "path": "index.html",
+      "size": 240930,
+      "sha256": "38712b47b62fc6085b60be7ee10e56cd2951ad9c8ff96f904d40163c14ed2049"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 23709,
+      "sha256": "ad08cda76ad168c6375b9956c839257a0544239d8e15138abd306acfb502006e"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 27671,
+      "sha256": "56925a0c1ffe3caa5c3ac8ed7ebc1b8ff2ea68dfbae96fe94e50029cb92ce928"
+    },
+    {
+      "path": "online-server/src/Realtime563.js",
+      "size": 6429,
+      "sha256": "e05af0377ec747a3b960d9a9ab6a6e5471aec4c072211985b22b8735fc96a29d"
+    },
+    {
+      "path": "online-server/src/RicochetCoordinator550.js",
+      "size": 1103,
+      "sha256": "66d626bc0a8cd54672c7ba7ad9cf49d3846522cae4709dbc6bb6710359d44227"
+    },
+    {
+      "path": "src/Styles/build564-hockey.css",
+      "size": 3615,
+      "sha256": "a021527c35538abe598c51aa5992b703396e3c60bb176fb11fd609534bbfcd8c"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "a3ce319ca2245efb45bc5b7a9bf87f2ba105441f44105a3cb70e4f0a63779428"
+    },
+    {
+      "path": "src/party/Arcade563.js",
+      "size": 4734,
+      "sha256": "3ec620037cdf1e1a4c35b8202f6cac3a3274b9823fe56212c79a51930f7853f0"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 5679,
+      "sha256": "d34f88c83998fc261474dc478bc1728572271c6bd225c4a871a3d469b8402d00"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12839,
+      "sha256": "391b8c1673a7c377c65781b143a0c07bcbda1782c44ee81eb2743009d8c8c976"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29649,
+      "sha256": "1981956d2bcb0ebe0b6004d1fe9615be914c1b563ce77122c3a1167bd80e4b17"
+    },
+    {
+      "path": "src/ricochet550/Board564.js",
+      "size": 7060,
+      "sha256": "2a96fb44c33cef823a3fcb645622741cccc5cf445947622de5802f82fa727f26"
+    },
+    {
+      "path": "src/ricochet550/Hockey564.js",
+      "size": 12258,
+      "sha256": "d4f12998c9d99c5e987534cc8b44d17ff8eb2c5af752196d99248559df7d985b"
+    },
+    {
+      "path": "src/ricochet550/Rules550.js",
+      "size": 487,
+      "sha256": "4dd2d6ab7c1ce75fe2d69abb506d1d0647780733cfd6135d9d49ffd5786aade8"
+    },
+    {
+      "path": "src/ricochet550/Teams564.js",
+      "size": 3404,
+      "sha256": "fc101325d51cdeb3ad1c2c6acea8f880de0e3bc557168a0ed261199c4406f8d1"
+    },
+    {
+      "path": "src/ricochet550/View550.js",
+      "size": 10856,
+      "sha256": "fabe768cd57173249cff76734f2529040b0ad5f50d85e72c662e7eb19afc288f"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "bc9520117c5d47a07e50edc466c912516c3a023fb70fbdbb1a27621390cc4fe7"
+    },
+    {
+      "path": "tests/build563-wire.test.mjs",
+      "size": 7278,
+      "sha256": "52e7557bc02db1a170d8d74afec0f4584f37d2ef01d0f74ca6823d9b2878f63c"
+    },
+    {
+      "path": "tests/build564-cache.test.mjs",
+      "size": 1762,
+      "sha256": "b1ccabc890250cffd32f63108e0da11afc12a4a17d4f311673574f7e257068a9"
+    },
+    {
+      "path": "tests/build564-hockey.test.mjs",
+      "size": 8269,
+      "sha256": "89d456a35ef272b6185747030c0f39194ed204a685682a0fe13dbf9d2a2e71dd"
+    },
+    {
+      "path": "tools/build563/wire-fixture.mjs",
+      "size": 3781,
+      "sha256": "1e48f5888fe2628b4292f16d95143b36281940b8e032a7267e930b41ffa190f8"
+    },
+    {
+      "path": "tools/build564/browser.mjs",
+      "size": 6248,
+      "sha256": "792956a9b653645518a519f873506661d0593b704f94fad654b27ab42285b431"
+    },
+    {
+      "path": "tools/build564/package.py",
+      "size": 2910,
+      "sha256": "94264311cc5640eaef5c05d00a4da49e63dbac6b037cf439599afe6509f260e0"
+    },
+    {
+      "path": "tools/build564/preview.mjs",
+      "size": 4867,
+      "sha256": "0ae426953cdc6c87e693e2e0b75a1f80e7b56eae692de4604cf2efe8a13fec61"
+    },
+    {
+      "path": "world-raid-offline564-assets.json",
+      "size": 48989,
+      "sha256": "56c3e821c4f1e507b5070b9c1280fcd31f413fd0ab83c765d71e436d24915561"
+    },
+    {
+      "path": "world-raid-offline564-sw.js",
+      "size": 2502,
+      "sha256": "27fca31b37631aec6e71200c263bd77bf7988cefbd1e0294c13ec2bf6874abb4"
+    }
+  ]
+}

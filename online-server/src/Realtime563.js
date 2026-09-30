@@ -11,11 +11,12 @@ export function realtime563(cfg){
  const handle=(c,session,m)=>{
   if(m.op!==cfg.op)return false;const g=find(c,session.playerId),p=party(c,g),me=g?.members.find(q=>q.playerId===session.playerId&&!q.departed);
   if(!g||!p||!me||m.gameId!==g.id)throw Error('ゲームが切り替わりました');
-  if(m[cfg.versionKey]!==cfg.version)throw Error('本体をBuild563へ更新してください');
+  if(m[cfg.versionKey]!==cfg.version)throw Error(`本体をBuild${cfg.build??563}へ更新してください`);
   if(g.phase!=='lobby'){if(m.kind==='start'&&p.hostId===session.playerId)return true;throw Error('開始前に設定してください');}
   if(m.kind==='select'){const choice=me.owned.find(x=>x.id===m.monsterId);if(!choice)throw Error('所持している相棒を選んでね');me.choice={...choice};p.members.find(x=>x.playerId===me.playerId).ready=false;}
   else if(m.kind==='duration'&&cfg.array){if(p.hostId!==session.playerId)throw Error('部屋主が設定できます');if(![90,150].includes(m.seconds))throw Error('90秒か150秒を選んでね');g.duration555=m.seconds*1000;p.members.forEach(x=>x.ready=false);}
-  else if(m.kind==='start'){if(p.hostId!==session.playerId)throw Error('部屋主が開始できます');if(p.members.some(x=>x[cfg.versionKey]!==cfg.version))throw Error('全員がBuild563へ更新してから開始してください');if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員が相棒を選んで準備OKを押してください');if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかの対戦の終了を待っています');g.aiColors500={...(p.aiColors500??{})};cfg.start(g,c.now(),randomBytes(4).readUInt32LE());runtimes(c).delete(g.id);}
+  else if(cfg.configure?.(g,p,me,m)){}
+  else if(m.kind==='start'){if(p.hostId!==session.playerId)throw Error('部屋主が開始できます');if(p.members.some(x=>x[cfg.versionKey]!==cfg.version))throw Error(`全員がBuild${cfg.build??563}へ更新してから開始してください`);if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員が相棒を選んで準備OKを押してください');if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかの対戦の終了を待っています');g.aiColors500={...(p.aiColors500??{})};cfg.start(g,c.now(),randomBytes(4).readUInt32LE());runtimes(c).delete(g.id);}
   else throw Error('未対応の操作です');g.updatedAt=c.now();g.revision++;return true;
  };
  const queue=(c,session,m)=>{
