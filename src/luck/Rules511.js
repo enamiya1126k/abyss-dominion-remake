@@ -1,3 +1,4 @@
+import {factors575,rewardProgress575} from './Progress575.js';
 import {copies571,count571 as count,total571,retain571,eligible571,milestone571} from './Buffs571.js';
 import {freezeColors501} from '../party/GameColors501.js';
 import {ITEMS511,item511,ATTACKS511,BIG511,DICE511} from './Items511.js';
@@ -12,7 +13,7 @@ const shuffled = (a,randomInt)=>{for(let i=a.length-1;i>0;i--){const j=randomInt
 // Outcomes are sealed on the server before choices. Final hands guarantee a finisher.
 export function drawPlan511(randomInt,rounds=8){if(![8,16].includes(rounds))throw Error('8か16ラウンドを選んでください');return Array.from({length:rounds},(_,round)=>({order:shuffled([0,1,2,3],randomInt),seats:Array.from({length:4},()=>({boxes:Array.from({length:4},()=>{const hand=shuffled(ITEMS511.filter(x=>eligible571(x,round+1,rounds)).map(x=>x.id),randomInt).slice(0,4);if(round===rounds-1&&!hand.some(id=>BIG511.includes(id)))hand[randomInt(4)]=BIG511.filter(id=>eligible571(item511(id),round+1,rounds))[randomInt(BIG511.filter(id=>eligible571(item511(id),round+1,rounds)).length)];if(hand.every(id=>BIG511.includes(id))){const safe=ITEMS511.filter(x=>!BIG511.includes(x.id)&&eligible571(x,round+1,rounds));hand[randomInt(4)]=safe[randomInt(safe.length)].id;}return hand}),autoBox:randomInt(4),autoItem:randomInt(4),waitBox:1500+randomInt(1501),waitItem:3000+randomInt(3001),dice:[1+randomInt(6),1+randomInt(6),1+randomInt(6)],jackpot:1+randomInt(6),coin:randomInt(2),tie:randomInt(4)}))}))}
 function validPlan(plan,rounds){return Array.isArray(plan)&&plan.length===rounds&&plan.every(r=>Array.isArray(r.order)&&r.order.length===4&&new Set(r.order).size===4&&r.order.every(x=>integer(x,0,3))&&Array.isArray(r.seats)&&r.seats.length===4&&r.seats.every(p=>Array.isArray(p.boxes)&&p.boxes.length===4&&p.boxes.every(b=>Array.isArray(b)&&b.length===4&&new Set(b).size===4&&b.every(id=>ITEMS511.some(x=>x.id===id)))&&integer(p.autoBox,0,3)&&integer(p.autoItem,0,3)&&integer(p.waitBox,1500,3000)&&integer(p.waitItem,3000,6000)&&Array.isArray(p.dice)&&p.dice.length===3&&p.dice.every(x=>integer(x,1,6))&&integer(p.jackpot,1,6)&&integer(p.coin,0,1)&&integer(p.tie,0,3)))}
-export function makeLuck511({id,code,partyId,hostId,members,now=0}){return{id,code,game:'luck',rounds:8,rules511:1,itemRules571:1,partyId462:partyId,hostId,phase:'lobby',phaseAt:now,createdAt:now,updatedAt:now,revision:0,members:members.map(m=>({...m,choice:m.choice??null})),players:[],round:0,scaleMax:600,event:null,history:[],results:null,nextAt:null}}
+export function makeLuck511({id,code,partyId,hostId,members,now=0}){return{id,code,game:'luck',rounds:8,rules511:1,itemRules571:1,itemRules575:1,partyId462:partyId,hostId,phase:'lobby',phaseAt:now,createdAt:now,updatedAt:now,revision:0,members:members.map(m=>({...m,choice:m.choice??null})),players:[],round:0,scaleMax:600,event:null,history:[],results:null,nextAt:null}}
 export function startLuck511(g,at,plan){
  if(g.phase!=='lobby'||!g.members.length||g.members.length>4||g.members.some(m=>!m.choice))fail('全員の魔物を選んでください');
  if(!Number.isFinite(at)||!validPlan(plan,rounds528(g)))fail('抽選情報が不正です');
@@ -59,6 +60,7 @@ export function aiPick511(g,p){const d=draw(g,p.seat),hand=d.boxes[g.boxes511[p.
   if(id==='focus')value=300+future*900;
   if(['hunter','combo','salvage','streak'].includes(id))value=200+future*600;
   if(id==='pioneer')value=500+future*1000;
+  if(['regalia','podium','frontier','usurper'].includes(id))value=250+future*700+(gap===0?600:0);
   if(id==='mile')value=200+Number(milestone571(p.distance,1000))*future*700;
   if(id==='interest')value=200+Number(milestone571(p.distance,500))*future*500;
   if(id==='resonance')value=total571(p.loadout)*future*500+(p.suns??0)*1000;
@@ -117,7 +119,7 @@ export function resolveRound511(g,at){
   const echoTwice=metres511(p.lastAdvance)*BigInt(count(grown,'echo')),echo=echoTwice/2n;
   const crowns=g.round===rounds528(g)?count(active,'crown'):0,overdrive=count(grown,'overdrive')*(big?2:1);
   const strikes=(p.strikes??0)*amplified,usedStrikes=big?strikes:0,wings=(p.wings??0)*amplified;
-  const factors={growth:2n**BigInt(doubling),solar:3n**BigInt(usedSuns),coil:2n**BigInt(usedCoils),hunt:2n**BigInt(usedStrikes),combo:BigInt(1+(p.attackHits??0))**BigInt(count(grown,'combo')),miles:milestone571(p.distance,1000)**BigInt(count(active,'mile')),pioneer:3n**BigInt(count(grown,'pioneer')),interest:active.filter(x=>x.id==='interest').reduce((n,x)=>n*milestone571(x.entryDistance,500)**BigInt(copies571(x)),1n),wings:1n+BigInt(wings),battery:2n**BigInt(batteries),overdrive:2n**BigInt(overdrive),crown:5n**BigInt(crowns),turbine:3n**BigInt(turbines)};
+  const factors={...factors575(active,g.round,metres511(p.distance)===leader&&g.players.filter(o=>metres511(o.distance)===leader).length===1),growth:2n**BigInt(doubling),solar:3n**BigInt(usedSuns),coil:2n**BigInt(usedCoils),hunt:2n**BigInt(usedStrikes),combo:BigInt(1+(p.attackHits??0))**BigInt(count(grown,'combo')),miles:milestone571(p.distance,1000)**BigInt(count(active,'mile')),pioneer:3n**BigInt(count(grown,'pioneer')),interest:active.filter(x=>x.id==='interest').reduce((n,x)=>n*milestone571(x.entryDistance,500)**BigInt(copies571(x)),1n),wings:1n+BigInt(wings),battery:2n**BigInt(batteries),overdrive:2n**BigInt(overdrive),crown:5n**BigInt(crowns),turbine:3n**BigInt(turbines)};
   const baseTwice=(max(0n,base)+passive+seed+bond+forge+cash)*2n+echoTwice,denominator=2n**BigInt(turbines+1);
   const gain=Object.values(factors).reduce((n,x)=>n*x,baseTwice)/denominator;
   const vault=count(active,'vault');
@@ -167,7 +169,8 @@ export function resolveRound511(g,at){
  }
  for(const r of rows){if(r.stopped||['turbo','mega'].includes(r.item)&&r.hit||r.hit&&r.planned>0n&&r.gain===0n){r.gain=0n;r.stopped=true;}if(BIG511.includes(r.item)&&r.stopped&&count(r.loadout,'phoenix')){const used=r.calculation.spent;r.suns+=used.suns-r.beforeAttacks.suns;r.coils+=used.coils-r.beforeAttacks.coils;r.strikes+=used.strikes-r.beforeAttacks.strikes;r.savings+=used.savings;r.refunded571=true;}if(!r.hit)r.wings+=count(r.loadout,'streak');r.to=max(0n,r.start+r.gain-r.knockback);r.delta=r.to-r.from;r.lastAdvance=max(0n,r.delta)}
  const after=ranks511(rows.map(r=>({playerId:r.playerId,distance:r.to})));for(const r of rows)r.afterRank=after.find(x=>x.playerId===r.playerId).rank;
- return serial({round:g.round,itemRules562:1,itemRules571:1,at,fromMax:g.scaleMax,toMax:rows.reduce((n,r)=>max(n,r.to+100n),600n),rows,attacks,castMs:attacks.length*LUCK511.castMs,diceOrder:g.plan511[g.round-1].order.filter(seat=>DICE511.includes(rows[seat].item)),diceMs:rows.filter(r=>DICE511.includes(r.item)).length*LUCK511.diceMs});
+ rewardProgress575(rows,g.round,rounds528(g));
+ return serial({round:g.round,itemRules562:1,itemRules571:1,itemRules575:1,at,fromMax:g.scaleMax,toMax:rows.reduce((n,r)=>max(n,r.to+100n),600n),rows,attacks,castMs:attacks.length*LUCK511.castMs,diceOrder:g.plan511[g.round-1].order.filter(seat=>DICE511.includes(rows[seat].item)),diceMs:rows.filter(r=>DICE511.includes(r.item)).length*LUCK511.diceMs});
 }
 
 function reveal(g,at){g.event=resolveRound511(g,at);g.history.push(copy(g.event));g.phase='reveal';g.phaseAt=at;g.nextAt=at+LUCK511.revealMs}
@@ -190,7 +193,7 @@ export function advanceLuck511(g,now){if(!Number.isFinite(now))return false;let 
 export function publicLuck511(g,selfId,connected=()=>true){
  if(g.rules511!==1)return publicLuck509(g,selfId,connected);
  const me=g.players.find(p=>p.playerId===selfId),choosing=['chest','hand'].includes(g.phase),seat=me?.seat;
- return{id:g.id,code:g.code,game:'luck',rules511:1,itemRules562:1,itemRules571:g.itemRules571??0,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:rounds528(g),scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
+ return{id:g.id,code:g.code,game:'luck',rules511:1,itemRules562:1,itemRules571:g.itemRules571??0,itemRules575:g.itemRules575??0,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:rounds528(g),scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
  members:g.members.map(m=>({playerId:m.playerId,name:m.name,color499:m.color499,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null})),
  players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{...p.choice},seat:p.seat,ai:p.ai,color499:p.color499,distance:p.distance,loadout:copy(p.loadout),coils:p.coils,wards:p.wards,savings:p.savings,suns:p.suns,strikes:p.strikes??0,attackHits:p.attackHits??0,wings:p.wings??0,lastAdvance:p.lastAdvance,connected:p.ai||!!connected(p.playerId),locked:choosing?slots(g)[p.seat]!==null:false})),
  ownBox:choosing&&me?g.boxes511[seat]:null,ownPick:g.phase==='hand'&&me?g.items511[seat]:null,

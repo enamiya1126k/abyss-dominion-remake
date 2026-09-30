@@ -1,0 +1,18 @@
+import {createRequire} from 'node:module';import {writeFile} from 'node:fs/promises';import assert from 'node:assert/strict';import {createServer} from '../build571/preview.mjs';
+const {chromium}=createRequire(import.meta.url)('playwright'),server=createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;const report={errors:[],failed:[],cases:[],nativeIPhone:false};
+try{browser=await chromium.launch({headless:true,executablePath:'/tmp/chromium',args:['--no-sandbox']});const page=await browser.newPage({isMobile:true,hasTouch:true,viewport:{width:390,height:740}});page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failed.push(r.url())});await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.ready&&c.lkUI511.artReady);await page.evaluate(()=>document.fonts.ready);
+await page.evaluate(()=>{window.chest=()=>{load('hand');c.state.luck.phase='chest';c.state.luck.ownBox=null;c.state.luck.ownPick=null;c.state.luck.players[0].locked=false;c.raw=(kind,msg)=>{window.sent=msg;return true};c.render()};window.confirmBox=i=>{c.lkUI511.pending=null;c.state.luck.ownBox=i;c.state.luck.players[0].locked=true;c.lkUI511.lastPaint=null;at(1)};window.openHand=()=>{c.state.luck.phase='hand';c.state.luck.players[0].locked=false;c.lkUI511.pending=null;c.render()}});
+for(const size of [{width:390,height:740},{width:320,height:568}]){await page.setViewportSize(size);for(let i=0;i<4;i++){
+ await page.evaluate(()=>chest());await page.locator('[data-chest511="'+i+'"]').tap();assert.equal(await page.evaluate(()=>sent.index),i);assert.equal(await page.locator('.lk-opening574').count(),0);
+ await page.evaluate(i=>confirmBox(i),i);await page.evaluate(()=>openHand());assert.equal(await page.locator('.lk-opening574').count(),1);assert.equal(await page.locator('.lk-loot574').count(),4);
+ assert.deepEqual(await page.locator('.lk-loot574 .lk-art508').evaluateAll(es=>es.map(e=>e.dataset.item)),await page.evaluate(()=>c.state.luck.hand));
+ assert.equal(await page.locator('.lk-opening574').evaluate(e=>getComputedStyle(e).pointerEvents),'none');
+ await page.evaluate(()=>{for(const a of c.lkUI511.chestAnimations574){a.pause();a.currentTime=380}});
+ if(size.width===390&&i===0)await page.screenshot({path:'docs/build574/opening.png'});
+ assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.locator('[data-hand-pick511="0"]').tap();assert.equal(await page.evaluate(()=>sent.kind),'hand');
+ await page.evaluate(()=>{for(const a of [...c.lkUI511.chestAnimations574])a.finish()});await page.waitForFunction(()=>!document.querySelector('.lk-opening574'));await page.evaluate(()=>c.render());assert.equal(await page.locator('.lk-opening574').count(),0);report.cases.push({...size,box:i});
+}}
+await page.emulateMedia({reducedMotion:'reduce'});await page.evaluate(()=>{chest();confirmBox(0);openHand()});assert.equal(await page.locator('.lk-opening574').count(),0);assert(await page.locator('[data-hand-pick511="0"]').isEnabled());
+await page.emulateMedia({reducedMotion:'no-preference'});await page.evaluate(()=>{chest();confirmBox(0);openHand();c.render()});assert.equal(await page.locator('.lk-opening574').count(),0);assert.equal(await page.evaluate(()=>c.lkUI511.chestAnimations574.length),0);
+assert.deepEqual(report.errors,[]);assert.deepEqual(report.failed,[]);
+}finally{await browser?.close();await new Promise(r=>server.close(r));await writeFile('docs/build574/browser.json',JSON.stringify(report,null,2)+'\n')};console.log(JSON.stringify(report));

@@ -8,7 +8,15 @@ export const WORLDS512 = Object.freeze([
   {id:'sky', name:'天空都市', from:1000000n, milestone:'100万m', src:'./assets/luck512/sky.png'},
   {id:'stratosphere', name:'成層圏', from:10000000n, milestone:'1000万m', src:'./assets/luck512/stratosphere.png'},
   {id:'space', name:'宇宙', from:100000000n, milestone:'1億m', src:'./assets/luck512/space.png'},
-  {id:'galaxy', name:'銀河の彼方', from:1000000000n, milestone:'10億m', src:'./assets/luck512/galaxy.png'}
+  {id:'galaxy', name:'銀河の彼方', from:1000000000n, milestone:'10億m', src:'./assets/luck512/galaxy.png'},
+  {id:'blackhole', name:'事象の地平線', from:100000000000n, milestone:'1000億m', src:'./assets/luck572/blackhole.webp'},
+  {id:'beyond', name:'時空の外側', from:10000000000000000n, milestone:'1京m', src:'./assets/luck572/beyond.webp'},
+  {id:'chaos', name:'混沌の果て', from:1000000000000000000000000n, milestone:'1秭m', src:'./assets/luck572/chaos.webp'},
+  {id:'moon', name:'静寂の月面', from:10000000000000000000000000n, milestone:'10秭m', src:'./assets/luck573/moon.webp'},
+  {id:'venus', name:'金星の灼熱地表', from:1000000000000000000000000000n, milestone:'1000秭m', src:'./assets/luck573/venus.webp'},
+  {id:'sun', name:'太陽の海', from:100000000000000000000000000000n, milestone:'10穣m', src:'./assets/luck573/sun.webp'},
+  {id:'graveyard', name:'星の墓場', from:100000000000000000000000000000000n, milestone:'1溝m', src:'./assets/luck573/graveyard.webp'},
+  {id:'rebirth', name:'宇宙の再誕', from:10000000000000000000000000000000000000000n, milestone:'1正m', src:'./assets/luck573/rebirth.webp'}
 ].map(world=>Object.freeze({...world,src:new URL('../../'+world.src.slice(2),import.meta.url).href})));
 const clamp=x=>Math.max(0,Math.min(1,x)), Q=1000000n, P=1000000000000n;
 const fast=new Set(['rocket','turbo','comet','mega','jackpot']);
@@ -58,7 +66,7 @@ export function sceneryFrame512(g,at,raceFrame,reduced=false){
   return {from:previous.index,to:current.index,blend,index:blend<.5?previous.index:current.index,warp:Math.sin(Math.PI*k)*.15};
 }
 
-// Six images maximum, two concurrent downloads. No request, decode or timer per frame.
+// Fourteen images maximum, two concurrent downloads. No request, decode or timer per frame.
 // Core game art has its own readiness gate: these backgrounds never delay play.
 export function createSceneryLoader512({ImageClass=globalThis.Image,setTimer=setTimeout,clearTimer=clearTimeout}={}){
   const records=WORLDS512.map((_,i)=>({status:i?'idle':'ready',image:null,cancel:null}));

@@ -11,10 +11,10 @@ function state(from=[0,0,0,0],to=from,item='dash'){
   return {id:'scenery',phase:'run',phaseAt:1000,round:4,players:from.map((distance,seat)=>({seat,playerId:'p'+seat,distance,loadout:[]})),event:{rows:from.map((value,seat)=>({seat,from:value,to:to[seat],item,delta:(BigInt(to[seat])-BigInt(value)).toString()}))}};
 }
 const frame=(g,ms=0,self='p0',reduced=false)=>sceneryFrame512(g,g.phaseAt+ms,raceFrame511(g,g.phaseAt+ms,self,reduced),reduced);
-test('all seven boundaries are exact, including decimal strings beyond safe Number range',()=>{
+test('all fifteen boundaries are exact, including decimal strings beyond safe Number range',()=>{
   assert.equal(worldIndex512(-1),0);assert.equal(worldIndex512(0),0);
   WORLDS512.slice(1).forEach((w,i)=>{assert.equal(worldIndex512(w.from-1n),i);assert.equal(worldIndex512(w.from),i+1);assert.equal(worldIndex512(String(w.from+1n)),i+1)});
-  assert.equal(worldIndex512('999999999999999999999999999999999999999999'),6);
+  assert.equal(worldIndex512(10n**100n),14);
 });
 test('every viewer follows their own distance, independently of the leader and the minimap',()=>{
   const g=state([0,10000,10000000,1000000000]);g.phase='hand';
@@ -34,10 +34,10 @@ test('ordinary crossings begin at their actual marker crossing and fade for at m
   }
 });
 test('a huge jump reveals every intermediate world without adding run time',()=>{
-  const g=state([0,0,0,0],['1000000000000000000000000000000',0,0,0],'mega'),before=JSON.stringify(g),route=worldRoute512(g.event.rows[0]);
-  assert.deepEqual(route.map(s=>s.index),[0,1,2,3,4,5,6]);
+  const g=state([0,0,0,0],[(10n**60n).toString(),0,0,0],'mega'),before=JSON.stringify(g),route=worldRoute512(g.event.rows[0]);
+  assert.deepEqual(route.map(s=>s.index),Array.from({length:15},(_,i)=>i));
   for(let i=1;i<route.length;i++){assert.equal(frame(g,route[i].at+181).index,i);if(i>1)assert.ok(route[i].at-route[i-1].at>=279.99)}
-  assert.ok(route.at(-1).at+180<LUCK511.runMs);assert.equal(frame(g,4800).index,6);assert.equal(JSON.stringify(g),before);
+  assert.ok(route.at(-1).at+180<LUCK511.runMs);assert.equal(frame(g,4800).index,14);assert.equal(JSON.stringify(g),before);
 });
 test('scenery never leads physical distance during a forward run',()=>{
   for(const finish of [10001,105000,1e8,'10000000000000000000000000000000000000000']){
@@ -59,7 +59,7 @@ test('very late crossings, stationary scores and already-galactic scores cannot 
 test('late join is derived from shared run time without replay state; reduced motion jumps directly',()=>{
   const g=state([0,0,0,0],[1e12,0,0,0]);
   assert.deepEqual(frame(g,1700),frame(JSON.parse(JSON.stringify(g)),1700));
-  assert.deepEqual(frame(g,0,'p0',true),{from:6,to:6,index:6,blend:0,warp:0});
+  assert.deepEqual(frame(g,0,'p0',true),{from:7,to:7,index:7,blend:0,warp:0});
   assert.equal(worldRoute512(g.event.rows[0]),worldRoute512(g.event.rows[0]));
 });
 test('all presentation phases keep exact camera, flowing markers, offsets and distance gaps untouched',()=>{
@@ -79,13 +79,13 @@ function loaderRig(){
 test('background loader caps downloads at two, prioritizes the current world and caches completed images',()=>{
   const r=loaderRig();r.loader.preload([5,6]);assert.equal(r.instances.length,2);assert.match(r.instances[0].src,/space\.png$/);assert.match(r.instances[1].src,/galaxy\.png$/);
   r.instances[0].onload();assert.equal(r.instances.length,3);assert.equal(r.loader.status(5),'ready');assert.equal(r.timers.size,2);
-  for(let i=1;i<6;i++)r.instances[i].onload();assert.equal(r.instances.length,6);assert.equal(r.timers.size,0);assert.equal(r.events(),6);
-  for(let i=0;i<100;i++)r.loader.preload();assert.equal(r.instances.length,6);r.unsubscribe();
+  for(let i=1;i<14;i++)r.instances[i].onload();assert.equal(r.instances.length,14);assert.equal(r.timers.size,0);assert.equal(r.events(),14);
+  for(let i=0;i<100;i++)r.loader.preload();assert.equal(r.instances.length,14);r.unsubscribe();
 });
 test('failed and timed-out scenery uses fallback, allows remaining downloads and retries explicitly',()=>{
   const r=loaderRig();r.loader.preload();r.instances[0].onerror();assert.equal(r.loader.status(1),'failed');[...r.timers.values()][0]();assert.equal(r.loader.status(2),'failed');
-  for(let i=2;i<6;i++)r.instances[i].onload();assert.equal(r.loader.status(6),'ready');assert.equal(r.timers.size,0);
-  r.loader.retry();assert.equal(r.instances.length,8);r.instances[6].onload();r.instances[7].onload();assert.equal(r.loader.status(1),'ready');r.unsubscribe();
+  for(let i=2;i<14;i++)r.instances[i].onload();assert.equal(r.loader.status(6),'ready');assert.equal(r.timers.size,0);
+  r.loader.retry();assert.equal(r.instances.length,16);r.instances[14].onload();r.instances[15].onload();assert.equal(r.loader.status(1),'ready');r.unsubscribe();
 });
 test('leaving the game cancels downloads, timers and callbacks; reopening resumes only missing assets',()=>{
   const r=loaderRig();r.loader.preload();const stale=r.instances[0].onload;r.unsubscribe();assert.equal(r.timers.size,0);assert.equal(r.instances[0].onload,null);assert.equal(r.instances[0].src,'');stale();assert.equal(r.events(),0);assert.equal(r.instances.length,2);
@@ -119,7 +119,7 @@ test('generated assets fully decode with documented hashes and a consistent pano
   for(const entry of manifest){const url=new URL('../'+entry.path,import.meta.url),bytes=readFileSync(url),image=await loadImage(url.pathname);assert.equal(image.width,entry.width);assert.equal(image.height,entry.height);assert.ok(Math.abs(image.width/image.height-3)<.01);assert.equal(createHash('sha256').update(bytes).digest('hex'),entry.sha256)}
 });
 test('the victory background uses the winning distance and safely falls back to the original stadium',()=>{
-  assert.equal(finishScenery512(9999),'');assert.match(finishScenery512(100000000),/data-finish-world512="space"/);assert.match(finishScenery512('100000000000000000000000'),/galaxy\.png/);
+  assert.equal(finishScenery512(9999),'');assert.match(finishScenery512(100000000),/data-finish-world512="space"/);assert.match(finishScenery512('100000000000000000000000'),/beyond\.webp/);
 });
 
 const fixtures={
@@ -136,7 +136,7 @@ const begin=g=>{advanceLuck511(g,g.nextAt);return g.phaseAt};
 function context(g,self='p0'){return{state:{luck:publicLuck511(g,self),party:{id:'party',hostId:'p0',members:g.members.map(m=>({...m,connected:true})),game:'luck',phase:g.phase},available:true,serverNow:g.phaseAt,partyResultActions490:1},transport:{selfId:self},offset:g.phaseAt-Date.now(),sgMonster463:()=>'<span class="sg-monster"><i></i></span>',sgSpeciesName463:id=>id,ready:()=>true,connected:()=>true,roster:()=>[{id:'m0',speciesId:'wolf'}],bank:()=>null,save:{state:{player:{gold:1000,crystals:0},settings:{audioEnabled:false},monsters:[]}},root:{querySelector:()=>null},draft:{code:'ABC123'},render(){},lkUI511:{gameId:g.id,artReady:true,sound:false}}}
 function dom(g=game()){
  let mutations=0,serial=0;const queue=new Map(),listeners=new Map(),saved={document:globalThis.document,requestAnimationFrame:globalThis.requestAnimationFrame,cancelAnimationFrame:globalThis.cancelAnimationFrame};
- function el(){const values={},attrs={},children=new Map();return{clientHeight:350,clientWidth:393,dataset:new Proxy({},{set(t,k,v){mutations++;t[k]=v;return true}}),style:new Proxy({setProperty(k,v){this[k]=v},getPropertyValue(k){return this[k]??''},getPropertyPriority(){return''}},{set(t,k,v){mutations++;t[k]=v;return true}}),classList:{contains:s=>s==='lk-play508'},getAttribute:k=>attrs[k]??null,setAttribute(k,v){mutations++;attrs[k]=v},addEventListener(){},removeEventListener(){},contains:()=>false,querySelector(q){if(!children.has(q))children.set(q,el());return children.get(q)},querySelectorAll:()=>[],get textContent(){return values.textContent},set textContent(v){mutations++;values.textContent=v},get disabled(){return values.disabled},set disabled(v){mutations++;values.disabled=v},get hidden(){return values.hidden},set hidden(v){mutations++;values.hidden=v}}}
+ function el(){const values={},attrs={},children=new Map();return{getBoundingClientRect:()=>({top:0,bottom:100}),clientHeight:350,clientWidth:393,dataset:new Proxy({},{set(t,k,v){mutations++;t[k]=v;return true}}),style:new Proxy({setProperty(k,v){this[k]=v},getPropertyValue(k){return this[k]??''},getPropertyPriority(){return''}},{set(t,k,v){mutations++;t[k]=v;return true}}),classList:{contains:s=>s==='lk-play508'},getAttribute:k=>attrs[k]??null,setAttribute(k,v){mutations++;attrs[k]=v},addEventListener(){},removeEventListener(){},contains:()=>false,querySelector(q){if(!children.has(q))children.set(q,el());return children.get(q)},querySelectorAll:()=>[],get textContent(){return values.textContent},set textContent(v){mutations++;values.textContent=v},get disabled(){return values.disabled},set disabled(v){mutations++;values.disabled=v},get hidden(){return values.hidden},set hidden(v){mutations++;values.hidden=v}}}
  const root=el(),groups={'[data-dice-cube511]':3,'[data-dice-lift511]':3,'[data-dice-actor511]':4,'[data-gear-slot511]':40,'[data-volley511] .lk-art508':9,'[data-chest511]':4,'[data-hand-pick511]':4,'[data-dot511]':8,'[data-mark511]':7,'[data-reveals511] .lk-art508':4};for(const[k,v]of Object.entries(groups))groups[k]=Array.from({length:v},el);root.querySelectorAll=q=>groups[q]??[];
  globalThis.document={visibilityState:'visible',querySelector:()=>null,addEventListener:(n,fn)=>listeners.set(n,fn),removeEventListener:n=>listeners.delete(n)};globalThis.requestAnimationFrame=fn=>{const id=++serial;queue.set(id,fn);return id};globalThis.cancelAnimationFrame=id=>queue.delete(id);
  if(g.phase==='countdown')begin(g);const c=context(g);c.root={querySelector:()=>root};c.offset=g.phaseAt-Date.now();c.raw=()=>true;

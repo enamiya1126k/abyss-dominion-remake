@@ -1,0 +1,47 @@
+{
+  "errors": [],
+  "failed": [],
+  "cases": [
+    {
+      "width": 390,
+      "height": 740,
+      "box": 0
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "box": 1
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "box": 2
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "box": 3
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "box": 0
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "box": 1
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "box": 2
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "box": 3
+    }
+  ],
+  "nativeIPhone": false
+}
