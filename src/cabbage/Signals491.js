@@ -1,9 +1,9 @@
 // Signal copy is live text. Generated artwork contains no baked-in numerals.
 export function cue491(signal,game,at){
  const count=Math.max(1,Math.min(3,Math.ceil((game.startAt-at)/1000)));
- const legacy=game.scoringVersion491!==1;
+ const legacy=game.scoringVersion491!==1,swipe=game.controlVersion567===1,move=swipe?'上へ戻して、下へザクッ！':'左 → 右 → 左 → 右';
  const kind=signal.kind==='cut'&&at<game.startAt+650?'go':signal.kind;
- const labels={countdown:['包丁を構えて',String(count),'3つの合図で、開店！'],go:['ABYSS KITCHEN','開店！','左 → 右 → 左 → 右'],cut:['CHOP! CHOP!','切れ！','左 → 右 → 左 → 右'],warning:['まもなく停止','止まる準備！','赤い合図が出たら、手を離そう'],stop:['HANDS OFF!','切るな！',legacy?'手を止めて、台所を守れ':'1タップ −80pt · マイナスまで減点！'],finish:['おつかれさま！','そこまで！','みんなの千切りを集計中'],waiting:['通信確認中','合図を確認中','もう少し待ってね']};
+ const labels={countdown:['包丁を構えて',String(count),'3つの合図で、開店！'],go:['ABYSS KITCHEN','開店！',move],cut:['CHOP! CHOP!','切れ！',move],warning:['まもなく停止','止まる準備！','赤い合図が出たら、手を離そう'],stop:['HANDS OFF!','切るな！',legacy?'手を止めて、台所を守れ':swipe?'1回切ると −80pt · 手を止めて！':'1タップ −80pt · マイナスまで減点！'],finish:['おつかれさま！','そこまで！','みんなの千切りを集計中'],waiting:['通信確認中','合図を確認中','もう少し待ってね']};
  return{kind,count,label:labels[kind]??labels.waiting,key:kind+':'+(kind==='countdown'?count:'')};
 }
 export function signalMarkup491(){return '<div class="cb-signal cb-signal491" data-cb-signal role="status" aria-live="polite" aria-atomic="true"><i class="cb-cue-art491" data-cb-cue-art aria-hidden="true"></i><small data-cb-signal-en></small><strong data-cb-signal-main></strong><span data-cb-signal-note></span><div class="cb-count-dots491" aria-hidden="true"><i></i><i></i><i></i></div></div>'}

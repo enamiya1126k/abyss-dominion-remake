@@ -1,0 +1,496 @@
+TAP version 13
+# Subtest: 1–4 humans always creates exactly four chefs; monster identity never affects scoring
+ok 1 - 1–4 humans always creates exactly four chefs; monster identity never affects scoring
+  ---
+  duration_ms: 3.226453
+  type: 'test'
+  ...
+# Subtest: seeded schedule covers all 45 seconds, warns before every stop and changes across matches
+ok 2 - seeded schedule covers all 45 seconds, warns before every stop and changes across matches
+  ---
+  duration_ms: 3.458738
+  type: 'test'
+  ...
+# Subtest: alternation, repeated side, minimum cadence, combos and floors are enforced by server
+ok 3 - alternation, repeated side, minimum cadence, combos and floors are enforced by server
+  ---
+  duration_ms: 0.299841
+  type: 'test'
+  ...
+# Subtest: every forbidden tap is charged from the stop boundary and negative points persist
+ok 4 - every forbidden tap is charged from the stop boundary and negative points persist
+  ---
+  duration_ms: 0.21983
+  type: 'test'
+  ...
+# Subtest: replays, forged times, invalid sides, before/after match and nonmonotonic inputs cannot earn points
+ok 5 - replays, forged times, invalid sides, before/after match and nonmonotonic inputs cannot earn points
+  ---
+  duration_ms: 0.21585
+  type: 'test'
+  ...
+# Subtest: finish waits for in-flight inputs, then seals scores with shared ranks for ties
+ok 6 - finish waits for in-flight inputs, then seals scores with shared ranks for ties
+  ---
+  duration_ms: 0.644845
+  type: 'test'
+  ...
+# Subtest: AI cadence is deterministic across server ticks and restart serialization
+ok 7 - AI cadence is deterministic across server ticks and restart serialization
+  ---
+  duration_ms: 3.863503
+  type: 'test'
+  ...
+# Subtest: public packets do not expose ownership rosters, RNG or future stop schedule
+ok 8 - public packets do not expose ownership rosters, RNG or future stop schedule
+  ---
+  duration_ms: 1.256104
+  type: 'test'
+  ...
+# Subtest: only current members may select owned monsters and host needs everyone ready, connected and updated
+ok 9 - only current members may select owned monsters and host needs everyone ready, connected and updated
+  ---
+  duration_ms: 1.336008
+  type: 'test'
+  ...
+# Subtest: batched retries are deduplicated; scoring is durable before packets are broadcast
+ok 10 - batched retries are deduplicated; scoring is durable before packets are broadcast
+  ---
+  duration_ms: 1.686641
+  type: 'test'
+  ...
+# Subtest: spectator, old round, oversized payloads and queue flooding do not create arbitrary score
+ok 11 - spectator, old round, oversized payloads and queue flooding do not create arbitrary score
+  ---
+  duration_ms: 2.97569
+  type: 'test'
+  ...
+# Subtest: disconnection and restart still finish; idle rooms expire without touching other games
+ok 12 - disconnection and restart still finish; idle rooms expire without touching other games
+  ---
+  duration_ms: 1.653343
+  type: 'test'
+  ...
+# Subtest: UI switches lobby/play/results; live score changes keep tap buttons mounted
+ok 13 - UI switches lobby/play/results; live score changes keep tap buttons mounted
+  ---
+  duration_ms: 18.858069
+  type: 'test'
+  ...
+# Subtest: UI escapes names, never treats pointer follow-up click as another tap and ignores held keys
+ok 14 - UI escapes names, never treats pointer follow-up click as another tap and ignores held keys
+  ---
+  duration_ms: 0.6308
+  type: 'test'
+  ...
+# Subtest: clock calibration uses round-trip midpoint and ignores foreign or stale replies
+ok 15 - clock calibration uses round-trip midpoint and ignores foreign or stale replies
+  ---
+  duration_ms: 0.179165
+  type: 'test'
+  ...
+# Subtest: real party route: 4 people create/join/select/ready/start/input/result/rematch/switch games
+ok 16 - real party route: 4 people create/join/select/ready/start/input/result/rematch/switch games
+  ---
+  duration_ms: 40.492996
+  type: 'test'
+  ...
+# Subtest: spectator joins midgame, receives score view, cannot tap and participates next game
+ok 17 - spectator joins midgame, receives score view, cannot tap and participates next game
+  ---
+  duration_ms: 5.074709
+  type: 'test'
+  ...
+# Subtest: durable restart restores scores and sequence ACK; duplicate old input cannot earn again
+ok 18 - durable restart restores scores and sequence ACK; duplicate old input cannot earn again
+  ---
+  duration_ms: 7.360583
+  type: 'test'
+  ...
+# Subtest: clock sync has authenticated identity and queue inputs do not broadcast or write per tap
+ok 19 - clock sync has authenticated identity and queue inputs do not broadcast or write per tap
+  ---
+  duration_ms: 1.705533
+  type: 'test'
+  ...
+# Subtest: opposite thumbs at the same millisecond both count; only same-side bounce is suppressed
+ok 20 - opposite thumbs at the same millisecond both count; only same-side bounce is suppressed
+  ---
+  duration_ms: 2.213934
+  type: 'test'
+  ...
+# Subtest: 40 alternating taps per second maintain a full combo and all scoring
+ok 21 - 40 alternating taps per second maintain a full combo and all scoring
+  ---
+  duration_ms: 0.603513
+  type: 'test'
+  ...
+# Subtest: every forbidden tap damages the board, including consecutive hits from one hand; penalty applies to every tap
+ok 22 - every forbidden tap damages the board, including consecutive hits from one hand; penalty applies to every tap
+  ---
+  duration_ms: 0.731208
+  type: 'test'
+  ...
+# Subtest: another stop keeps the same board; duplicated input does not damage or charge twice
+ok 23 - another stop keeps the same board; duplicated input does not damage or charge twice
+  ---
+  duration_ms: 0.671633
+  type: 'test'
+  ...
+# Subtest: saved games without new timing and damage fields migrate on first input
+ok 24 - saved games without new timing and damage fields migrate on first input
+  ---
+  duration_ms: 0.70667
+  type: 'test'
+  ...
+# Subtest: the same cabbage only gets finer across 1,000 cuts; every pre-mince tap advances its material
+ok 25 - the same cabbage only gets finer across 1,000 cuts; every pre-mince tap advances its material
+  ---
+  duration_ms: 2.732652
+  type: 'test'
+  ...
+# Subtest: local prediction uses real rules without mutating server state; ACK removes exactly confirmed inputs
+ok 26 - local prediction uses real rules without mutating server state; ACK removes exactly confirmed inputs
+  ---
+  duration_ms: 1.42031
+  type: 'test'
+  ...
+# Subtest: fresh input bypasses ACK backlog; failures retain unsent input and retry sends no private fields
+ok 27 - fresh input bypasses ACK backlog; failures retain unsent input and retry sends no private fields
+  ---
+  duration_ms: 0.479414
+  type: 'test'
+  ...
+# Subtest: 40 taps/sec survive 300ms each-way latency, 250ms server ticks, batched retries and reconciliation
+ok 28 - 40 taps/sec survive 300ms each-way latency, 250ms server ticks, batched retries and reconciliation
+  ---
+  duration_ms: 9.036562
+  type: 'test'
+  ...
+# Subtest: view updates score, combo, expected hand and generated food immediately before any server reply
+ok 29 - view updates score, combo, expected hand and generated food immediately before any server reply
+  ---
+  duration_ms: 50.426574
+  type: 'test'
+  ...
+# Subtest: each illegal tap swaps board art locally; the board persists through stop and the next cut while cabbage remains minced
+ok 30 - each illegal tap swaps board art locally; the board persists through stop and the next cut while cabbage remains minced
+  ---
+  duration_ms: 2.565851
+  type: 'test'
+  ...
+# Subtest: generated material keeps changing the minced pile after the final art stage, never restocks
+ok 31 - generated material keeps changing the minced pile after the final art stage, never restocks
+  ---
+  duration_ms: 1.167019
+  type: 'test'
+  ...
+# Subtest: pointer binding accepts both simultaneous thumbs, suppresses duplicate downs and clears capture on cancel
+ok 32 - pointer binding accepts both simultaneous thumbs, suppresses duplicate downs and clears capture on cancel
+  ---
+  duration_ms: 0.544452
+  type: 'test'
+  ...
+# Subtest: touch fallback handles both changed touches; a compatibility click never adds a second cut
+ok 33 - touch fallback handles both changed touches; a compatibility click never adds a second cut
+  ---
+  duration_ms: 0.290457
+  type: 'test'
+  ...
+# Subtest: zoom prevention is confined to mounted play surface; it restores exact viewport and removes every listener
+ok 34 - zoom prevention is confined to mounted play surface; it restores exact viewport and removes every listener
+  ---
+  duration_ms: 0.933025
+  type: 'test'
+  ...
+# Subtest: render cleanup restores zoom and removes active input handlers when leaving the minigame
+ok 35 - render cleanup restores zoom and removes active input handlers when leaving the minigame
+  ---
+  duration_ms: 1.708162
+  type: 'test'
+  ...
+# Subtest: private input timestamps are self-only; public damage survives reconnect and result sealing
+ok 36 - private input timestamps are self-only; public damage survives reconnect and result sealing
+  ---
+  duration_ms: 0.910728
+  type: 'test'
+  ...
+# Subtest: one board retains cumulative damage through cut, another stop, save/reconnect and results; only a new match repairs it
+ok 37 - one board retains cumulative damage through cut, another stop, save/reconnect and results; only a new match repairs it
+  ---
+  duration_ms: 5.091272
+  type: 'test'
+  ...
+# Subtest: a completely shattered board never prevents legal cuts and repeated damage is charged on every tap
+ok 38 - a completely shattered board never prevents legal cuts and repeated damage is charged on every tap
+  ---
+  duration_ms: 0.521738
+  type: 'test'
+  ...
+# Subtest: predicted cumulative damage reconciles across the stop boundary without double damage or losing old scars
+ok 39 - predicted cumulative damage reconciles across the stop boundary without double damage or losing old scars
+  ---
+  duration_ms: 1.205711
+  type: 'test'
+  ...
+# Subtest: cabbage progresses beyond the old coarse pile into granules, snow and powder without restocking
+ok 40 - cabbage progresses beyond the old coarse pile into granules, snow and powder without restocking
+  ---
+  duration_ms: 0.316294
+  type: 'test'
+  ...
+# Subtest: each cut refines an opaque part of the same pile: complementary masks have no translucent double image
+ok 41 - each cut refines an opaque part of the same pile: complementary masks have no translucent double image
+  ---
+  duration_ms: 2.673415
+  type: 'test'
+  ...
+# Subtest: harvest quantity uses final points including penalties and bonus, with shared exact comparison scale
+ok 42 - harvest quantity uses final points including penalties and bonus, with shared exact comparison scale
+  ---
+  duration_ms: 0.3284
+  type: 'test'
+  ...
+# Subtest: result gives the podium only to rank one, shows final point quantities for all players and keeps replay actions
+ok 43 - result gives the podium only to rank one, shows final point quantities for all players and keeps replay actions
+  ---
+  duration_ms: 18.78233
+  type: 'test'
+  ...
+# Subtest: tied winners share the summit and zero points never invent a cabbage mountain or divide by zero
+ok 44 - tied winners share the summit and zero points never invent a cabbage mountain or divide by zero
+  ---
+  duration_ms: 1.023597
+  type: 'test'
+  ...
+# Subtest: winner names remain escaped in podium accessibility text and result labels
+ok 45 - winner names remain escaped in podium accessibility text and result labels
+  ---
+  duration_ms: 0.497502
+  type: 'test'
+  ...
+# Subtest: the eighth forbidden strike reaches the table only after seven board damage stages
+ok 46 - the eighth forbidden strike reaches the table only after seven board damage stages
+  ---
+  duration_ms: 1.015531
+  type: 'test'
+  ...
+# Subtest: each further hit changes the table through cracks, holes, collapse and complete removal with no rectangular clipping
+ok 47 - each further hit changes the table through cracks, holes, collapse and complete removal with no rectangular clipping
+  ---
+  duration_ms: 0.606337
+  type: 'test'
+  ...
+# Subtest: old or invalid counters never display negative damage or an invalid atlas cell
+ok 48 - old or invalid counters never display negative damage or an invalid atlas cell
+  ---
+  duration_ms: 0.169637
+  type: 'test'
+  ...
+# Subtest: persistent table damage survives the next cut, a later stop, save and result without changing scoring rules
+ok 49 - persistent table damage survives the next cut, a later stop, save and result without changing scoring rules
+  ---
+  duration_ms: 4.173779
+  type: 'test'
+  ...
+# Subtest: crossing from board to table before a server reply reconciles to identical scene state
+ok 50 - crossing from board to table before a server reply reconciles to identical scene state
+  ---
+  duration_ms: 0.792535
+  type: 'test'
+  ...
+# Subtest: rendered surfaces expose the floor and stay collapsed when the signal changes
+ok 51 - rendered surfaces expose the floor and stay collapsed when the signal changes
+  ---
+  duration_ms: 0.369228
+  type: 'test'
+  ...
+# Subtest: real input immediately breaks the table locally, then the same mounted buttons keep accepting fast legal cuts on the floor
+ok 52 - real input immediately breaks the table locally, then the same mounted buttons keep accepting fast legal cuts on the floor
+  ---
+  duration_ms: 34.773276
+  type: 'test'
+  ...
+# Subtest: reduced motion suppresses new input recoil, knife animations and particles but preserves scene damage
+ok 53 - reduced motion suppresses new input recoil, knife animations and particles but preserves scene damage
+  ---
+  duration_ms: 0.839773
+  type: 'test'
+  ...
+# Subtest: damage feedback describes the object actually breaking and never suggests a second charge in one stop
+ok 54 - damage feedback describes the object actually breaking and never suggests a second charge in one stop
+  ---
+  duration_ms: 0.313233
+  type: 'test'
+  ...
+# Subtest: results show the winner’s collapsed table rather than restoring it; replay still works
+ok 55 - results show the winner’s collapsed table rather than restoring it; replay still works
+  ---
+  duration_ms: 1.450702
+  type: 'test'
+  ...
+# Subtest: same cabbage gets lower on every cut across all material boundaries and only spreads slightly
+ok 56 - same cabbage gets lower on every cut across all material boundaries and only spreads slightly
+  ---
+  duration_ms: 44.483111
+  type: 'test'
+  ...
+# Subtest: play height depends only on total cuts, never combo, points, damage or material reset; final podium still grows with points
+ok 57 - play height depends only on total cuts, never combo, points, damage or material reset; final podium still grows with points
+  ---
+  duration_ms: 1.047481
+  type: 'test'
+  ...
+# Subtest: all eight floor stages follow total board/table loss; every additional strike continues widening the abyss
+ok 58 - all eight floor stages follow total board/table loss; every additional strike continues widening the abyss
+  ---
+  duration_ms: 4.084282
+  type: 'test'
+  ...
+# Subtest: paint and reconnect preserve floor holes; starting a new match alone restores all surfaces
+ok 59 - paint and reconnect preserve floor holes; starting a new match alone restores all surfaces
+  ---
+  duration_ms: 0.576953
+  type: 'test'
+  ...
+# Subtest: floor damage survives real cuts, next stop, persisted snapshot and final result; every forbidden tap deducts points
+ok 60 - floor damage survives real cuts, next stop, persisted snapshot and final result; every forbidden tap deducts points
+  ---
+  duration_ms: 20.542474
+  type: 'test'
+  ...
+# Subtest: production result click → server clears completed game → same party can open EVERY minigame
+ok 61 - production result click → server clears completed game → same party can open EVERY minigame
+  ---
+  duration_ms: 39.033371
+  type: 'test'
+  ...
+# Subtest: production again click creates a new match, resets ready/damage, retains party and rejects duplicate/stale actions
+ok 62 - production again click creates a new match, resets ready/damage, retains party and rejects duplicate/stale actions
+  ---
+  duration_ms: 2.584822
+  type: 'test'
+  ...
+# Subtest: delayed list retransmit cannot destroy a newly opened game, including after durable restart
+ok 63 - delayed list retransmit cannot destroy a newly opened game, including after durable restart
+  ---
+  duration_ms: 7.569408
+  type: 'test'
+  ...
+# Subtest: guests dismiss only their result, cannot switch for host, then follow the next game
+ok 64 - guests dismiss only their result, cannot switch for host, then follow the next game
+  ---
+  duration_ms: 3.654329
+  type: 'test'
+  ...
+# Subtest: active game, wrong party identity and invalid action cannot clear a match
+ok 65 - active game, wrong party identity and invalid action cannot clear a match
+  ---
+  duration_ms: 2.492326
+  type: 'test'
+  ...
+# Subtest: busy errors are visible in the actual result, while list remains able to release the old game
+ok 66 - busy errors are visible in the actual result, while list remains able to release the old game
+  ---
+  duration_ms: 20.386219
+  type: 'test'
+  ...
+# Subtest: double taps send once; loss of reply times out, errors release controls, offline/send failure explain what happened
+ok 67 - double taps send once; loss of reply times out, errors release controls, offline/send failure explain what happened
+  ---
+  duration_ms: 2.478903
+  type: 'test'
+  ...
+# Subtest: all existing result header routes go through the same close path; ordinary lobby browse is unaffected
+ok 68 - all existing result header routes go through the same close path; ordinary lobby browse is unaffected
+  ---
+  duration_ms: 7.255263
+  type: 'test'
+  ...
+# Subtest: clearing results preserves already-issued reward delivery queues
+ok 69 - clearing results preserves already-issued reward delivery queues
+  ---
+  duration_ms: 2.26809
+  type: 'test'
+  ...
+# Subtest: outdated server gives a useful error without sending an unsupported request
+ok 70 - outdated server gives a useful error without sending an unsupported request
+  ---
+  duration_ms: 1.73549
+  type: 'test'
+  ...
+# Subtest: all FOUR actual result views expose the same two actions and no home button, even with a lingering game menu
+ok 71 - all FOUR actual result views expose the same two actions and no home button, even with a lingering game menu
+  ---
+  duration_ms: 22.774026
+  type: 'test'
+  ...
+# Subtest: stop starts charging immediately; opposite thumbs, repeated hand and deep negative scores all count once per accepted tap
+ok 72 - stop starts charging immediately; opposite thumbs, repeated hand and deep negative scores all count once per accepted tap
+  ---
+  duration_ms: 2.541537
+  type: 'test'
+  ...
+# Subtest: prediction and partial ACK preserve exact negative scores without charging retries twice
+ok 73 - prediction and partial ACK preserve exact negative scores without charging retries twice
+  ---
+  duration_ms: 1.500258
+  type: 'test'
+  ...
+# Subtest: old running snapshots finish with their original rule; a fresh start adopts the new rule
+ok 74 - old running snapshots finish with their original rule; a fresh start adopts the new rule
+  ---
+  duration_ms: 0.662264
+  type: 'test'
+  ...
+# Subtest: constant mashing loses to the same cutting pace with hands off at red cues
+ok 75 - constant mashing loses to the same cutting pace with hands off at red cues
+  ---
+  duration_ms: 4.730365
+  type: 'test'
+  ...
+# Subtest: negative-only results rank correctly, show true signed points and never draw a negative harvest mound
+ok 76 - negative-only results rank correctly, show true signed points and never draw a negative harvest mound
+  ---
+  duration_ms: 18.389525
+  type: 'test'
+  ...
+# Subtest: countdown shows 3, 2, 1 then opening, and every subsequent cue uses its distinct live text and artwork
+ok 77 - countdown shows 3, 2, 1 then opening, and every subsequent cue uses its distinct live text and artwork
+  ---
+  duration_ms: 0.627791
+  type: 'test'
+  ...
+# Subtest: cue transitions update accessible text, digit dots and art even when reduced motion is enabled
+ok 78 - cue transitions update accessible text, digit dots and art even when reduced motion is enabled
+  ---
+  duration_ms: 0.795123
+  type: 'test'
+  ...
+# Subtest: new client explains an old server instead of starting a match with the old penalty rule
+ok 79 - new client explains an old server instead of starting a match with the old penalty rule
+  ---
+  duration_ms: 1.269651
+  type: 'test'
+  ...
+# Subtest: server queues, retries and a durable restart preserve every forbidden penalty and negative score
+ok 80 - server queues, retries and a durable restart preserve every forbidden penalty and negative score
+  ---
+  duration_ms: 30.865033
+  type: 'test'
+  ...
+# Subtest: mixed client versions cannot start; an updated ready packet upgrades a persisted old member without rejoining
+ok 81 - mixed client versions cannot start; an updated ready packet upgrades a persisted old member without rejoining
+  ---
+  duration_ms: 4.689919
+  type: 'test'
+  ...
+1..81
+# tests 81
+# suites 0
+# pass 81
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1104.801535

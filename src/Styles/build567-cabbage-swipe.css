@@ -1,0 +1,37 @@
+/* The board itself is the control. No left/right pads or input-sized dead area. */
+.cb-play.cb-swipe567{height:100dvh;min-height:0;max-height:none}
+.cb-swipe567 .cb-stage486{min-height:0;outline:none;cursor:ns-resize;touch-action:none}
+.cb-swipe567 .cb-stage486:focus-visible{box-shadow:inset 0 0 0 2px #eef4ab}
+.cb-swipe567 .cb-stage486 .cb-food,.cb-swipe567 .cb-stage486 .cb-knife488{display:none}
+.cb-swipe567 .cb-stage486 .cb-chef{left:3%;top:calc(36% + var(--floor-drop488,0%));width:19%;height:27%;z-index:2}
+.cb-swipe567 .cb-particles{z-index:3}
+.cb-swipe567 .cb-stage[data-signal] .cb-signal491{z-index:4;width:min(78%,300px);left:50%;right:auto;top:2%;transform:translateX(-50%)}
+.cb-swipe567 .cb-stage[data-signal] .cb-signal491 strong{font-size:28px}
+.cb-swipe567 .cb-stage[data-signal] .cb-signal491 small{font-size:8px}
+.cb-swipe567 .cb-stage[data-signal] .cb-signal491>span{font-size:9px}
+.cb-swipe567 .cb-stage[data-signal=countdown] .cb-signal491{width:min(55cqw,43cqh);height:min(55cqw,43cqh)}
+.cb-swipe567 .cb-stage[data-signal=countdown] .cb-signal491 strong{font-size:56px}
+.cb-swipe567 .cb-stage486 .cb-feedback{top:83%;font-size:16px}
+.cb-swipe567 .cb-texture487{z-index:4;bottom:2%;font-size:10px;padding:4px 10px}
+.cb-swipe567 .cb-action-area{padding:10px 14px max(12px,env(safe-area-inset-bottom));flex:none}
+.cb-swipe567 .cb-rhythm{margin:0;font-size:15px;letter-spacing:.04em;line-height:1.5}
+.cb-swipe567 .cb-instruction{margin:4px 0 0;font-size:10px;line-height:1.6}
+.cb-swipe567 .cb-swipe-keys567{font-size:10px;color:#bbc8a4;margin-left:8px;font-weight:500}
+.cb-swipe567 .cb-swipe-keys567 kbd{font:inherit;padding:1px 5px;border:1px solid #bccb9366;border-radius:3px}
+.cb-swipe567 .cb-action-area[data-stop="true"]{background:linear-gradient(#56291c,#291d14);border-color:#d58c58}
+.cb-swipe567 .cb-action-area[data-stop="true"] .cb-rhythm{color:#ffe6b3}
+@media(hover:none){.cb-swipe-keys567{display:none}}
+@media(max-height:620px){.cb-swipe567 .cb-header{height:42px;padding:4px 8px}.cb-swipe567 .cb-seat-avatar{height:20px}.cb-swipe567 .cb-seat-avatar .sg-monster,.cb-swipe567 .cb-seat-avatar .sg-monster>*{height:22px;width:24px}.cb-swipe567 .cb-scoreboard{padding:4px 8px}.cb-swipe567 .cb-seat{padding:3px}.cb-swipe567 .cb-clockbar{padding-bottom:5px}.cb-swipe567 .cb-clockbar>span>b{font-size:20px}.cb-swipe567 .cb-action-area{padding-top:7px;padding-bottom:8px}.cb-swipe567 .cb-rhythm{font-size:13px}.cb-swipe567 .cb-texture487{font-size:8px}}
+@media(orientation:landscape) and (max-height:550px){
+ .cb-play.cb-swipe567{max-width:none;display:grid;grid-template-columns:165px minmax(0,1fr);grid-template-rows:42px auto 1fr 55px}
+ .cb-swipe567 .cb-header{grid-column:1/-1;grid-row:1}
+ .cb-swipe567 .cb-scoreboard{grid-column:1;grid-row:2;grid-template-columns:repeat(2,minmax(0,1fr));padding:8px}
+ .cb-swipe567 .cb-clockbar{grid-column:1;grid-row:3;display:flex;flex-wrap:wrap;align-content:start;padding:5px 12px}
+ .cb-swipe567 .cb-time-track{flex-basis:100%;order:3}
+ .cb-swipe567 .cb-stage486{grid-column:2;grid-row:2/5}
+ .cb-swipe567 .cb-action-area{grid-column:1;grid-row:4;padding:4px 5px;align-self:end}
+ .cb-swipe567 .cb-rhythm{font-size:10px}.cb-swipe567 .cb-instruction{font-size:8px}
+ .cb-swipe567 .cb-stage[data-signal] .cb-signal491{width:min(75%,270px);left:50%;right:auto;transform:translateX(-50%);top:1%}
+ .cb-swipe567 .cb-stage[data-signal=countdown] .cb-signal491{width:135px;height:135px}
+ .cb-swipe567 .cb-stage486 .cb-chef{height:32%;top:30%}
+}
