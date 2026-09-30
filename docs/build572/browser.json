@@ -1,0 +1,79 @@
+{
+  "errors": [],
+  "failed": [],
+  "cases": [
+    {
+      "world": "blackhole",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "471px 314px",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "beyond",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "471px 314px",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "chaos",
+      "viewport": {
+        "width": 390,
+        "height": 740
+      },
+      "width": 390,
+      "page": 390,
+      "size": "471px 314px",
+      "height": 314,
+      "horizon": "none"
+    },
+    {
+      "world": "blackhole",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "280.5px 187px",
+      "height": 187,
+      "horizon": "none"
+    },
+    {
+      "world": "beyond",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "280.5px 187px",
+      "height": 187,
+      "horizon": "none"
+    },
+    {
+      "world": "chaos",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "width": 320,
+      "page": 320,
+      "size": "280.5px 187px",
+      "height": 187,
+      "horizon": "none"
+    }
+  ],
+  "nativeIPhone": false
+}

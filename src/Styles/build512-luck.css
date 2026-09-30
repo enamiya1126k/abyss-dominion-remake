@@ -21,3 +21,12 @@
 .lk511 .lk-victory507[data-finish-world512]{background-color:#111f3e;background-size:auto 100%;background-position:center;background-repeat:no-repeat}
 @media(max-height:600px) and (orientation:landscape){.lk511 .lk-world-label512{bottom:2px;font-size:7px;padding:1px 5px}}
 @media(prefers-reduced-motion:reduce){.lk511 .lk-world512{will-change:auto!important}.lk511 .lk-world-warp512{display:none}}
+
+/* Build572: preserve the new 3:2 artwork and faces without stretching or
+   slicing a face between parallax depths. Existing scenery keeps its motion. */
+.lk511 .lk-world512:is([data-world512=blackhole],[data-world512=beyond],[data-world512=chaos]) .lk-course508{background-size:calc(var(--lk-stage-height508) * 1.5) var(--lk-stage-height508)}
+.lk511 .lk-world512:is([data-world512=blackhole],[data-world512=beyond],[data-world512=chaos]) :is(.lk-horizon508,.lk-near511){display:none}
+.lk511 .lk-world512[data-world512=blackhole]{--world-sky:#130e25;--world-floor:#102b43;--lane:#b8ddff99}
+.lk511 .lk-world512[data-world512=beyond]{--world-sky:#284d49;--world-floor:#133c35;--lane:#ffe8ae99}
+.lk511 .lk-world512[data-world512=chaos]{--world-sky:#391146;--world-floor:#24143c;--lane:#ffccf2aa}
+.lk511 .lk-world512[data-world512=chaos]::after{content:"";position:absolute;inset:34% 0 0;background:linear-gradient(transparent,#12092155);pointer-events:none}
