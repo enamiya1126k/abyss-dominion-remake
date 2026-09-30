@@ -1,0 +1,174 @@
+{
+  "before": [
+    {
+      "x": 1150,
+      "y": 4660,
+      "checkpoint": 1,
+      "progress": 25,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 4410,
+      "checkpoint": 1,
+      "progress": 29,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 3960,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 3510,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 3060,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 2610,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 2160,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 1710,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 1260,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 810,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1000,
+      "y": 550,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 750,
+      "y": 300,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    }
+  ],
+  "after": [
+    {
+      "x": 1150,
+      "y": 4660,
+      "checkpoint": 1,
+      "progress": 25,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 4410,
+      "checkpoint": 1,
+      "progress": 29,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 3960,
+      "checkpoint": 1,
+      "progress": 37,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 3510,
+      "checkpoint": 2,
+      "progress": 45,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 3060,
+      "checkpoint": 2,
+      "progress": 52,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 2610,
+      "checkpoint": 3,
+      "progress": 60,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 2160,
+      "checkpoint": 3,
+      "progress": 68,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 1710,
+      "checkpoint": 3,
+      "progress": 76,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 1260,
+      "checkpoint": 4,
+      "progress": 83,
+      "finished": false
+    },
+    {
+      "x": 1150,
+      "y": 810,
+      "checkpoint": 4,
+      "progress": 91,
+      "finished": false
+    },
+    {
+      "x": 1000,
+      "y": 550,
+      "checkpoint": 4,
+      "progress": 96,
+      "finished": false
+    },
+    {
+      "x": 750,
+      "y": 300,
+      "checkpoint": 5,
+      "progress": 100,
+      "finished": true
+    }
+  ]
+}
