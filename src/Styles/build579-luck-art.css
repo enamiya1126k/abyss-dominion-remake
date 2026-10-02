@@ -1,0 +1,4 @@
+/* New paths also bypass older offline workers that drop query-string versions.
+   Keep this sheet after build571-luck.css: the head loads before cache cleanup. */
+.lk511 .lk-art508[data-atlas="571"]{background-image:url('../../assets/luck579/items-571.webp');background-size:400% 300%;background-position:calc(var(--tile-x)*100%/3) calc(var(--tile-y)*100%/2)}
+.lk511 .lk-art508[data-atlas="575"]{background-image:url('../../assets/luck579/items-575.webp');background-size:200% 200%;background-position:calc(var(--tile-x)*100%) calc(var(--tile-y)*100%)}
