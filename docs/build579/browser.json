@@ -1,0 +1,874 @@
+{
+  "errors": [],
+  "failed": [],
+  "cases": [
+    {
+      "width": 390,
+      "height": 740,
+      "item": "hunter",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "combo",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "mile",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "pioneer",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "sprint",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "resonance",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "vault",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "phoenix",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "salvage",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "anchor",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "streak",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "interest",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "regalia",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "podium",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "frontier",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 740,
+      "item": "usurper",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "hunter",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "combo",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "mile",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "pioneer",
+      "art": [
+        {
+          "item": "hunter",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "combo",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "mile",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "pioneer",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "sprint",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "resonance",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "vault",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "phoenix",
+      "art": [
+        {
+          "item": "sprint",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "resonance",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "vault",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "phoenix",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "salvage",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "anchor",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "streak",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "interest",
+      "art": [
+        {
+          "item": "salvage",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "anchor",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "streak",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        },
+        {
+          "item": "interest",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-571.webp\")",
+          "size": "400% 300%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "regalia",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "podium",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "frontier",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "item": "usurper",
+      "art": [
+        {
+          "item": "regalia",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "podium",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "frontier",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        },
+        {
+          "item": "usurper",
+          "url": "url(\"http://127.0.0.1:36411/assets/luck579/items-575.webp\")",
+          "size": "200% 200%"
+        }
+      ]
+    }
+  ],
+  "nativeIPhone": false,
+  "scope": "Production luck view, rules and art; isolated screen fixture with the party lounge stubbed.",
+  "reproducedBackground": "url(\"http://127.0.0.1:36411/assets/luck575/items.webp\")",
+  "oldWorker": "http://127.0.0.1:36411/world-raid-offline575-sw.js"
+}
