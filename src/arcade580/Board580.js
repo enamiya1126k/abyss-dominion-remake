@@ -1,5 +1,5 @@
 import {color563 as color} from '../party/Arcade563.js';
-export const PADS580=[[.28,.35],[.72,.35],[.16,.62],[.50,.72],[.84,.62]];
+export const PADS580=[[.28,.35],[.72,.35],[.19,.62],[.50,.72],[.81,.62]];
 const images=new Map();
 function asset(path){if(!images.has(path)){const i=new Image();i.src=new URL('../../assets/'+path,import.meta.url).href;images.set(path,i);}return images.get(path);}
 export function board580(canvas){return {canvas,ctx:canvas.getContext('2d'),w:1,h:1,points:[]};}

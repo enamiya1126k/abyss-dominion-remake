@@ -1,8 +1,8 @@
 import {STEP580,random580 as random,event580 as emit,make580,players580,finish580,publicBase580,resume580} from '../arcade580/Common580.js';
 
-export const CHAIRS583=Object.freeze({step:STEP580,countdown:3000,rounds:8,musicMin:3600,musicRange:3400,grabMs:4800,revealMs:2400,retryMs:280,normal:100,gold:150,goldMax:300,goldDelay:800,growMs:1800,counts:[3,3,2,3,2,3,2,1]});
+export const CHAIRS583=Object.freeze({step:STEP580,countdown:3000,rounds:8,musicMin:3600,musicRange:3400,grabMs:4800,revealMs:2400,retryMs:100,normal:100,gold:150,goldMax:300,goldDelay:800,growMs:1800,counts:[3,3,2,3,2,3,2,1]});
 const C=CHAIRS583;
-export const makeChairs583=args=>({...make580('chairs',args),rules583:2,chairs:[],history:[]});
+export const makeChairs583=args=>({...make580('chairs',args),rules583:3,chairs:[],history:[]});
 export function chairPoint583(index,count){return count===1?{x:.5,y:.56}:count===2?{x:index===0?.3:.7,y:.56}:[{x:.5,y:.46},{x:.27,y:.70},{x:.73,y:.70}][index];}
 export function orbit583(seat,g,at,reduced=false){const angle=Math.PI/2+seat*Math.PI/2+(reduced?0:Math.max(0,at-(g.roundAt??g.startAt))/1250);return {x:.5+Math.cos(angle)*.37,y:.58+Math.sin(angle)*.30};}
 export function chairLocation584(g,id){const ch=g.chairs.find(ch=>ch.id===id);return chairPoint583(ch?.slot??id,g.chairs.length);}
@@ -29,7 +29,7 @@ export function startChairs583(g,now,seed=583){
  g.updatedAt=now;g.revision++;return true;
 }
 export function validChairs583(g,p,m,at=g.lastAt??g.serverAt){
- return !!p&&g.phase==='play'&&['dance','grab'].includes(g.stage)&&!p.out&&p.chair==null&&at>=g.roundAt&&at>=(p.nextAt??0)&&(g.stage!=='grab'||at<g.deadline)&&m.action==='sit'&&Number.isSafeInteger(m.target)&&g.chairs.some(ch=>ch.id===m.target&&(g.stage==='dance'||chairOpen584(g,ch,at)));
+ return !!p&&g.phase==='play'&&['dance','grab'].includes(g.stage)&&!p.out&&p.chair==null&&at>=g.roundAt&&at>=(p.nextAt??0)&&(g.stage!=='grab'||at<g.deadline)&&m.action==='sit'&&Number.isSafeInteger(m.target)&&g.chairs.some(ch=>ch.id===m.target&&(g.stage==='dance'||at<g.phaseAt||chairOpen584(g,ch,at)));
 }
 export function inputChairs583(g,p,m){
  const at=m.at??g.lastAt;

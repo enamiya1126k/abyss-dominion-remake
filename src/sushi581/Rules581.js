@@ -1,6 +1,6 @@
 import {STEP580,random580 as random,event580 as emit,make580,players580,finish580,publicBase580,resume580} from '../arcade580/Common580.js';
 
-export const SUSHI581=Object.freeze({step:STEP580,countdown:3000,duration:75000,slots:12,speed:.50,rushSpeed:.66,reach:1.06,grabMs:650,spicyMs:1500,snatchMs:14000,setBonus:90,comboGoal:5,feverMs:6000});
+export const SUSHI581=Object.freeze({step:STEP580,countdown:3000,duration:75000,slots:12,speed:.50,rushSpeed:.66,reach:1.06,grabMs:650,spicyMs:1500,snatchMs:14000,setBonus:180,comboGoal:5,feverMs:6000});
 export const MENU581=Object.freeze([
  {id:'salmon',name:'サーモン',points:10},{id:'tuna',name:'まぐろ',points:10},
  {id:'egg',name:'たまご',points:10},{id:'shrimp',name:'えび',points:10},
@@ -8,7 +8,7 @@ export const MENU581=Object.freeze([
  {id:'gold',name:'金皿',points:40},{id:'wasabi',name:'激辛わさび',points:-40}
 ]);
 const C=SUSHI581,TAU=Math.PI*2;
-export const makeSushi581=args=>({...make580('sushi',args),rules581:2});
+export const makeSushi581=args=>({...make580('sushi',args),rules581:3});
 export const fever582=(p,at)=>!!p&&at<(p.feverUntil??0);
 export const seatAngle581=seat=>Math.PI/2+seat*Math.PI/2;
 const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
@@ -37,7 +37,7 @@ export function snatchTarget581(g,p){return g.dishes.filter(d=>d.kind!==7&&wante
 export function canEat581(g,p,at=g.lastAt??g.serverAt){return !!p&&g.phase==='play'&&at>=g.startAt&&at<g.deadline&&at>=p.nextAt&&at>=p.stunUntil;}
 export function validSushi581(g,p,m,at=g.lastAt??g.serverAt){
  if(!canEat581(g,p,at))return false;
- if(m.action==='snatch')return at>=p.snatchAt&&!!snatchTarget581(g,p);
+ if(m.action==='snatch')return false;
  return m.action==='grab'&&Number.isSafeInteger(m.target)&&m.target>0&&reachable581(g,p,g.dishes.find(d=>d.id===m.target),at);
 }
 export function inputSushi581(g,p,m){
@@ -52,14 +52,13 @@ export function inputSushi581(g,p,m){
  if(d.kind===6)p.golds++;
  if(index>=0){p.filled[index]=true;if(p.filled.every(Boolean)){p.score+=C.setBonus;p.sets++;complete=true;recipe(g,p);}}
  if(!hot){p.combo=index>=0?(p.combo??0)+1:0;p.bestCombo=Math.max(p.bestCombo??0,p.combo);}
- emit(g,m.action==='snatch'?'steal':'eat',{seat:p.seat,kind:d.kind,angle,value:p.score-before,platePoints,multiplier,matched:index>=0,complete,combo:p.combo});if(complete)emit(g,'set',{seat:p.seat,sets:p.sets});
+ emit(g,m.action==='snatch'?'steal':'eat',{seat:p.seat,kind:d.kind,angle,value:p.score-before,platePoints,multiplier,matched:index>=0,complete,combo:p.combo});if(complete)emit(g,'set',{seat:p.seat,sets:p.sets,value:C.setBonus});
  if(!hot&&p.combo>=C.comboGoal){p.combo=0;p.feverUntil=g.lastAt+C.feverMs;p.fevers=(p.fevers??0)+1;emit(g,'fever',{seat:p.seat,until:p.feverUntil});}return true;
 }
 function bot(g,p){
  if(g.lastAt<p.botAt||!canEat581(g,p))return null;p.botAt=g.lastAt+700+random(g)*700;
  const inReach=g.dishes.filter(d=>reachable581(g,p,d)),wanted=inReach.filter(d=>d.kind!==7&&wanted581(p,d.kind)>=0).sort((a,b)=>(b.kind===6)-(a.kind===6));
  if(wanted.length)return {action:'grab',target:wanted[Math.floor(random(g)*Math.min(2,wanted.length))].id};
- if(g.lastAt>=p.snatchAt&&snatchTarget581(g,p)&&random(g)<.6)return {action:'snatch'};
  const spare=inReach.filter(d=>d.kind!==7||random(g)<.014);if(spare.length&&g.lastAt-p.lastEatAt>1300&&random(g)<.38)return {action:'grab',target:spare[Math.floor(random(g)*spare.length)].id};return null;
 }
 export function advanceSushi581(g,now,inputs=new Map(),auto=new Set()){

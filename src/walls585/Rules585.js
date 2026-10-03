@@ -2,9 +2,9 @@ import {CONTROL586,vector586,segments586,nearestGap586,canDash586,move586} from 
 import {make580,players580,random580 as rnd,event580 as emit,publicBase580} from '../arcade580/Common580.js';
 
 // Positions are in the square floor's local [0,1] coordinates. 40 Hz authority.
-export const WALLS585=Object.freeze({step:25,countdown:3000,speed:.68,radius:.023,thickness:.088,edge:.036,finishDelay:1600});
+export const WALLS585=Object.freeze({step:25,countdown:3000,speed:.68,radius:.015,wallInset:.012,thickness:.088,edge:.036,finishDelay:1600});
 const C=WALLS585,clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-export const makeWalls585=args=>({...make580('walls',args),rules585:2,walls:[],elapsed:0,wave:0,stage:'ready'});
+export const makeWalls585=args=>({...make580('walls',args),rules585:3,walls:[],elapsed:0,wave:0,stage:'ready'});
 export const signature585=g=>!g?null:['lobby','result'].includes(g.phase)?g:{id:g.id,phase:'play',players:g.players.map(p=>[p.playerId,p.speciesId,p.color499])};
 export function difficulty585(elapsed){const t=elapsed/1000;return {level:t<18?1:t<38?2:t<65?3:4,warning:Math.max(850,1500-t*9),travel:Math.max(1750,3700-t*23),period:Math.max(1650,3950-t*31),gap:Math.max(.17,.39-t*.0027)};}
 export function wallPosition585(w,at){const f=(at-w.launchAt)/w.travel;return w.dir===0||w.dir===2?-.10+f*1.20:1.10-f*1.20;}
@@ -15,8 +15,8 @@ function sweptCircle(a,b,x0,y0,x1,y1,r){return segmentBox(a,b,x0-r,y0,x1+r,y1)||
 export function hitsWall585(w,a,b,from,to){
  if(to<w.launchAt||from>w.launchAt+w.travel)return false;
  // Relative motion sweeps both the player and wall; fast drags cannot tunnel.
- const axis=w.dir<2?'y':'x',cross=axis==='y'?'x':'y',p0=wallPosition585(w,from),p1=wallPosition585(w,to),v0={x:a[cross],y:a[axis]-p0},v1={x:b[cross],y:b[axis]-p1},h=C.thickness/2;
- return segments586(w).some(([lo,hi])=>sweptCircle(v0,v1,lo,-h,hi,h,C.radius));
+ const axis=w.dir<2?'y':'x',cross=axis==='y'?'x':'y',p0=wallPosition585(w,from),p1=wallPosition585(w,to),v0={x:a[cross],y:a[axis]-p0},v1={x:b[cross],y:b[axis]-p1},h=C.thickness/2-.010;
+ return segments586(w).some(([lo,hi])=>hi-lo>C.wallInset*2&&sweptCircle(v0,v1,lo+C.wallInset,-h,hi-C.wallInset,h,C.radius));
 }
 function spawn(g){const d=difficulty585(g.elapsed),wave=++g.wave;let dir;if(wave===1)dir=0;else {const pool=[0,1,2,3].filter(n=>n!==g.lastDir);dir=pool[Math.floor(rnd(g)*pool.length)];}g.lastDir=dir;
  const pattern=wave>=4&&wave%5===4?'double':wave>=5&&wave%5===0?'chase':wave>=6&&wave%5===1?'cross':'single',gap=.22+rnd(g)*.56,paired=['chase','cross'].includes(pattern);g.pattern=pattern;
@@ -51,10 +51,10 @@ export function advanceWalls585(g,now,inputs=new Map(),auto=new Set()){
   g.elapsed=g.lastAt-g.startAt;if(g.lastAt>=g.nextAt)spawn(g);
   for(const p of g.players){const wasAuto=p.auto;p.auto=p.ai||auto.has(p.playerId);if(wasAuto&&!p.auto)inputWalls585(g,p,{action:'stop'});const list=inputs.get(p.playerId)??[];inputs.delete(p.playerId);if(!p.alive)continue;if(p.auto)bot(g,p);else {const future=[];for(const m of list){if(Number.isFinite(m.at)&&m.at>g.lastAt){future.push(m);continue;}if(m.round==null||m.round===g.round)inputWalls585(g,p,m);}if(future.length)inputs.set(p.playerId,future);}
    const before={x:p.x,y:p.y},after=move586(p,C.step/1000,g.lastAt,C.speed,C.edge),hit=g.walls.find(w=>hitsWall585(w,before,after,previous,g.lastAt));p.vx=(after.x-before.x)/(C.step/1000);p.vy=(after.y-before.y)/(C.step/1000);Object.assign(p,after);p.survived=g.elapsed;
-   if(hit){p.alive=false;p.outAt=g.lastAt;p.outWave=hit.wave??hit.id;p.vx=0;p.vy=0;p.target={x:p.x,y:p.y};emit(g,'out',{seat:p.seat,wall:hit.id,x:p.x,y:p.y});}
+   if(hit){p.alive=false;p.outAt=g.lastAt;p.outWave=hit.wave??hit.id;p.outDir=hit.dir;p.vx=0;p.vy=0;p.target={x:p.x,y:p.y};emit(g,'out',{seat:p.seat,wall:hit.id,dir:hit.dir,x:p.x,y:p.y});}
   }
   const cleared=g.walls.filter(w=>g.lastAt>w.launchAt+w.travel);for(const w of cleared){for(const p of g.players)if(p.alive)p.dodged++;emit(g,'clear',{wall:w.id});}g.walls=g.walls.filter(w=>g.lastAt<=w.launchAt+w.travel);decide(g);
  }
  g.serverAt=g.lastAt;g.updatedAt=now;if(changed)g.revision++;return changed;
 }
-export function publicWalls585(g,selfId){return {...publicBase580(g),rules585:2,stage:g.stage,elapsed:g.elapsed,wave:g.wave,pattern:g.pattern,finishAt:g.finishAt,walls:g.walls.map(w=>({...w,openings:w.openings?.map(o=>({...o}))??null})),players:g.players.map(({botAt,botError,inputSeq563,target,...p})=>({...p,target:p.playerId===selfId?{...target}:null,lastSeq:p.playerId===selfId?Math.max(p.lastSeq,inputSeq563??0):0}))};}
+export function publicWalls585(g,selfId){return {...publicBase580(g),rules585:g.rules585,stage:g.stage,elapsed:g.elapsed,wave:g.wave,pattern:g.pattern,finishAt:g.finishAt,walls:g.walls.map(w=>({...w,openings:w.openings?.map(o=>({...o}))??null})),players:g.players.map(({botAt,botError,inputSeq563,target,...p})=>({...p,target:p.playerId===selfId?{...target}:null,lastSeq:p.playerId===selfId?Math.max(p.lastSeq,inputSeq563??0):0}))};}
