@@ -1,0 +1,18 @@
+import {configureRunners589} from '../../src/runners587/Courses589.js';
+import {makeRunners587,startRunners587,advanceRunners587,publicRunners587,validRunners587} from '../../src/runners587/Rules587.js';
+import {makeWalls585,startWalls585,advanceWalls585,publicWalls585,validWalls585} from '../../src/walls585/Rules585.js';
+import {makeChairs583,startChairs583,advanceChairs583,publicChairs583,validChairs583} from '../../src/chairs583/Rules583.js';
+import {realtime563} from './Realtime563.js';
+import {makeElevator580,startElevator580,advanceElevator580,publicElevator580,validElevator580} from '../../src/elevator580/Rules580.js';
+import {makeLava580,startLava580,advanceLava580,publicLava580,validLava580} from '../../src/lava580/Rules580.js';
+import {makeSushi581,startSushi581,advanceSushi581,publicSushi581,validSushi581} from '../../src/sushi581/Rules581.js';
+const config=game=>({rooms:game+'Rooms580',runtime:game+'Runtime580',prefix:game+'580',op:game+'580',state:game,frame:'arcadeFrame580',versionKey:'arcadeVersion580',rulesKey:'rules580',version:1,build:580,array:false,frameMs:50});
+export const elevator580=realtime563({...config('elevator'),make:makeElevator580,start:startElevator580,advance:advanceElevator580,public:publicElevator580,valid:validElevator580});
+export const lava580=realtime563({...config('lava'),make:makeLava580,start:startLava580,advance:advanceLava580,public:publicLava580,valid:validLava580});
+export const sushi581=realtime563({...config('sushi'),prefix:'su581',op:'sushi581',frame:'sushiFrame581',versionKey:'sushiVersion581',rulesKey:'rules581',version:2,build:582,make:makeSushi581,start:startSushi581,advance:advanceSushi581,public:publicSushi581,valid:validSushi581});
+export const chairs583=realtime563({...config('chairs'),prefix:'ch583',op:'chairs583',frame:'chairsFrame583',versionKey:'chairsVersion583',rulesKey:'rules583',version:2,build:584,make:makeChairs583,start:startChairs583,advance:advanceChairs583,public:publicChairs583,valid:validChairs583});
+export const walls585=realtime563({...config('walls'),prefix:'wa585',op:'walls585',frame:'wallsFrame585',versionKey:'wallsVersion585',rulesKey:'rules585',version:2,build:586,make:makeWalls585,start:startWalls585,advance:advanceWalls585,public:publicWalls585,valid:validWalls585});
+export const runners587=realtime563({...config('runners'),prefix:'ru587',op:'runners587',frame:'runnersFrame587',versionKey:'runnersVersion587',rulesKey:'rules587',version:3,build:589,configure:configureRunners589,make:makeRunners587,start:startRunners587,advance:advanceRunners587,public:publicRunners587,valid:validRunners587});
+export const arcadeFor580=(c,id)=>elevator580.find(c,id)??lava580.find(c,id)??sushi581.find(c,id)??chairs583.find(c,id)??walls585.find(c,id)??runners587.find(c,id);
+export const arcade580=game=>game==='elevator'?elevator580:game==='lava'?lava580:game==='sushi'?sushi581:game==='chairs'?chairs583:game==='walls'?walls585:game==='runners'?runners587:null;
+export const advanceArcade580=c=>{elevator580.advance(c);lava580.advance(c);sushi581.advance(c);chairs583.advance(c);walls585.advance(c);runners587.advance(c);};

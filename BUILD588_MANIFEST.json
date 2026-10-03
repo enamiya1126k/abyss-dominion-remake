@@ -1,0 +1,127 @@
+{
+  "build": 588,
+  "version": "3.1.267",
+  "type": "delta-patch",
+  "baseBuilds": [
+    587
+  ],
+  "baseCommit": "ededffdf38c16d067cb8db37fda3b63735da6d01",
+  "serverRestart": true,
+  "tests": {
+    "rulesAndIntegration": 47,
+    "touchViewportCases": 3,
+    "productionStylesheets": 293,
+    "fourWebSocketClients": true,
+    "nativeIPhone": false,
+    "actualManualCourseCompletion": true,
+    "manualScope": "Real key press/release, normal game physics; game paused between actions for screenshot inspection. No position edits or player AI.",
+    "manualHeartsAtGoal": 3
+  },
+  "files": [
+    {
+      "path": "README_BUILD588.md",
+      "size": 4643,
+      "sha256": "a3ee65410f5f02619c516363bad08d54b9b1bf40664f638b782e0adfde03f0f8"
+    },
+    {
+      "path": "index.html",
+      "size": 267941,
+      "sha256": "54d41b55815e213d9e40c10bfa528c46deb0c7e28a51288419e6130b23428a62"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "size": 3033,
+      "sha256": "0cc9c69a265b9e0b7ae9813136abd9c7de9104027f33374970f139c9ffdd5f5f"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 26872,
+      "sha256": "f569e254c221ea60ed5bcb9a11c6fae528ffcd48163a3f025939dd6951058bd6"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 29759,
+      "sha256": "5ff1ad607efffdbb6995a68e6287ac2ef5c7f9ff10a8b72213ec0b87eac51ed0"
+    },
+    {
+      "path": "src/Styles/build588-runners-polish.css",
+      "size": 8537,
+      "sha256": "daf5a069233e540d9553da59121119b6ea8a16e45777c3e0fbd2df25c6ebfb66"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "bf2d1fde65a6969debe3c937e5fd16b39a91118f7f8bd31ab4ab9771c641f836"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 8821,
+      "sha256": "291a9b2f9cd552ff04869e9f739838058fe17ceff3227ec9ae522aeb54b748b0"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 14883,
+      "sha256": "0d7cec7c2e73bba7bf898f0957382b14fa1666430aed9b146614e63181a03b32"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 33130,
+      "sha256": "1ef4ec7e3f3a07ec3d7f31898da51fce4703be1ae9461505151a0cf746b03dd9"
+    },
+    {
+      "path": "src/runners587/Board587.js",
+      "size": 6139,
+      "sha256": "688feed7ce906a2f14427f479145d669284d96c7a3751340890387d87db50e66"
+    },
+    {
+      "path": "src/runners587/Controls587.js",
+      "size": 4027,
+      "sha256": "e4fda77731619429d6b03b773fb943018758010adf786f560913f67bed03cb07"
+    },
+    {
+      "path": "src/runners587/Feel588.js",
+      "size": 1401,
+      "sha256": "1d25ecf2395e30dbedd3ae4560ceb569fa4e27dc4d06be28ce56cb679cd601f7"
+    },
+    {
+      "path": "src/runners587/Level587.js",
+      "size": 2702,
+      "sha256": "160a64ec277fc92a9d47cd19db36bd2e9a173b97f99897b3d901f9c7fccda3a1"
+    },
+    {
+      "path": "src/runners587/Physics587.js",
+      "size": 2784,
+      "sha256": "63bfb88e36fa1cae3d79b0aac95d1a3c84fec55928ea33793ec23b9eaccc587e"
+    },
+    {
+      "path": "src/runners587/Rules587.js",
+      "size": 7921,
+      "sha256": "2da0762c82f81161bd8742e2332fd5bada904c8d9b6b4874675a737bd8443f1f"
+    },
+    {
+      "path": "src/runners587/Scenery588.js",
+      "size": 7028,
+      "sha256": "bfaf015dcefddc0702d3b1a2086912093de81f5450a34d80de0d5bb3c9ac3a7f"
+    },
+    {
+      "path": "src/runners587/View587.js",
+      "size": 16282,
+      "sha256": "f2b15a43dc12d80d389132ea960f457b584b41515382fc812c076e0617ec6f1f"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "1f069e3ae7bb2744097adf62205d22fbd9c23de7f27419a5a4265e3deecc3640"
+    },
+    {
+      "path": "world-raid-offline588-assets.json",
+      "size": 53272,
+      "sha256": "0bf6f2ae60a6c36b19e66a837c922be1d258ac63749525c09223312fd171ea5d"
+    },
+    {
+      "path": "world-raid-offline588-sw.js",
+      "size": 2502,
+      "sha256": "22045b216e58014acf32526be54952f860a17e94dfe28b96e22d67e7fa73d0c6"
+    }
+  ]
+}

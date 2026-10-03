@@ -1,0 +1,130 @@
+{
+  "build": 585,
+  "version": "3.1.264",
+  "type": "delta-patch",
+  "baseBuilds": [
+    584
+  ],
+  "baseCommit": "aa18a9c54875f6fa339f1486c40c9338370bd548",
+  "serverRestart": true,
+  "tests": {
+    "rulesAndIntegration": 35,
+    "touchViewportCases": 3,
+    "productionStylesheets": 290,
+    "fourWebSocketClients": true,
+    "aiSimulationMatches": 60,
+    "nativeIPhone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD585.md",
+      "size": 2742,
+      "sha256": "de6c83b03f7c8513cd047a1a6b74ac4f2975d8d547dbe9028b6c1a1c193e0e92"
+    },
+    {
+      "path": "assets/walls585/SOURCES.json",
+      "size": 2462,
+      "sha256": "f69b8bf2e70536606ec48a99b3d360e329554eb2b45cd8b08c3d3cea7507b28a"
+    },
+    {
+      "path": "assets/walls585/arena.webp",
+      "size": 373894,
+      "sha256": "274224104f6543a0fc9cd3c87df2cf9258c75ee8b706d9c68c1f8076b2555ee4"
+    },
+    {
+      "path": "assets/walls585/cover.webp",
+      "size": 304514,
+      "sha256": "8891c3974b9abb4a0d0b3e346bc3144eca852115ddcc0d03e9f4f4ebe00fa1fb"
+    },
+    {
+      "path": "index.html",
+      "size": 262825,
+      "sha256": "d53d0b63625e876b278bc694c0cdfd0bbd4b68941a278064938f4ff4a805fec2"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "size": 2527,
+      "sha256": "ead2c5785ffbc4591f816d09692eaa1d0b3aa0cc766b3f8b975af333848cbe6b"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 26604,
+      "sha256": "7b2633fb7b6d2279a75dd956f07c0a9ebd00e93775800651f752c6c5b7f7c141"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 29527,
+      "sha256": "7961b3bfa55676513be6f2334070f03ce6354dbff7be78ea6454d5eea61581f8"
+    },
+    {
+      "path": "src/Styles/build585-walls.css",
+      "size": 9782,
+      "sha256": "da82040e84ed76b4fe1ffdee69d7ebefcdecd8936e4ca6892aec3816fa197d2d"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "75e82283f6c5b65d0464573968c10ede04882aaf2c269787b57b1993b60feaf2"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 8284,
+      "sha256": "ddc933d59c33a139cb94e63459481d39b609d9783ad3a343929e148b5b14716a"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "size": 3661,
+      "sha256": "ed709a33dbef7d12c3d3c888060acf752759020c018edb339340531c75841086"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 14606,
+      "sha256": "3f0e03a1cff15da97a054375cd43795c5bea8c7c7e776264f4bf36f1ac1db9eb"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 32536,
+      "sha256": "44c664ba9fd6c5c68447b1d622a69c3f08dd17c6b8d8df673c02940ccdabeb35"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "size": 7925,
+      "sha256": "f19269aaa8d32fe3ff46377cce6e96b07f82e13302d7e034a24f35b2e9abec5e"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "size": 4237,
+      "sha256": "a4ef605858d64ac2d42a5f2d5bd4b41925ffc26dbaf2184533c554ec7e777721"
+    },
+    {
+      "path": "src/walls585/Board585.js",
+      "size": 3931,
+      "sha256": "39f64e0aec1233b075e1063be516b7f65dad5828bfff6fb088d54c9b971dd093"
+    },
+    {
+      "path": "src/walls585/Rules585.js",
+      "size": 7474,
+      "sha256": "e50203eefd0c7a41a476174010dae0e00ad888957cb625fc66994cb1f8cebcd1"
+    },
+    {
+      "path": "src/walls585/View585.js",
+      "size": 14608,
+      "sha256": "94cf6207b64c639b83717a9c77cd331c225f806942b4eadf7582e3f71a6fac3d"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "46cac093e5f9d4cbc79f8cde251f68a2e0385621789f35699b887a125f909f63"
+    },
+    {
+      "path": "world-raid-offline585-assets.json",
+      "size": 52471,
+      "sha256": "97519ebb444943eb66449d66b8314d51f0b8f32e7c25b7dd29607e46244dcbba"
+    },
+    {
+      "path": "world-raid-offline585-sw.js",
+      "size": 2502,
+      "sha256": "6febf0f915a1c488ecb11bdcea81331b961c5fa3d2d0ddaa60235f863c4619bf"
+    }
+  ]
+}

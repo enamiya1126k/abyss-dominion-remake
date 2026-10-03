@@ -9,6 +9,10 @@ export const SPECIES500=Object.freeze([
  {id:'bass',name:'ブラックバス',short:'バス',quip:'くねくね速い！1回で捕獲。',hp:1,travelMs:5600,damage:15,points:20},
  {id:'cone',name:'コーンザリ将軍',short:'ザリ将軍',quip:'20回で捕獲！ミサイルは1タップで迎撃！',hp:20,travelMs:22000,damage:30,points:100}
 ]);
+// Build580 raises the pressure after tracing / team damage were added in Build541.
+// The flag keeps already-running older rooms on their original tuning until rematch.
+export const CANAL580=Object.freeze({maxEnemies:32,laneLimit:9,pace:1.32,bossAt:[25000,45000]});
+export const SPECIES580=Object.freeze(SPECIES500.map((s,i)=>Object.freeze({...s,hp:[3,6,3,56][i],quip:['体力３。なぞって群れごと捕獲！','体力６の硬い甲羅。仲間の網に続こう！','体力３。速いバスを逃がすな！','体力56！２人でBREAK、合体大網で一気に！'][i]})));
 const lanes=()=>[0,1,2,3];
 // Anchor movement before applying a snare: neither applying nor expiring it changes position.
 export function progress500(e,at){const anchor=e.motionAt??e.spawnAt,elapsed=Math.max(0,at-anchor),slowed=Math.max(0,Math.min(at,e.slowUntil??0)-anchor);return Math.max(0,Math.min(1,(e.motionProgress??0)+(elapsed-slowed*.7)/e.travelMs))}
@@ -29,11 +33,11 @@ export function start500(g,now){
  Object.assign(g,{rules492:1,rules494:1,rules496:1,rules500:1,phase:'countdown',simAt:g.startAt-100,nextSpawnAt:g.startAt+500,updatedAt:now,enemies:[],events:[],eventSerial:0,enemySerial:0,hp:100,captured:0,breaches:0,points:0,netEnergy:0,netMax:CANAL500.netMax,netUntil:0,megaCount:0,teamCatches:0,bySpecies:[0,0,0,0],bossMask:0,missiles:[],missileSerial:0,intercepted:0});if(g.rules541){Object.assign(g,{combo541:0,bestCombo541:0,fever541Until:0,feverReady541:0,lastCatch541:0,rally541:null,netMax:32});for(const p of g.players)Object.assign(p,{strokes541:0,bestSweep541:0})}return true;
 }
 function spawn(g,at,lane,kind){
- if(g.enemies.length>=CANAL500.maxEnemies||(kind!==3&&g.enemies.filter(e=>e.lane===lane).length>=6))return false;
+ if(g.enemies.length>=(g.rules580?CANAL580.maxEnemies:CANAL500.maxEnemies)||(kind!==3&&g.enemies.filter(e=>e.lane===lane).length>=(g.rules580?CANAL580.laneLimit:6)))return false;
  const elapsed=at-g.startAt;
  if(kind==null){const r=rand(g);kind=elapsed<12000?0:r<.42?0:r<.73?1:2}
  // A route is chosen once. It never depends on which other enemies remain alive.
- const s=SPECIES500[kind],routeX=kind===3?.5:[.17,.38,.60,.82][lane]+(rand(g)-.5)*.06,routeEnd=kind===3?.5:.36+rand(g)*.28,curve=kind===3?0:(rand(g)-.5)*.10;
+ const s=(g.rules580?SPECIES580:SPECIES500)[kind],routeX=kind===3?.5:[.17,.38,.60,.82][lane]+(rand(g)-.5)*.06,routeEnd=kind===3?.5:.36+rand(g)*.28,curve=kind===3?0:(rand(g)-.5)*.10;
  g.enemies.push({path541:g.rules541?1:0,path500:1,nextShotAt:kind===3?at+2000:null,id:++g.enemySerial,kind,lane,hp:s.hp,maxHp:s.hp,spawnAt:at,travelMs:s.travelMs*(.90+rand(g)*.20)*(elapsed>=50000?.62:.90),routeX,routeEnd,curve,wiggle:rand(g),motionAt:at,motionProgress:0,slowUntil:0,snareSeat:null,contributors:[]});return true;
 }
 function hit(g,p,e,damage,at,mega){
@@ -96,13 +100,13 @@ export function advance500(g,now,connected=()=>true){
   const at=g.simAt+=100,elapsed=at-g.startAt;
   if(at>=g.endAt){finish(g,g.endAt);break}
   if(elapsed===50000){g.nextSpawnAt=at;event(g,'flood',at)}
-  for(const [i,time]of [32000].entries())if(elapsed>=time&&!(g.bossMask&(1<<i))){const lane=(Math.floor(g.rng/100)+i)%4;if(spawn(g,at,lane,3)){g.bossMask|=1<<i;event(g,'boss',at,{lane})}}
+  for(const [i,time]of (g.rules580?CANAL580.bossAt:[32000]).entries())if(elapsed>=time&&!(g.bossMask&(1<<i))){const lane=(Math.floor(g.rng/100)+i)%4;if(spawn(g,at,lane,3)){g.bossMask|=1<<i;event(g,'boss',at,{lane})}}
   while(g.nextSpawnAt<=at){
    const t=g.nextSpawnAt,dt=t-g.startAt,open=gates500(dt);
    // Stagger the opening group and jitter cadence as well as positions.
    spawn(g,t,Math.floor(rand(g)*4),dt<12000?0:undefined);
    const teamPace=1+(g.rules541?.32:.75)*(g.players.filter(p=>!p.ai).length-1);
-   g.nextSpawnAt+=(dt<12000?850:dt<30000?560:dt<50000?350:180)*(.72+rand(g)*.56)/teamPace;
+   g.nextSpawnAt+=(dt<12000?850:dt<30000?560:dt<50000?350:180)*(.72+rand(g)*.56)/teamPace/(g.rules580?CANAL580.pace:1);
   }
   teamTick541(g,at,{hit,intercept:intercept500,event});
   for(let n=0;n<4;n++){
@@ -122,6 +126,7 @@ export function advance500(g,now,connected=()=>true){
  }
 }
 export function public500(g,selfId,now,connected=()=>true){return{
+ rules580:g.rules580===1?1:0,
  id:g.id,code:g.code,hostId:g.hostId,game:g.game,rules492:1,rules494:1,rules496:1,rules500:1,phase:g.phase,revision:g.revision,startAt:g.startAt,endAt:g.endAt,simAt:g.simAt,serverNow:now,hp:g.hp,captured:g.captured,breaches:g.breaches,points:g.points,success:g.success,grade:g.grade,finishedAt:g.finishedAt,
  ...(g.rules541?{rules541:1,combo541:g.combo541,bestCombo541:g.bestCombo541,fever541Until:g.fever541Until,rally541:g.rally541?{...g.rally541,seats:[...g.rally541.seats]}:null}:{}),
  missiles:(g.missiles??[]).map(m=>({...m})),intercepted:g.intercepted??0,netEnergy:g.netEnergy,netMax:g.netMax??CANAL500.netMax,netUntil:g.netUntil,megaCount:g.megaCount,teamCatches:g.teamCatches,bySpecies:[...g.bySpecies],

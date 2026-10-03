@@ -1,0 +1,67 @@
+{
+  "build": 579,
+  "version": "3.1.258",
+  "type": "delta-patch",
+  "baseBuilds": [
+    578
+  ],
+  "baseCommit": "ed9d93d9478127771b720192df24023c65944b48",
+  "serverRestart": false,
+  "tests": {
+    "browserCases": 32,
+    "staleCacheReproduced": true,
+    "nativeIPhone": false
+  },
+  "files": [
+    {
+      "path": "index.html",
+      "size": 253794,
+      "sha256": "baeed8793d3256b6314240a5a5e72ac3364ea63cd9e54712cf363ab5d98f1689"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "97a0b98fca89bc9ee892b052ca81119ccbfcbd568f0e91441502cee6a1d53ecb"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "size": 38690,
+      "sha256": "8485c126ef3a0c773951d5b83997ace0383ab29051e726728daef4592db94000"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "55cc395c2f3c5f4ddfcd1972d7a27d43cbd0c7b7337eb03f6455fe6603ef5759"
+    },
+    {
+      "path": "src/Styles/build579-luck-art.css",
+      "size": 554,
+      "sha256": "f42dc4361a870b5f4729f8777491ce3963c08b4f3c442fa7d00d8ec60ebd654a"
+    },
+    {
+      "path": "assets/luck579/items-571.webp",
+      "size": 553784,
+      "sha256": "7262e88e07c5ed4d89a6199fbeb505523d2cba4689f6d3f5ae773d02e01c04ea"
+    },
+    {
+      "path": "assets/luck579/items-575.webp",
+      "size": 449454,
+      "sha256": "64879896e29738eb0dd25ddec02b7529a792c11f7ebfa32ca9cd7c390a29388e"
+    },
+    {
+      "path": "world-raid-offline579-assets.json",
+      "size": 50781,
+      "sha256": "315e92004e86ae6d526fe8b13ac7a6ef46925c0ddcaa936b2bdb344123cde11a"
+    },
+    {
+      "path": "world-raid-offline579-sw.js",
+      "size": 2502,
+      "sha256": "2b158ef864241d7711be44b05fb67ab8630001a474a583e71035b3ba90222c54"
+    },
+    {
+      "path": "README_BUILD579.md",
+      "size": 1563,
+      "sha256": "f3afb2538cf917c4ad2302f5a3396f10c432cf414c4b7176c1b6d5d59c16c7bd"
+    }
+  ]
+}

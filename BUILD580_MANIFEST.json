@@ -1,0 +1,199 @@
+{
+  "build": 580,
+  "version": "3.1.259",
+  "type": "cumulative-delta-patch",
+  "baseBuilds": [
+    578,
+    579
+  ],
+  "baseCommit": "ed9d93d9478127771b720192df24023c65944b48",
+  "serverRestart": true,
+  "includesTransparency579": true,
+  "tests": {
+    "arcadeViewportCases": 6,
+    "canalMaxPopulationCases": 2,
+    "nativeIPhone": false
+  },
+  "files": [
+    {
+      "path": "assets/elevator580/cage.webp",
+      "size": 127802,
+      "sha256": "becf02204b8c0488b69fc69c6414f8d9ecc1a18f4771b6f4eacda35c04f60a45"
+    },
+    {
+      "path": "assets/elevator580/cover.webp",
+      "size": 107916,
+      "sha256": "81c874fd3f85860d12594a2764470b869eab90aeffc9044fa7c66446ef9e4040"
+    },
+    {
+      "path": "assets/elevator580/shaft.webp",
+      "size": 198050,
+      "sha256": "e3b5298964ae7899b60d6c64b92bd0bf42264ba8308168ce842685e6ca7b3478"
+    },
+    {
+      "path": "assets/lava580/caldera.webp",
+      "size": 206102,
+      "sha256": "e4a898ee8a1328ed102d220933778d19fbc8926b11c20e3bc48fac95b11c0c19"
+    },
+    {
+      "path": "assets/lava580/cover.webp",
+      "size": 69464,
+      "sha256": "449044fee62939240bdde0ce6cb92752ca11da24d421ef8c68b4e695a4fb98d9"
+    },
+    {
+      "path": "assets/luck579/items-571.webp",
+      "size": 553784,
+      "sha256": "7262e88e07c5ed4d89a6199fbeb505523d2cba4689f6d3f5ae773d02e01c04ea"
+    },
+    {
+      "path": "assets/luck579/items-575.webp",
+      "size": 449454,
+      "sha256": "64879896e29738eb0dd25ddec02b7529a792c11f7ebfa32ca9cd7c390a29388e"
+    },
+    {
+      "path": "index.html",
+      "size": 255968,
+      "sha256": "30fa3e97a2775dd1cd40665e26608152eecdedd95bffdea35bd0de38978295da"
+    },
+    {
+      "path": "online-server/server.js",
+      "size": 24054,
+      "sha256": "8de6e8d3d3e80b27237c031c9e52c0fe48be5a58d863678cbbaccd59fbd4235f"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "size": 1109,
+      "sha256": "7a4f4015d838cca4664e24845f90198a8082d81c567217f8e1df09086f4f130c"
+    },
+    {
+      "path": "online-server/src/CanalCoordinator489.js",
+      "size": 6726,
+      "sha256": "d88508f00182d7bf1a21267ba4c70a3760811fed49131f6cc10f51bd51effafa"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 25861,
+      "sha256": "a9459f101bba3c75556aa0cdb081ade983aa1dc7db83be343e6bffdbea4dc578"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 28866,
+      "sha256": "d1b91a47267f62c34e69b893d2e6300ba25eb84c99bc6f3ccadee6d5e01cf716"
+    },
+    {
+      "path": "online-server/src/Realtime563.js",
+      "size": 6462,
+      "sha256": "2fe6249a6f224331088ca8675a2f427279d6fa767380ff4a5028b38851a79f7f"
+    },
+    {
+      "path": "src/Styles/build579-luck-art.css",
+      "size": 554,
+      "sha256": "f42dc4361a870b5f4729f8777491ce3963c08b4f3c442fa7d00d8ec60ebd654a"
+    },
+    {
+      "path": "src/Styles/build580-arcade.css",
+      "size": 6338,
+      "sha256": "ab1176ae4697b47fb3e899ad4bacb57a3de54c6b459eeb9105b2d3f2211dd5ba"
+    },
+    {
+      "path": "src/arcade580/Board580.js",
+      "size": 5823,
+      "sha256": "004fe0da2d1fc7abdff620aa51059bfcf93635f053adbbf868ba6e9bf746db06"
+    },
+    {
+      "path": "src/arcade580/Common580.js",
+      "size": 2712,
+      "sha256": "e1f18f29982ed50643efae7bad776b3e7fbb544fc842bee32b1a5174770c15e6"
+    },
+    {
+      "path": "src/arcade580/View580.js",
+      "size": 14943,
+      "sha256": "d3268ae436a21f7987945963b71aaca04663cfbf4feb573bf566c2e67f97cee1"
+    },
+    {
+      "path": "src/canal/Rules500.js",
+      "size": 15155,
+      "sha256": "a148360c94f4c11c5942cee092c7f3c9ceed4e7de70cb01e7f838f4091eb12f6"
+    },
+    {
+      "path": "src/canal/View489.js",
+      "size": 24021,
+      "sha256": "b401f97129e39c311ed5674806931136f3be6195621032ae334205d032820a68"
+    },
+    {
+      "path": "src/canal/View496.js",
+      "size": 16916,
+      "sha256": "1ceeec0394eef485636ed7670df9c6699f773ef78221c7a11e4e5afb6611c7de"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "e57817192b8ac43e53f50a54f340867472ae81f4692de270144c5d5ed33b437e"
+    },
+    {
+      "path": "src/elevator580/Rules580.js",
+      "size": 6344,
+      "sha256": "a0a1dcbb6fffdea9c26793ccd71ee8fa78dd5b3ca97429f1a5d25b2433ceec09"
+    },
+    {
+      "path": "src/lava580/Rules580.js",
+      "size": 3928,
+      "sha256": "67f7716b8d9e736dc54bf5b20521be4285996b3fa7b811b1677e36efb7852ab5"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "size": 38690,
+      "sha256": "8485c126ef3a0c773951d5b83997ace0383ab29051e726728daef4592db94000"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 6973,
+      "sha256": "625dc10231b2a11f1ddb680ab899c4dc492cf0a993cba486366701b88335cafc"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "size": 3612,
+      "sha256": "9a479a9710e4d7338eefd06cffd43b2256c37c78fca6eba1b10977b9f4c4d875"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 13821,
+      "sha256": "f1f7fed6be696ac766db5bfb9ae609b06fa54347ed904670f4a94dc81d80bf1d"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 30889,
+      "sha256": "789a973ceb99b1d8c673275bdeae5b4c96bfd179b49ce8151af03191cfdefd5e"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "size": 7484,
+      "sha256": "f9ec59c7a5a6e820ee96767a188253baadc71f6bccd88ede102a27365bc00381"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "size": 4188,
+      "sha256": "5c3ff209481b62e7905fa11a05b6b53ccff600099b65ddad8cba85f79a58ec3a"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "884de9804350226ecfd092c986cdb4316836b1d2db111142c3caa80c42e33748"
+    },
+    {
+      "path": "world-raid-offline580-assets.json",
+      "size": 51333,
+      "sha256": "f52c1e8dd6d210f432937c9f2f46ef0dc084aa0520520f75d66a1f8aff371147"
+    },
+    {
+      "path": "world-raid-offline580-sw.js",
+      "size": 2502,
+      "sha256": "4e6d6a6afa0f1f01746f08aff10dd072e44c67da5ea65e985d274e79dea6ae24"
+    },
+    {
+      "path": "README_BUILD580.md",
+      "size": 4040,
+      "sha256": "c819a86d9ac751546920b33e40daa06696659de568bbebd3a5a3efc72baa0ac5"
+    }
+  ]
+}

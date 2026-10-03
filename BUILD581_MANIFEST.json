@@ -1,0 +1,127 @@
+{
+  "build": 581,
+  "version": "3.1.260",
+  "type": "delta-patch",
+  "baseBuilds": [
+    580
+  ],
+  "baseCommit": "a77cace97b1601e683fdaeb64d2632c0b298d9de",
+  "serverRestart": true,
+  "tests": {
+    "touchViewportCases": 3,
+    "fourWebSocketClients": true,
+    "nativeIPhone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD581.md",
+      "size": 2356,
+      "sha256": "87a07d57c597dfa93644ee842234a8ee72d573dfc5bec83594df8668dd5555f7"
+    },
+    {
+      "path": "assets/sushi581/cover.webp",
+      "size": 127868,
+      "sha256": "06b3efccd4f5dba56ae633e44bea0eb57c4c328ec3f31ed9c4fc61f79d21d274"
+    },
+    {
+      "path": "assets/sushi581/menu.webp",
+      "size": 211338,
+      "sha256": "8159ddb10c33417318e9efd345e1ae8b7947f6efa01a758cb6826924f3e75879"
+    },
+    {
+      "path": "assets/sushi581/table.webp",
+      "size": 190356,
+      "sha256": "52d11aec694285512332e51e28c64733cf3a2e0514fce3fa5745083027e56746"
+    },
+    {
+      "path": "index.html",
+      "size": 257463,
+      "sha256": "5bbcc10b4d4794bb5cddc34431bb07641549e2c45f85f127fbec481ae7d180a3"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "size": 1565,
+      "sha256": "9f92c0b5d0f31755aea22fa201ca2860d819db969501a2c583b2889e2b7f7a13"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 26104,
+      "sha256": "dac805ef3a7976077bd4152d6c437f8f04fa867fe6dd1e9db5bcefb97f71be49"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 29084,
+      "sha256": "dc9f1c6f11cda79ef7ee047d2595725a2d1460f7e2101199574b3b2437edebb3"
+    },
+    {
+      "path": "src/Styles/build581-sushi.css",
+      "size": 5969,
+      "sha256": "a4dda1a9eba441e9bdf8cc6998ab0fca02451e8a552ce959b987936299b924e8"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "e1e40bf083b9cfe61c31cae46be0bc5dafc3dfafcfaf80389be64e5f0965c369"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 7391,
+      "sha256": "d6ee061d5ea42d9b1a543da9246d8b3105fb4dfaa2161cfb6a1defe66bf95faa"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "size": 3628,
+      "sha256": "3c02831f88bf85dc50e97443daaf3ee8e74003ab759813e1bfc44205d11f8355"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 14079,
+      "sha256": "5787a994f2c7c043d54404283de5dd10b5e7659c0295ec8665bbfebdb83104d6"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 31429,
+      "sha256": "6dc22f48420a73443766679bda49d89e5c3b79c7c262e624898f80d5b8613f37"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "size": 7655,
+      "sha256": "57669e72134738f7149c0529eb7d472d576768db0df13b5c492223314bc023bf"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "size": 4204,
+      "sha256": "b6f77c48f3511bdb97bd522c1e362739b60e0363de5d8f5a4da648aabe02d890"
+    },
+    {
+      "path": "src/sushi581/Board581.js",
+      "size": 3657,
+      "sha256": "f7c742d988e69ba479896380b70ea500d8b1ddf4f4dd438d0c56e5acc400f2e1"
+    },
+    {
+      "path": "src/sushi581/Rules581.js",
+      "size": 7831,
+      "sha256": "9b7c2db45d379bdf9ffb4ac1c85c3fdc0eb900f3e0f9c1125682a5a3498c98ef"
+    },
+    {
+      "path": "src/sushi581/View581.js",
+      "size": 11374,
+      "sha256": "fab428887f6c9392e3e9331bf344d159c37dff2619091a249a68c743660abe30"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "cbcd905cda8b2a247a86ea0bb8768069b3933676bb76c752130eddb5a0aceef6"
+    },
+    {
+      "path": "world-raid-offline581-assets.json",
+      "size": 51642,
+      "sha256": "22f6b40e7d9595526207cd163c04a5ca49bae852a2f83e70ae8ac1717d8bf1c0"
+    },
+    {
+      "path": "world-raid-offline581-sw.js",
+      "size": 2502,
+      "sha256": "fc09aecef4c36080f2b35f2ac06bfb155686d0ef9cacc29e1ab656dc79c02f77"
+    }
+  ]
+}

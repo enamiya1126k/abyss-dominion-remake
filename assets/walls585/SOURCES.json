@@ -1,0 +1,13 @@
+{
+  "method": "Built-in image generation; WebP conversion at quality 87",
+  "assets": [
+    {
+      "path": "assets/walls585/arena.webp",
+      "prompt": "Use case: stylized-concept. Asset type: background texture for an actual mobile multiplayer survival game, square 1024x1024. Make a lavish dark fantasy trap arena for the game 'Demon King's Closing Walls'. Camera EXACTLY straight overhead orthographic, flat square arena, zero perspective, no horizon. Perfectly square playable floor takes central 88% of image, unobstructed smooth deep emerald-black stone tiles with very restrained engraved gold geometric lines and an understated central circular demonic seal. Around the outer 6% on each side are intricate aged bronze rails, brass gear mechanisms, black stone masonry, corners with small warm amber lanterns. The floor is clearly lighter than the very dark outer gutter, elegant physically painted materials, high-end fantasy strategy game environmental artwork, realistic subtle wear. No characters, no moving walls or spikes on the floor (these will be rendered by the game), no treasure, no user interface, absolutely no lettering or text. Keep central floor calm and legible for gameplay with four small colorful creatures and moving metal walls later overlaid. Deep forest green and burnished gold palette, moody rim lighting, no purple."
+    },
+    {
+      "path": "assets/walls585/cover.webp",
+      "prompt": "Use case: stylized-concept. Asset type: landscape 1536x1024 cover illustration for a polished mobile fantasy party survival minigame. Four small charming fantasy creatures: glossy blue slime hero foreground desperately sliding into a narrow safe opening in an enormous moving iron spike wall, a tiny green goblin, dark gray wolf, ivory skeleton dodging in background. Exciting tense but playful action, high quality detailed game key art, realistic emerald stone dungeon floor with ornate burnished brass machinery and chains. Spike walls converge from perpendicular directions but have clearly visible open archlike gaps. Eye-level three-quarter dramatic perspective, glowing golden safe gap, orange flying sparks and dust motion trails, no blood, no injury. Rich deep forest green, antique gold, warm amber palette with colorful creatures matching a fantasy party board game. Strong readable silhouette and dynamic composition. No UI, no text, no letters, no watermark. This is a survival race, no treasure, no chairs."
+    }
+  ]
+}

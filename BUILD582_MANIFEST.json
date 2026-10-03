@@ -1,0 +1,97 @@
+{
+  "build": 582,
+  "version": "3.1.261",
+  "type": "delta-patch",
+  "baseBuilds": [
+    581
+  ],
+  "baseCommit": "0820a95a4cbc45c7a2e389df047fc23f383f7cd2",
+  "serverRestart": true,
+  "tests": {
+    "touchViewportCases": 3,
+    "fourWebSocketClients": true,
+    "nativeIPhone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD582.md",
+      "size": 2888,
+      "sha256": "73dc62b6ddeacaf83cff9da4e85542a7f8c184b17ce2865983920226bda92187"
+    },
+    {
+      "path": "index.html",
+      "size": 258396,
+      "sha256": "6e2859bf34f5bba42481ecfb0cce0c4dc1fec007eb780976217ccadccbeffd96"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "size": 1575,
+      "sha256": "3a371a4c0a942735fd79da0df7100339361af00a927acb148c50f1e0e94a50d2"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 26104,
+      "sha256": "13a46af501fc2c650c014f979559938a98cafb0a4a692cf85e2c520f8fd8d3f9"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 29084,
+      "sha256": "16536938ba9f9a5e229b7217847195b8ee3a2e899da2568674b79037599f6be6"
+    },
+    {
+      "path": "src/Styles/build582-sushi-polish.css",
+      "size": 4025,
+      "sha256": "63f555132d37d9e209405c74fcdb39f9164e34d89ee7ddbe81dd03fabaf0b7b6"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "64008aac9129d06d77720019df8d3a0c8f7cd5d310340a2df7750e579f910203"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 7410,
+      "sha256": "6ba58dad1669b1842805cf9c503435ea5c6f0df65fc83d629a4754ee06097fc5"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 14079,
+      "sha256": "23c5c4b92a7b84348e9e002bcc533d939a16ce8aa18c5e57715cd5dc8f6e27d0"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 31429,
+      "sha256": "3e4c858c4032783c83ebaf337de51013ee7fa36e561dc4e393fce8489fa4b17c"
+    },
+    {
+      "path": "src/sushi581/Board581.js",
+      "size": 5311,
+      "sha256": "610c0e188c2954cf8137557c078755df7e9b64dd2e92bfea93644fce244dffd3"
+    },
+    {
+      "path": "src/sushi581/Rules581.js",
+      "size": 8399,
+      "sha256": "afcc85b89e4fdc817c57a7b86a4ed76368701bb0ea35e1dac3bd8a471ce9110e"
+    },
+    {
+      "path": "src/sushi581/View581.js",
+      "size": 13918,
+      "sha256": "705c3524aaa14f0199c519a70fbecff6eff8600dfa7fe6701af60fde2c9a7a74"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "2a4ed65e9d2b52814e8ac70f3a6e671a8764b7ccf606b8155508c65d8685af89"
+    },
+    {
+      "path": "world-raid-offline582-assets.json",
+      "size": 51705,
+      "sha256": "c516eba91c2118a2039ea90a0b9a3996f07a6df7d561e9f6c524d8de686738cc"
+    },
+    {
+      "path": "world-raid-offline582-sw.js",
+      "size": 2502,
+      "sha256": "b88a281b2830819ad99ee0358b1b12e740060878847ef63da47a757a4b23c8d2"
+    }
+  ]
+}

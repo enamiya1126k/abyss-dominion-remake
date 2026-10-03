@@ -1,0 +1,110 @@
+{
+  "build": 586,
+  "version": "3.1.265",
+  "type": "delta-patch",
+  "baseBuilds": [
+    585
+  ],
+  "baseCommit": "2a5dad72e4120518bba208fc41c3ccc8629cec05",
+  "serverRestart": true,
+  "tests": {
+    "rulesAndIntegration": 42,
+    "touchViewportCases": 3,
+    "productionStylesheets": 291,
+    "fourWebSocketClients": true,
+    "aiSimulationMatches": 60,
+    "nativeIPhone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD586.md",
+      "size": 2858,
+      "sha256": "8ada93cc86dc08ac81c58f03498c3f903ad775df9408ea120798d537104f8ea5"
+    },
+    {
+      "path": "index.html",
+      "size": 264156,
+      "sha256": "d9ee9f05b9782a7782398cd4195f211469fad581cdc9017d2318590765b6b380"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "size": 2527,
+      "sha256": "0a629822b08852db4febc0c8e2eba4b482a9639e73da161d266be6814ffcb9ff"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 26604,
+      "sha256": "23d769dec2841ce3fffbe09fca8ed4bb9de4535a914b7b830983f97805597f77"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 29527,
+      "sha256": "9b4f9813ade122540faeb173243da439e8b79f3385a195b755693c79a8ddc1c8"
+    },
+    {
+      "path": "src/Styles/build586-walls-polish.css",
+      "size": 6682,
+      "sha256": "c161d2ad87124fabaedad742ad48ff6579d3cb738459da1095bec73d7f685597"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "09e9b1c449788634a0899a5eaf8c8d72828c4c7f1fcfd541ead96f269b6dc0b3"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 8297,
+      "sha256": "d84439356bcbacbbb893b7e87e95d7727ecd746ca9c9bcff1a83d5383f29e081"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 14606,
+      "sha256": "6473ba5231af864fa141cdaf1fac86cc22c185e906242efda10e7fbd3322325a"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 32536,
+      "sha256": "c9f01848c1ae9aafa96fb81f2cf0cfdc5e997e72faeaec3187ef2cdcf978e3ed"
+    },
+    {
+      "path": "src/walls585/Board585.js",
+      "size": 5539,
+      "sha256": "2f0a4b4e558c66be0a0866226203341c38c325a42ad80a7a41f7a8fe00547f9c"
+    },
+    {
+      "path": "src/walls585/Controls586.js",
+      "size": 5085,
+      "sha256": "be62c262c962e89e85b1217d9bbe54f1d2b1d7453c1ccfbb6f72987dd1bb2598"
+    },
+    {
+      "path": "src/walls585/Mechanics586.js",
+      "size": 2029,
+      "sha256": "f5696d47afdf9b0422fd0532a7ad76caf03bd004b628ce8cfc2fc6e7b85178ad"
+    },
+    {
+      "path": "src/walls585/Rules585.js",
+      "size": 9846,
+      "sha256": "fd544ad550015c15dda002abf66e5cbf631a0f1cb56e06a94f42678bd872868d"
+    },
+    {
+      "path": "src/walls585/View585.js",
+      "size": 14646,
+      "sha256": "7ce22f2d6e9a33348f6ecbb17f7bec352ede16d992ba02c599f216e3d06cc37e"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "1fcc3dc88cbf77535af340f289b8796e206c5757442b255d5e5bdea9bc4e056b"
+    },
+    {
+      "path": "world-raid-offline586-assets.json",
+      "size": 52643,
+      "sha256": "c362921be58a176ffd0641b86db4141fa99c1524d504c9d3edf7d71344cc33c7"
+    },
+    {
+      "path": "world-raid-offline586-sw.js",
+      "size": 2502,
+      "sha256": "909e19a507304d3992deb98c97b6b4f7b9973bb476246ae0e1a586d749c4818b"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "method": "OpenAI image_gen built-in tool",
+  "assets": [
+    {
+      "path": "assets/runners587/background.webp",
+      "prompt": "Use case: stylized-concept. Asset type: wide panoramic background for a polished side-scrolling fantasy platform game called ABYSS DOMINION. Generate a richly painted 2D side-view magical forest with distant ruined emerald towers and bridges, a luminous pale turquoise sky and warm amber sun shafts, giant ancient trees, waterfalls fading into mist at the bottom, a small distant dark castle toward the right. Original whimsical monster-world, inviting adventurous mood, exquisite layered storybook game art, jewel green teal and antique gold, luminous flecks. Strictly BACKGROUND scenery: no characters, no enemies, no game UI, no words, no logos, no foreground platforms, no flat solid ground across bottom, no objects with apparent gameplay collisions. Horizontal landscape 1536x1024 or wider, atmospheric depth, open readable middle area for tiny sprites. Strong silhouettes in distance but subdued contrast and fine detail, bright enough to support colorful gameplay.",
+      "conversion": "PNG to WebP, quality 88; no compositing or background edits"
+    },
+    {
+      "path": "assets/runners587/cover.webp",
+      "prompt": "Use case: stylized-concept. Asset type: premium fantasy party game cover illustration, landscape 1536x1024. A side-on action moment in an ORIGINAL whimsical fantasy platformer: cheerful jewel blue slime leaping rightward above a cute reddish armored beetle, a small green goblin running after it, a little dark wolf airborne and a chibi skeleton chasing behind, all four full-body characters on moss-topped antique stone floating platforms. A turquoise emerald diamond glows above the next platform, a brass and coral spring pad launches a character, a distant gold-rimmed green portal is the goal. Luminous emerald ruined forest in background, waterfalls, ancient trees, floating ruins and distant castle, warm golden sunlight, pale turquoise sky. Rich painterly 2D storybook videogame key art, intricate materials, readable silhouettes, lively playful adventure and racing friends, polished ornamental fantasy style, teal forest green blue and antique gold palette. Side-view platforming composition with distinct horizontal platforms and gaps, space in upper left for overlaid interface but NO TEXT, no letters, no UI, no watermark. Own monster designs, no humans, no plumber, no mushrooms, no familiar Nintendo iconography.",
+      "conversion": "PNG to WebP, quality 88; no compositing or background edits"
+    }
+  ]
+}
