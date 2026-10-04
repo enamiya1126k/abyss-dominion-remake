@@ -41,7 +41,9 @@ export function predict591(c,p,at){
    return {...p,x:pa.x+(pb.x-pa.x)*f,y:pa.y+(pb.y-pa.y)*f};
   }
  }
- const q=extrapolate(c,p,g,at);if(!self)return q;
+ // Remote players use snapshots, never run a second physics simulation locally.
+ if(!self){const ms=g.phase==='play'&&g.stage==='run'&&p.alive&&!p.respawnAt&&p.finishTime==null?Math.min(50,Math.max(0,at-75-g.serverAt)):0;return {...p,x:p.x+p.vx*ms/1000,y:p.y+(p.grounded?0:p.vy*ms/1000)};}
+ const q=extrapolate(c,p,g,at);
  const records=u.corrections591??=new Map();let r=records.get(p.seat);
  if(!r){r={source:g,at,dx:0,dy:0};records.set(p.seat,r);}
  if(r.source.serverAt!==g.serverAt){

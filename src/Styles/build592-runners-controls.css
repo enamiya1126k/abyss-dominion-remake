@@ -1,0 +1,19 @@
+/* Larger continuous thumb zones. The entire pad, including its seam, receives input. */
+.ru-smooth592 .ru-controls587{display:grid;grid-template-columns:minmax(148px,1fr) 58px 82px;gap:9px;align-items:stretch}
+.ru-smooth592 .ru-directions587{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;min-width:0;touch-action:none;pointer-events:auto;border-radius:22px;border:1px solid #93b9a2;overflow:hidden;background:#193c40;box-shadow:0 4px 0 #071e26}
+.ru-smooth592 .ru-directions587 [data-ru-control]{width:100%;height:92px;min-height:92px;border:0;border-radius:0;box-shadow:none;padding:10px 0;background:linear-gradient(#456c66,#284c4d)}
+.ru-smooth592 .ru-directions587 [data-ru-control=left]{border-right:1px solid #93b9a266}
+.ru-smooth592 .ru-directions587 [data-ru-control]>b{font-size:32px}
+.ru-smooth592 .ru-directions587 [data-ru-control]>small{font-size:9px;letter-spacing:1px}
+.ru-smooth592 [data-ru-control].is-held{filter:none;transform:translateY(2px);background:#779b83;color:#102f35;border-color:#eaffc8;box-shadow:inset 0 3px 0 #24463e}
+.ru-smooth592 .ru-directions587 [data-ru-control].is-held{box-shadow:inset 0 4px 0 #274a45,inset 0 -4px 0 #b5d8a6}
+.ru-smooth592 .ru-jump587{width:82px;min-height:92px}
+.ru-smooth592 .ru-attack591{width:58px;min-height:80px;align-self:center}
+.ru-smooth592 .ru-help587{display:flex;justify-content:space-between;align-items:center;gap:4px}
+.ru-smooth592 .ru-help587>span{font-size:9px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.ru-smooth592 .ru-help587>button{flex-shrink:0;padding:4px 6px;border:1px solid #91b09b66;border-radius:6px;background:#183b40;color:#dce4c6;font:inherit;font-size:9px;min-height:25px;cursor:pointer}
+.ru-smooth592 .ru-help587>button:disabled{opacity:.55;cursor:default}
+.ru-smooth592 .ru-count587{backdrop-filter:none}
+.ru-smooth592 .ru-card-avatar587 *{animation:none!important;filter:none!important}
+@media(max-width:350px){.ru-smooth592 .ru-controls587{grid-template-columns:minmax(142px,1fr) 54px 76px;gap:6px}.ru-smooth592 .ru-jump587{width:76px}.ru-smooth592 .ru-attack591{width:54px}.ru-smooth592 .ru-directions587 [data-ru-control]{height:84px;min-height:84px}.ru-smooth592 .ru-jump587{min-height:84px}}
+@media(orientation:landscape) and (max-height:550px){.ru-smooth592 .ru-controls587{grid-template-columns:minmax(190px,1fr) 62px 90px;justify-content:space-between;gap:16px}.ru-smooth592 .ru-directions587{margin:0;width:190px}.ru-smooth592 .ru-directions587 [data-ru-control]{height:72px;min-height:72px}.ru-smooth592 .ru-attack591{width:62px;min-height:65px}.ru-smooth592 .ru-jump587{width:90px;min-height:75px}.ru-smooth592 .ru-help587{display:none}}

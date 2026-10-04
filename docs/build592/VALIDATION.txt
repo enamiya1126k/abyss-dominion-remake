@@ -1,0 +1,63 @@
+Build592 validation — 2026-10-04
+
+Functional: 19 existing runners tests PASS (includes four AI finishing all 8 courses).
+Additional: 5 tests PASS (thumb hysteresis/escape, bounded optional 8ms haptics,
+three distinct AI decisions, AI resumes after human goal).
+Production WebSocket integration: 4 actual clients, 1 scenario PASS.
+Browser: Chromium 134, Playwright 1.51.1, local production modules/import map/styles.
+320x568, 390x844, 844x390: 3-finger input, direction slide, cancel,
+keyboard release, selection/context-menu suppression, within-viewport controls,
+haptic press/change calls/no repeats/opt-out, lobby selection/start: PASS.
+Runtime errors: 0. Landscape right-thumb attack/jump grouping: PASS.
+
+Render comparison: 390x844, touch, DPR3, CDP 4x CPU throttle, 6 seconds
+holding right after countdown. Fixture simulates server 25ms steps and sends
+50ms snapshots, using current production rules. Before serves saved Build591
+runners modules and styles; after serves Build592. Headless browser, software
+rendering environment; not an iPhone or Safari measurement. A single sample
+per version, not a multi-device benchmark. Frame intervals include fixture
+simulation. Canvas height differs slightly due to enlarged controls.
+
+BEFORE Build591:
+{
+  "mutations": 1986,
+  "frames": 196,
+  "median": 33.30000000000018,
+  "p95": 49.900000000000546,
+  "over34": 11,
+  "canvas": [
+    585,
+    797
+  ],
+  "TaskDuration": 6.026346,
+  "ScriptDuration": 0.620319,
+  "RecalcStyleDuration": 0.201175,
+  "LayoutDuration": 0.005176,
+  "RecalcStyleCount": 198,
+  "LayoutCount": 6
+}
+AFTER Build592:
+{
+  "mutations": 888,
+  "frames": 358,
+  "median": 16.699999999999818,
+  "p95": 16.700000000000728,
+  "over34": 0,
+  "canvas": [
+    390,
+    523
+  ],
+  "TaskDuration": 2.89002,
+  "ScriptDuration": 0.7711570000000001,
+  "RecalcStyleDuration": 0.23709899999999998,
+  "LayoutDuration": 0.00579,
+  "RecalcStyleCount": 360,
+  "LayoutCount": 6
+}
+
+Limits: No iPhone/Android physical-device test, Safari/WebKit not exercised.
+Vibration API mocked in browser tests to verify invocation; actual tactile
+strength/duration depends on browser, device and OS settings.
+Runners protocol stays at version 4; shared AI module requires server restart.
+Other games are unchanged. Full legacy suite is not rerun for this scoped patch;
+Build591 documented 3 pre-existing failures in bomb/tetra tests.
