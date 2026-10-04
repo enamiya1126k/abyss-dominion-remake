@@ -1,0 +1,102 @@
+/* Touch selection suppression is scoped to the game, including text descendants. */
+.ru-adventure591,.ru-adventure591 *{user-select:none!important;-webkit-user-select:none!important;-webkit-touch-callout:none!important;-webkit-tap-highlight-color:transparent}
+.ru-adventure591{touch-action:none;overscroll-behavior:none}
+.ru-adventure591 [data-ru-control] *{pointer-events:none}
+.ru-adventure591 [data-ru-control]{touch-action:none}
+.ru-adventure591 .ru-pawn587{left:0;top:0;will-change:transform;contain:layout style}
+.ru-adventure591 .ru-sprite587,.ru-adventure591 .ru-pawn587.is-self .ru-sprite587,.ru-adventure591 .ru-pawn587.is-boost .ru-sprite587{filter:none}
+.ru-adventure591 .ru-pawn587>i{box-shadow:none;background:var(--player);height:4px}
+.ru-adventure591 .ru-pawn587.is-self>b{border:1px solid #fff0c5;background:#193f42;box-shadow:0 2px 0 #112e33}
+.ru-adventure591 .ru-pawn587>mark{filter:none}
+.ru-adventure591 .ru-message587{backdrop-filter:none;background:#123a3bf5}
+.ru-adventure591 .ru-field587{contain:layout paint;isolation:isolate;background:#769c98}
+.ru-adventure591 .ru-stage587{top:12px;left:12px;background:#1a4349d9;border:1px solid #e4d3a66b;border-left:3px solid #e4d3a6;box-shadow:0 3px 0 #13383c33}
+.ru-adventure591 .ru-stage587 small{color:#ecdaab;font-size:8px;letter-spacing:2px}
+.ru-adventure591 .ru-stage587 b{font-size:10px;color:#fff0d0;font-weight:600}
+.ru-adventure591 .ru-brief587{background:#153d3d;border-top:1px solid #c6b98230}
+.ru-adventure591 .ru-brief587 b{font-size:15px;letter-spacing:.4px}
+.ru-adventure591 .ru-players587{background:#102e33}
+.ru-adventure591 .ru-players587>button{background:#173b3e}
+.ru-adventure591 .ru-route587{background:#123537;flex-basis:22px}
+.ru-adventure591 .ru-track587>b{transition:none}
+.ru-adventure591 .ru-rivals588{top:90px}
+.ru-adventure591 .ru-rivals588>span{background:#184049de}
+.ru-adventure591 .ru-footer587{background:linear-gradient(#214a49,#102f34);padding:8px 12px max(12px,env(safe-area-inset-bottom));border-top:1px solid #e4d3a68c;box-shadow:none}
+.ru-adventure591 .ru-help587{margin-bottom:8px;display:block;text-align:center}
+.ru-adventure591 .ru-help587>b{display:none}
+.ru-adventure591 .ru-help587>span{font-size:10px;color:#d9ddc9}
+.ru-adventure591 .ru-controls587{gap:8px;justify-content:space-between}
+.ru-adventure591 .ru-directions587{flex:0 0 auto;gap:3px;padding:3px;border-radius:20px}
+.ru-adventure591 [data-ru-control]{width:64px;min-height:76px;border-color:#839c89;background:linear-gradient(150deg,#486965,#284b4a);box-shadow:0 3px 0 #071d24;transition:transform 60ms}
+.ru-adventure591 [data-ru-control]>small{font-size:7px;letter-spacing:0;color:#c5d7cb;line-height:1.4}
+.ru-adventure591 .ru-jump587{width:95px;min-height:87px;background:linear-gradient(150deg,#f4dfab,#c9ad76);border-color:#ffeac0;box-shadow:0 4px 0 #796345}
+.ru-adventure591 .ru-jump587>b{font-size:26px}
+.ru-adventure591 .ru-jump587>strong{font-size:14px}
+.ru-adventure591 .ru-jump587>small{color:#3c4b3d;font-size:8px}
+.ru-adventure591 .ru-attack591{width:65px;min-height:73px;border-radius:50% 50% 18px 18px;color:#d7cdb6;background:linear-gradient(150deg,#605b58,#373e46);border-color:#b5a080;opacity:.8}
+.ru-adventure591 .ru-attack591>b{font-size:25px;line-height:1}
+.ru-adventure591 .ru-attack591>strong{font-size:12px;margin-top:3px}
+.ru-adventure591 .ru-attack591>small{font-size:7px;white-space:nowrap;color:#e5dac8}
+.ru-adventure591.has-power591 .ru-attack591{opacity:1;color:#fff0cc;background:linear-gradient(150deg,#be885f,#865459);border-color:#ffd49e;box-shadow:0 3px 0 #492e38}
+.ru-adventure591 .ru-mission589{left:50%;right:auto;bottom:13px;transform:translateX(-50%);min-width:170px;max-width:calc(100% - 24px);background:#173e43e8;box-shadow:none;white-space:nowrap;border-color:#c2dbc299;padding:6px 12px;min-height:30px}
+.ru-adventure591 .ru-mission589>div:empty{display:none}
+.ru-adventure591 .ru-mission589>b{font-size:10px}
+.ru-adventure591 .ru-mission589 i{width:20px;height:20px;font-size:10px}
+.ru-adventure591 .ru-boost588{bottom:61px;right:12px}
+.ru-adventure591 .ru-toast587{top:80px;font-size:11px;max-width:calc(100% - 20px);white-space:nowrap}
+.ru-adventure591 .ru-network587,.ru-adventure591 .ru-watch587{bottom:53px;font-size:10px}
+.ru-lobby591{background:#102e34;color:#ede4c9}
+.ru-lobby591 .arc-cover563{min-height:245px;background-position:center 42%}
+.ru-lobby591 .arc-cover563 h1{font-size:37px;letter-spacing:2px;line-height:1.35;text-shadow:0 3px 15px #092c33}
+.ru-lobby591 .arc-cover563>small{font-size:10px;letter-spacing:1.8px}
+.ru-lobby591 .arc-rule563{font-size:12px;line-height:1.9}
+.ru-lobby591 .ru-course-select589{margin-top:27px}
+.ru-lobby591 .ru-course-title589 h2{font-size:21px!important;letter-spacing:1px;color:#f5dfae}
+.ru-lobby591 .ru-course-title589 small{font-size:9px;color:#baccc1;letter-spacing:2.5px}
+.ru-lobby591 .ru-course-grid589{gap:12px}
+.ru-lobby591 .ru-course589{display:block;min-height:0;padding:0 0 13px;border-radius:13px;border:1px solid #c3d4c240;background:#1a3d43;box-shadow:0 4px 0 #0a242c;color:#f7e5bd;overflow:hidden}
+.ru-lobby591 .ru-course589[aria-pressed=true]{border:1px solid #ffe0a0;padding:0 0 13px;box-shadow:0 0 0 2px #ffe0a04d,0 4px 0 #0a242c}
+.ru-lobby591 svg.ru-course-art591{display:block;width:100%;height:auto;margin:0;fill:initial;stroke:none;filter:none;border-bottom:1px solid #d9ddbd44}
+.ru-lobby591 .ru-course-number589{padding:10px 10px 3px;font-size:9px;letter-spacing:1px}
+.ru-lobby591 .ru-course-number589 em{padding:2px 4px;font-size:8px;letter-spacing:0;background:#102a30;border:0}
+.ru-lobby591 .ru-course589>b{display:block;padding:2px 10px;font-size:13px;line-height:1.5;min-height:25px;letter-spacing:0}
+.ru-lobby591 .ru-course-tags589{margin:5px 10px 9px;min-height:17px}
+.ru-lobby591 .ru-course-tags589 i{font-size:8px;padding:2px 4px;color:#c4d3cd;border:0;background:#153138}
+.ru-lobby591 .ru-course589>strong{position:static;display:block;padding:0 10px;font-size:10px;font-weight:500;color:#b9cfbd}
+.ru-lobby591 .ru-course589[aria-pressed=true]>strong{color:#ffe0a0;font-weight:800}
+.ru-lobby591 .ru-selected589{background:#1b4143;border-color:#f1d69c}
+.ru-lobby591 .ru-selected589>b{font-size:13px}
+.ru-lobby591 .ru-selected589>p{font-size:11px}
+.ru-result591 .ru-finale587 h1{font-size:29px}
+@media(max-width:350px){
+ .ru-adventure591 .ru-footer587{padding:7px 7px 10px}
+ .ru-adventure591 .ru-controls587{gap:5px}
+ .ru-adventure591 [data-ru-control]{width:54px;min-height:67px}
+ .ru-adventure591 .ru-jump587{width:84px;min-height:77px}
+ .ru-adventure591 .ru-attack591{width:58px;min-height:68px}
+ .ru-adventure591 .ru-help587>span{font-size:9px}
+ .ru-adventure591 .ru-brief587 b{font-size:13px}
+ .ru-lobby591 .ru-course-grid589{gap:8px}
+ .ru-lobby591 .ru-course589>b{font-size:11px;padding-inline:8px}
+ .ru-lobby591 .ru-course-number589{padding-inline:8px;font-size:8px}
+ .ru-lobby591 .ru-course-tags589{margin-inline:8px}
+ .ru-lobby591 .ru-course-tags589 i{font-size:7px}
+}
+@media(orientation:landscape) and (max-height:550px){
+ .ru-adventure591 .ru-stage587{left:auto;right:12px;top:55px}
+ .ru-adventure591 .ru-footer587{padding:0 15px 10px;background:none;border:0;pointer-events:none}
+ .ru-adventure591 .ru-help587{display:none}
+ .ru-adventure591 .ru-directions587{margin-right:auto}
+ .ru-adventure591 .ru-controls587{gap:15px}
+ .ru-adventure591 [data-ru-control]{width:60px;min-height:57px;pointer-events:auto}
+ .ru-adventure591 .ru-attack591{width:62px;min-height:62px}
+ .ru-adventure591 .ru-jump587{width:88px;min-height:68px}
+ .ru-adventure591 .ru-mission589{top:72px;bottom:auto;left:12px;transform:none;min-height:27px;padding:4px 9px;min-width:0}
+ .ru-adventure591 .ru-stage587 small{display:none}
+ .ru-adventure591 .ru-boost588{top:115px;bottom:auto}
+ .ru-adventure591 .ru-rivals588{top:158px}
+ .ru-adventure591 .ru-toast587{top:106px;left:50%}
+ .ru-adventure591 .ru-route587{display:none}
+}
+
+.ru-lobby591 .ru-course-number589{font-family:inherit}

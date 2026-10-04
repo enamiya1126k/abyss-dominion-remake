@@ -21,11 +21,20 @@ export const COURSE587=Object.freeze({length:4920,goal:4820,height:400,ground:30
  enemies:[{id:'bug0',x:350,min:310,max:390,y:300,speed:32},{id:'bug1',x:855,min:805,max:900,y:300,speed:37},{id:'bug2',x:1400,min:1340,max:1465,y:300,speed:45},{id:'bug3',x:2250,min:2240,max:2290,y:300,speed:40},{id:'bug4',x:3150,min:3130,max:3190,y:300,speed:49},{id:'bug5',x:3590,min:3550,max:3620,y:300,speed:50},{id:'bug6',x:4060,min:4040,max:4120,y:300,speed:54},{id:'bug7',x:4650,min:4590,max:4720,y:300,speed:60}]
 });
 export const section587=(x,course=COURSE587)=>course.sections.filter(s=>s.x<=x).at(-1)??course.sections[0];
+const geometry591=new WeakMap();
+const frames591=new WeakMap();
 export function surfaces587(elapsed=0,course=COURSE587,world={}){
+ let fixed=geometry591.get(course);
+ if(!fixed){fixed=course.grounds.map(([x,end],i)=>({id:'ground'+i,x,y:300,w:end-x,h:160,ground:true}));geometry591.set(course,fixed);}
+ let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
+ const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',');
+ if(cache.has(key))return cache.get(key);
+
  const fallen=p=>{const t=world?.crumbles?.[p.id];return t!=null&&elapsed>=t+900&&elapsed<t+4000;};
- return [...course.grounds.map(([x,end],i)=>({id:'ground'+i,x,y:300,w:end-x,h:160,ground:true})),
+ const result=[...fixed,
   ...course.platforms.filter(p=>!fallen(p)).map(p=>({...p,oneWay:true,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{})})),
   ...(course.walls??[]).map(p=>({...p,wall:true})),
   ...(course.bridges??[]).filter(p=>world?.switches?.includes(p.id)).map(p=>({...p,bridge:true}))];
+ if(cache.size>24)cache.clear();cache.set(key,result);return result;
 }
 export function enemyAt587(spec,elapsed){const width=spec.max-spec.min,offset=spec.x-spec.min,travel=(offset+elapsed/1000*spec.speed)%(width*2);return{...spec,x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};}

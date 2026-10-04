@@ -1,6 +1,6 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'runners',name:'とびだせ！魔界ランナーズ',tag:'仲間ジャンプ × 壁キック × ４つの冒険',players:'４人レース／協力 · 空席はAI',image:'./assets/runners587/cover.webp',description:'仲間を踏んで高く跳び、壁を蹴って塔を越えろ！ 森・風車の庭園・時計塔・スイッチ遺跡の４コース。風やコンベア、崩れる足場、蒸気トラップも。協力遺跡では対岸のスイッチで仲間の橋を開き、全員ゴールを目指そう！'},
+ {id:'runners',name:'とびだせ！魔界ランナーズ',tag:'８つの世界 × 協力もいたずらも自由',players:'４人で冒険 · 順位なし · 空席はAI',image:'./assets/runners587/cover.webp',description:'敵を踏んで倒し、火・風の紋章で攻撃！ 仲間を助けるのも、ちょっかいを出すのも自由。森・空・海・氷・洞窟・城など８ステージ。全員ゴールを目指して、何度でも旗から再開しよう！'},
  {id:'walls',name:'魔王のせまりくる壁',tag:'１ミス脱落 × ダッシュ回避 × 二択・連続・クロス壁',players:'４人サバイバル · 空席はAI',image:'./assets/walls585/cover.webp',description:'スティックで走り、ダッシュですき間を抜けろ！ 二択ゲート・連続壁・クロス壁を見切れるか？ １回当たったら脱落、復活なし。最後まで生き残った１人が勝ち！'},
  {id:'chairs',name:'早押し！魔王のイス取り',tag:'育つ金席 × 安全確保 × シャッフル争奪',players:'４人対戦 · 全８回 · 空席はAI',image:'./assets/chairs583/cover.webp',description:'音楽が止まったら、普通席で100点を確保？ 遅れて開く金のイスは150→300点に成長！ シャッフルと黄金祭を勝ち抜け。毎回全員復帰、最後は最大600点の玉座争奪！'},
  {id:'sushi',name:'まわせ！魔王の回転寿司',tag:'注文３皿で＋180点 × フィーバー × 金皿争奪',players:'４人対戦 · 75秒 · 空席はAI',image:'./assets/sushi581/cover.webp',description:'光る帯の中の皿をタップ！ 注文３皿をそろえて＋180点、注文５皿連続でフィーバー！ 激辛わさびに気をつけて。逆回転と最後の金皿ラッシュで大逆転！'},
