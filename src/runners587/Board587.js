@@ -17,7 +17,9 @@ export function paint587(r,g,u,positions,focus,at){const course=course589(g),c=r
  c.setTransform(r.dpr,0,0,r.dpr,0,0);paintBackdrop591(r,course);
  for(let i=0;i<8;i++){const x=(i*71.7-r.camera*.08+(u.reduced?0:Math.sin(at/3200+i)*14))%(w+10),y=(i*43.7+(u.reduced?0:at*.006))%(h*.8);c.fillStyle='rgba(255,249,185,.55)';c.beginPath();c.arc(x<0?x+w:x,y,1+i%2*.5,0,7);c.fill();}
  c.save();c.translate(-r.camera*r.scale,r.offsetY);c.scale(r.scale,r.scale);const left=r.camera-100,right=r.camera+view+100,visible=s=>s.x+(s.w??40)>left&&s.x<right;
- for(const s of surfaces587(g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),course,g).filter(s=>visible(s)&&!s.wall&&!s.bridge))platform591(r,s,course);
+ const renderedSurfaces=surfaces587(g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),course,g);
+ for(const s of renderedSurfaces.filter(s=>visible(s)&&!s.wall&&!s.bridge))platform591(r,s,course);
+ if(visible({x:course.goal})){const arrival=u.reduced?null:g.events.findLast(e=>e.type==='goal');if(!gate595(c,course,readyGate589(g),u.reduced?0:at,arrival?at-arrival.at:-1))gate(c,u.reduced?0:at,course,readyGate589(g));}
  for(const wall of course.walls.filter(s=>visible(s)&&!g.broken?.includes(s.id)))if(wall.breakable)barrier595(c,wall,g.barrierHits?.[wall.id]??0);else platform591(r,{...wall,wall:true},course);
  scenery589(c,g,{...course,walls:[]},left,right,u.reduced?0:at);
  for(const cp of course.checkpoints.slice(1))if(visible(cp))flag(c,cp.x,cp.y,(focus.checkpoint??0)>=course.checkpoints.indexOf(cp),'CHECK');
@@ -27,8 +29,7 @@ export function paint587(r,g,u,positions,focus,at){const course=course589(g),c=r
  for(const item of course.pickups)if(visible(item)&&!focus.powers?.includes(item.id))pickup591(c,item,u.reduced?0:at);
  for(const b of g.projectiles??[]){if(!visible(b))continue;const lead=Math.min(65,Math.max(0,at-g.serverAt))/1000,x=b.x+b.vx*lead;c.fillStyle=b.kind==='fire'?'#ffc288':'#bcffe7';c.beginPath();c.ellipse(x,b.y,b.kind==='fire'?7:12,6,0,0,7);c.fill();c.fillStyle='#fff2cc';c.beginPath();c.arc(x+Math.sign(b.vx)*2,b.y,3,0,7);c.fill();c.strokeStyle=b.kind==='fire'?'#f3977544':'#adf5e844';c.lineWidth=4;c.beginPath();c.moveTo(x,b.y);c.lineTo(x-Math.sign(b.vx)*19,b.y);c.stroke();}
  for(const e of g.enemies){if(e.defeated)continue;const p=enemyAt587(e,g.elapsed+Math.max(0,Math.min(150,at-g.serverAt)));if(visible(p))enemy595(c,p,u.reduced?0:at);}
- if(visible({x:course.goal})&&!gate595(c,course,readyGate589(g)))gate(c,u.reduced?0:at,course,readyGate589(g));
- for(const p of positions){if(p.waiting||!p.alive||p.respawnAt||p.finishTime!=null)continue;const floor=surfaces587(g.elapsed,course,g).filter(s=>p.x>s.x-10&&p.x<s.x+s.w+10&&s.y>=p.y).sort((a,b)=>a.y-b.y)[0];if(floor){c.fillStyle='rgba(1,17,18,.25)';c.beginPath();c.ellipse(p.x,floor.y-1,Math.max(6,17-(floor.y-p.y)/12),3,0,0,7);c.fill();}if(p.boostUntil>at&&!u.reduced){for(let i=0;i<4;i++){c.fillStyle=`rgba(151,255,186,${.35-i*.07})`;c.fillRect(p.x-p.facing*(18+i*10),p.y-17+i%2*4,7,3);}}}
+ for(const p of positions){if(p.waiting||!p.alive||p.respawnAt||p.finishTime!=null)continue;const floor=renderedSurfaces.filter(s=>p.x>s.x-10&&p.x<s.x+s.w+10&&s.y>=p.y-1).sort((a,b)=>a.y-b.y)[0];if(floor){c.fillStyle='rgba(1,17,18,.25)';c.beginPath();c.ellipse(p.x,floor.y-1,Math.max(6,17-(floor.y-p.y)/12),3,0,0,7);c.fill();}if(p.boostUntil>at&&!u.reduced){for(let i=0;i<4;i++){c.fillStyle=`rgba(151,255,186,${.35-i*.07})`;c.fillRect(p.x-p.facing*(18+i*10),p.y-17+i%2*4,7,3);}}}
  if(!u.reduced)for(const e of g.events){const age=at-e.at;if(age<0||age>600||!Number.isFinite(e.x)||e.x<left||e.x>right)continue;if(!['break','crack','windjump','defeat','power','bump','shoot','stomp','spring','boost','miss','jump','goal','land','buddy','wallkick','switch','rescue'].includes(e.type))continue;const count=['jump','land'].includes(e.type)?5:10;for(let i=0;i<count;i++){const a=i/count*Math.PI*2,dist=age/11;c.fillStyle=e.type==='miss'?'#ffb7a7':e.type==='boost'?'#c9ffd0':'#fff0b9';c.globalAlpha=1-age/600;c.fillRect(e.x+Math.cos(a)*dist,e.y-15+Math.sin(a)*dist+age*age/17000,3,3);}c.globalAlpha=1;}
  c.restore();r.positions=positions;
 }

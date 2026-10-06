@@ -1,6 +1,16 @@
 import {RUN587,control587,stepRunner587,enemyContact588} from './Physics587.js';
 import {course589} from './Courses589.js';
-import {enemyAt587} from './Level587.js';
+import {enemyAt587,surfaces587} from './Level587.js';
+function ground596(q,g,at,sourceAt=at){
+ if(!q.grounded||!q.platformId||q.respawnAt||!q.alive||q.finishTime!=null)return q;
+ const course=course589(g),elapsed=g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),s=surfaces587(elapsed,course,g).find(s=>s.id===q.platformId);
+ if(!s||Math.abs(q.y-s.y)>32)return q;
+ // Snapshot interpolation can lag by 75ms, but a rider and their platform
+ // must be painted at the same time. This affects only display positions.
+ if(s.move&&sourceAt!==at){const old=surfaces587(g.elapsed+sourceAt-g.serverAt,course,g).find(p=>p.id===s.id);if(old)q.x+=s.x-old.x;}
+ if(q.x+11>s.x&&q.x-11<s.x+s.w)q.y=s.y;
+ return q;
+}
 export function remember591(c){
  const g=c.state?.runners,u=c.runnersUI587;if(!g||!u)return;
  if(u.motionId!==g.id||u.motionStart591!==g.startAt){u.motionStart591=g.startAt;u.motionId=g.id;u.frames591=[];u.corrections591=new Map();u.inputs591=[];}
@@ -36,11 +46,11 @@ export function predict591(c,p,at){
    const pa=a.players[p.seat],pb=b.players[p.seat];
    if(!pa||!pb||pa.respawnAt||pb.respawnAt||Math.abs(pa.x-pb.x)>100)break;
    const f=(t-a.serverAt)/Math.max(1,b.serverAt-a.serverAt);
-   return {...p,x:pa.x+(pb.x-pa.x)*f,y:pa.y+(pb.y-pa.y)*f};
+   return ground596({...p,x:pa.x+(pb.x-pa.x)*f,y:pa.y+(pb.y-pa.y)*f},g,at,t);
   }
  }
  // Remote players use snapshots, never run a second physics simulation locally.
- if(!self){const ms=g.phase==='play'&&g.stage==='run'&&p.alive&&!p.respawnAt&&p.finishTime==null?Math.min(50,Math.max(0,at-75-g.serverAt)):0;return {...p,x:p.x+p.vx*ms/1000,y:p.y+(p.grounded?0:p.vy*ms/1000)};}
+ if(!self){const ms=g.phase==='play'&&g.stage==='run'&&p.alive&&!p.respawnAt&&p.finishTime==null?Math.min(50,Math.max(0,at-75-g.serverAt)):0;return ground596({...p,x:p.x+p.vx*ms/1000,y:p.y+(p.grounded?0:p.vy*ms/1000)},g,at,g.serverAt+ms);}
  const q=extrapolate(c,p,g,at);
  const records=u.corrections591??=new Map();let r=records.get(p.seat);
  if(!r){r={source:g,at,dx:0,dy:0};records.set(p.seat,r);}
@@ -52,5 +62,5 @@ export function predict591(c,p,at){
   r.source=g;
  }
  const decay=Math.exp(-Math.max(0,at-r.at)/65);r.dx*=decay;r.dy*=decay;r.at=at;
- q.x+=r.dx;q.y+=r.dy;return q;
+ q.x+=r.dx;q.y+=r.dy;return ground596(q,g,at);
 }

@@ -1,0 +1,385 @@
+{
+  "before-grounding": {
+    "checks": [
+      {
+        "theme": "forest",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 47,
+        "p95Gap": 21,
+        "centerGap": 19
+      },
+      {
+        "theme": "forest",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 5,
+        "p95Gap": 2,
+        "centerGap": 2
+      },
+      {
+        "theme": "forest",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 5,
+        "p95Gap": 3,
+        "centerGap": 2
+      },
+      {
+        "theme": "forest",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 26,
+        "p95Gap": 26,
+        "centerGap": 8
+      },
+      {
+        "theme": "clock",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 19,
+        "p95Gap": 9,
+        "centerGap": 5
+      },
+      {
+        "theme": "clock",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 1,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "clock",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 1,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "clock",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 9,
+        "p95Gap": 9,
+        "centerGap": 2
+      },
+      {
+        "theme": "frost",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 19,
+        "p95Gap": 8,
+        "centerGap": 7
+      },
+      {
+        "theme": "frost",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 1,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "frost",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 1,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "frost",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 10,
+        "p95Gap": 9,
+        "centerGap": 4
+      },
+      {
+        "theme": "ember",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 13,
+        "p95Gap": 8,
+        "centerGap": 3
+      },
+      {
+        "theme": "ember",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "ember",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "ember",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 7,
+        "p95Gap": 7,
+        "centerGap": 0
+      }
+    ],
+    "player": {
+      "x": 90,
+      "y": 300,
+      "grounded": true,
+      "feet": 462.0899658203125,
+      "collision": 462.09
+    },
+    "cache": 27,
+    "errors": [],
+    "missing": []
+  },
+  "after-grounding": {
+    "checks": [
+      {
+        "theme": "forest",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "forest",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "forest",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "forest",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "clock",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "clock",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "clock",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "clock",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "frost",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "frost",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "frost",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "frost",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "ember",
+        "kind": "ground",
+        "w": 650,
+        "h": 174,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "ember",
+        "kind": "ledge",
+        "w": 125,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "ember",
+        "kind": "narrow",
+        "w": 62,
+        "h": 18,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      },
+      {
+        "theme": "ember",
+        "kind": "wall",
+        "w": 40,
+        "h": 110,
+        "maxGap": 0,
+        "p95Gap": 0,
+        "centerGap": 0
+      }
+    ],
+    "player": {
+      "x": 90,
+      "y": 300,
+      "grounded": true,
+      "feet": 462.0899658203125,
+      "collision": 462.09
+    },
+    "cache": 27,
+    "errors": [],
+    "missing": []
+  },
+  "motion-effects-results": {
+    "movement": {
+      "platform": "float1",
+      "samples": [
+        148,
+        157
+      ],
+      "maximumCssGap": [
+        0,
+        0
+      ]
+    },
+    "effects": {
+      "gateChangedPixels": 3989,
+      "arrivalChangedPixels": 1236,
+      "steamFlowChangedPixels": 1072,
+      "steamWarningChangedPixels": 424,
+      "steamActiveChangedPixels": 2509,
+      "reducedGateChangedPixels": 0
+    },
+    "entered": {
+      "entering": true,
+      "hidden": false,
+      "messageHidden": true
+    },
+    "finished": {
+      "hidden": true,
+      "messageHidden": false,
+      "clear": true
+    },
+    "partyCamera": {
+      "during": 8040,
+      "goal": 8420,
+      "players": 2,
+      "after": 0
+    },
+    "errors": [],
+    "missing": []
+  },
+  "stress-results": {
+    "frames": 356,
+    "median": 16.699999999999818,
+    "p95": 33.30000000000109,
+    "over34": 1,
+    "humans": 4,
+    "ai": false,
+    "projectiles": 24,
+    "terrainCache": 21,
+    "errors": []
+  },
+  "preview-results": {
+    "steamStart": 5.602,
+    "steamEnd": 9.077,
+    "gateStart": 11.085,
+    "gateEnd": 14.698,
+    "video": "/workspace/scratch/7594a4aa2188/work596/videos/9037cea856d2bcb7ef7b9c5d9971681e.webm",
+    "errors": [],
+    "missing": []
+  },
+  "unitAndProtocolTestsPassed": 40,
+  "newPlatformMotionTestsPassed": 2,
+  "browser": "Chromium headless / Playwright 1.51.1",
+  "limits": [
+    "iPhone実機・Safariは未確認",
+    "CPU４倍低速の値はこの実行環境での測定。全端末60fpsを保証する値ではない",
+    "プレビューは地点を設定後、実ゲームの描画・入力で収録。全コースの通し攻略ではない"
+  ]
+}
