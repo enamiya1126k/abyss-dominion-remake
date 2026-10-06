@@ -4,7 +4,7 @@ import {RUN587 as C} from './Physics587.js';
 // Resolve all four previous/current positions together; seat iteration cannot
 // turn an ascending character into a platform or bounce a pair repeatedly.
 export function mechanics589(g,previous,emit,hurt){
- const course=course589(g),usable=p=>p.alive&&!p.respawnAt&&p.finishTime==null;
+ const course=course589(g),usable=p=>p.alive&&!p.waiting&&!p.respawnAt&&p.finishTime==null;
  const pairs=[];
  for(const rider of g.players){
   if(!usable(rider)||g.lastAt<(rider.buddyUntil??0))continue;

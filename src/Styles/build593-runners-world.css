@@ -1,0 +1,97 @@
+/* A full-height play surface, compact information, and a clear two-thumb controller. */
+.ru-vivid593{position:fixed!important;inset:0!important;width:100%!important;height:var(--ru-height593,100dvh)!important;min-height:0!important;max-height:none!important;z-index:90;display:flex;flex-direction:column;overflow:hidden;background:#153b49;color:#fff3d6;padding:0!important}
+.ru-vivid593 .arc-head563{flex:0 0 38px;min-height:38px;padding:3px 10px;background:linear-gradient(#224b54,#12343f);border-bottom:1px solid #dbbf7540}
+.ru-vivid593 .arc-head563 small{display:none}
+.ru-vivid593 .arc-head563 b{font-size:13px;letter-spacing:.4px}
+.ru-vivid593 .arc-head563 button{min-height:30px;min-width:34px;padding:4px 8px;border:1px solid #c8b67960;border-radius:10px;background:#163947;font-size:11px}
+.ru-vivid593 .ru-players587{flex:0 0 44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:4px 7px;gap:5px;background:#103441;border:0}
+.ru-vivid593 .ru-players587>button{min-height:35px;position:relative;overflow:hidden;padding:3px 4px;gap:4px;border:1px solid color-mix(in srgb,var(--player),transparent 45%);border-bottom:2px solid var(--player);border-radius:8px;background:#1b4351;box-shadow:none}
+.ru-vivid593 .ru-card-avatar587{width:25px!important;height:27px!important;flex:0 0 25px;display:grid;place-items:center;overflow:hidden}
+.ru-vivid593 .ru-card-avatar587>*{width:25px!important;height:25px!important;min-width:0!important;max-width:25px!important;max-height:25px!important;object-fit:contain;transform:none!important}
+.ru-vivid593 .ru-players587>button>span:nth-child(2){min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.ru-vivid593 .ru-players587 b{font-size:9px;max-width:48px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.25}
+.ru-vivid593 .ru-players587 small{font-size:8px;line-height:1.1;height:12px}
+.ru-vivid593 .ru-players587>button>i{display:none}
+.ru-hearts593{display:flex;align-items:center;gap:2px;color:#ff9478}
+.ru-icon593{display:inline-block!important;width:24px;height:24px;min-width:0!important;flex-shrink:0;overflow:visible;stroke:none!important}
+.ru-icon593 path{fill:currentColor;stroke:none}
+.ru-hearts593 .ru-icon593{width:10px;height:10px;filter:none}
+.ru-hearts593 .is-empty{color:#466974}
+.ru-vivid593 .ru-brief587{position:absolute;top:94px;left:12px;right:12px;z-index:3;min-height:0;padding:0;display:flex;justify-content:space-between;background:none;border:0;pointer-events:none;gap:10px}
+.ru-vivid593 .ru-brief587>div:first-child{padding:6px 10px;border-radius:10px;background:#123947e8;box-shadow:0 2px 0 #08273570;max-width:75%;border:1px solid #e6d29b66}
+.ru-vivid593 .ru-brief587 small{font-size:7px;letter-spacing:1px;color:#e4cb8e}
+.ru-vivid593 .ru-brief587 b{font-size:13px;line-height:1.4;letter-spacing:.2px}
+.ru-vivid593 .ru-timer587{padding:4px 9px;background:#143d4adb;border:1px solid #e6d29b66;border-radius:10px;min-width:52px;text-align:center}
+.ru-vivid593 .ru-timer587 small{font-size:6px}.ru-vivid593 .ru-timer587 b{font-size:17px;font-variant-numeric:tabular-nums}
+.ru-vivid593 .ru-route587{display:none}
+.ru-vivid593 .ru-field587{flex:1 1 auto;min-height:140px;border:0;border-radius:0;background:#8cdaef;contain:layout paint}
+.ru-vivid593 .ru-stage587{display:none}
+.ru-vivid593 .ru-mission589{left:auto;right:12px;top:70px;bottom:auto;transform:none;min-width:0;max-width:160px;padding:5px 8px;min-height:0;border:1px solid #f9e8b28c;border-radius:9px;background:#1a4654e6;box-shadow:0 2px 0 #08273550}
+.ru-vivid593 .ru-mission589>b{font-size:9px;letter-spacing:.1px}.ru-vivid593 .ru-mission589 i{width:16px;height:16px;font-size:8px}
+.ru-vivid593 .ru-pawn587{will-change:transform}
+.ru-vivid593 .ru-pawn587>b{font-size:8px;border-radius:5px;padding:2px 4px;bottom:calc(100% + 5px + var(--label-lift,0px));border-color:var(--player);color:#fff9da;background:#17333f;box-shadow:0 2px 0 #10232b55;max-width:68px}
+.ru-vivid593 .ru-pawn587.is-self>b{background:#fff1a8;color:#163843;border-color:#fff9d6;z-index:5;font-weight:900}
+.ru-vivid593 .ru-pawn587.is-self>mark{bottom:calc(100% + 24px + var(--label-lift,0px));font-size:12px;color:#fff1a8;text-shadow:0 2px 0 #133644}
+.ru-vivid593 .ru-sprite587{width:var(--sprite);height:var(--sprite);display:grid;place-items:center}
+.ru-vivid593 .ru-sprite587>*{width:100%!important;height:100%!important;min-width:0!important;max-width:100%!important;max-height:100%!important;object-fit:contain}
+.ru-vivid593 .ru-pawn587>i{height:3px;width:66%;left:17%;background:var(--player);opacity:.9}
+.ru-vivid593 .ru-rivals588{top:115px;right:12px;gap:4px}.ru-vivid593 .ru-rivals588>span{font-size:9px;padding:4px 6px;border-radius:7px;background:#1b414be8}
+.ru-vivid593 .ru-boost588{bottom:15px;top:auto;right:12px;width:104px;padding:5px 7px}
+.ru-vivid593 .ru-toast587{top:120px;left:50%;padding:7px 12px;font-size:11px;line-height:1.4;max-width:90%;border-radius:12px;background:#183f4de8;box-shadow:0 3px 0 #15343b30;pointer-events:none}
+.ru-vivid593 .ru-count587{background:#123a4830;backdrop-filter:none;gap:4px}
+.ru-vivid593 .ru-count587>b{font-size:80px;line-height:1.2;text-shadow:0 5px 0 #28546a,0 7px 0 #123445}
+.ru-vivid593 .ru-count587 small{font-size:10px;letter-spacing:3px}.ru-vivid593 .ru-count587>span{font-size:11px;background:#113949cb;padding:6px 10px;border-radius:8px}
+.ru-vivid593 .ru-message587{top:35%;left:7%;right:7%;background:#173b48f5;padding:18px 14px;border-radius:16px;box-shadow:0 4px 0 #102b35aa}
+.ru-vivid593 .ru-message587 b{font-size:19px}.ru-vivid593 .ru-message587 span{font-size:10px}
+.ru-vivid593 .ru-watch587,.ru-vivid593 .ru-network587{bottom:12px;font-size:9px;padding:6px 8px}
+.ru-vivid593 .ru-footer587{flex:0 0 auto;padding:5px 10px max(9px,env(safe-area-inset-bottom));background:linear-gradient(#1e4854,#0e2c39);border-top:2px solid #dec580;box-shadow:0 -2px 0 #2b647559}
+.ru-vivid593 .ru-help587{margin:0 0 5px;min-height:19px;display:flex;justify-content:space-between}
+.ru-vivid593 .ru-help587>span{font-size:8px;color:#d2ddcf;letter-spacing:0}
+.ru-vivid593 .ru-help587>button{font-size:8px;min-height:21px;padding:2px 6px;border-radius:5px}
+.ru-vivid593 .ru-help587>button:disabled{display:none}
+.ru-vivid593 .ru-controls587{display:grid;grid-template-columns:minmax(142px,1fr) 60px 88px;gap:9px;align-items:center}
+.ru-vivid593 .ru-directions587{min-width:0;width:auto;display:grid;grid-template-columns:1fr 1fr;height:78px;border-radius:22px;padding:0;gap:0;background:#31596c;border:1px solid #92b7ba;box-shadow:0 5px 0 #051d2b,inset 0 1px 0 #c6e1d666;overflow:hidden}
+.ru-vivid593 .ru-directions587 [data-ru-control]{width:100%;height:78px;min-height:78px;padding:7px 0;gap:3px;border:0;border-radius:0;background:linear-gradient(140deg,#527f8c,#274b60);box-shadow:none;transition:none;color:#fff2c6;transform:none;filter:none}
+.ru-vivid593 .ru-directions587 [data-ru-control=left]{border-right:1px solid #accfc84d}
+.ru-vivid593 [data-ru-control]>b{height:32px;display:grid;place-items:center}
+.ru-vivid593 .ru-directions587 .ru-icon593{width:32px;height:32px}
+.ru-vivid593 [data-ru-control]>small{font-size:8px;letter-spacing:0;margin-top:3px;color:inherit}
+.ru-vivid593 .ru-jump587{width:88px;height:88px;min-height:88px;border-radius:50%;border:2px solid #fff2b6;background:radial-gradient(circle at 35% 20%,#fff5c1,#e9bd59 60%,#c39134);box-shadow:0 5px 0 #896321,inset 0 1px 0 white;padding:6px 0;gap:1px;color:#303b32;transition:none}
+.ru-vivid593 .ru-jump587 .ru-icon593{width:31px;height:31px}
+.ru-vivid593 .ru-jump587 strong{font-size:12px;letter-spacing:0}.ru-vivid593 .ru-jump587 small{font-size:7px}
+.ru-vivid593 .ru-attack591{width:60px;height:66px;min-height:66px;border-radius:50%;padding:5px 0;border:1px solid #e6b8a2;background:linear-gradient(130deg,#a37e74,#79545e);box-shadow:0 4px 0 #482f3e;color:#fff2d1;opacity:1;transition:none}
+.ru-vivid593 .ru-attack591>b{height:24px}.ru-vivid593 .ru-attack591 .ru-icon593{width:25px;height:25px}
+.ru-vivid593 .ru-attack591 strong{font-size:10px;margin:1px 0}.ru-vivid593 .ru-attack591 small{display:none}
+.ru-vivid593.has-power591 .ru-attack591{background:radial-gradient(circle at 30% 20%,#ffcb8b,#d8744e 65%,#9b4545);border-color:#ffe7b0;box-shadow:0 4px 0 #613440}
+.ru-vivid593 [data-ru-control].is-held,.ru-vivid593 .ru-directions587 [data-ru-control].is-held{transform:translateY(3px);filter:none;color:#102e3c;background:#b9d9be;box-shadow:inset 0 4px 0 #6c9f91}
+.ru-vivid593 [data-ru-control]:disabled{opacity:.48;filter:none}
+/* Image-led stage cards with compact details. */
+.ru-lobby593{background:#0d2e3e;color:#f3ebd0}
+.ru-lobby593 .arc-cover563{min-height:245px;background-position:center 62%;position:relative;border-bottom:3px solid #dcb96c}
+.ru-lobby593 .arc-cover563 h1{font-size:34px;line-height:1.2;letter-spacing:1px;text-shadow:0 3px 0 #183a4c,0 4px 16px #122837}
+.ru-lobby593 .arc-cover563 p{font-size:12px}
+.ru-lobby593 .arc-body563{padding:18px 13px}
+.ru-lobby593 .arc-rule563{font-size:11px;line-height:1.8;color:#cadbdb}
+.ru-lobby593 .ru-course-select589{margin-top:16px}
+.ru-lobby593 .ru-course-title589 h2{font-size:22px!important;color:#ffe6a6}
+.ru-lobby593 .ru-course-title589 p{font-size:11px;margin:6px 0 16px}
+.ru-lobby593 .ru-course-grid589{gap:12px 10px}
+.ru-lobby593 .ru-course589{position:relative;overflow:hidden;border-radius:15px;background:#153c50;border:1px solid #61858a;box-shadow:0 4px 0 #061e2d;padding-bottom:10px;transition:transform 120ms}
+.ru-lobby593 .ru-course589[aria-pressed=true]{border:2px solid #ffe09b;box-shadow:0 0 0 2px #c9994950,0 5px 0 #061e2d;padding:0 0 9px}
+.ru-lobby593 img.ru-course-art593{width:100%;height:auto;aspect-ratio:1.5;object-fit:cover;display:block;margin:0;border:0;filter:none;background:#70b9d6}
+.ru-lobby593 .ru-course-number589{padding:8px 9px 1px;font-size:8px;letter-spacing:1px}
+.ru-lobby593 .ru-course-number589 em{font-size:7px;letter-spacing:0;padding:2px 4px;background:#0e2d3e}
+.ru-lobby593 .ru-course589>b{font-size:12px;line-height:1.45;padding:3px 9px;min-height:36px;display:flex;align-items:center}
+.ru-lobby593 .ru-course-tags589{display:none}
+.ru-lobby593 .ru-course589>strong{padding:2px 9px;font-size:9px;color:#bdced4}
+.ru-lobby593 .ru-course589[aria-pressed=true]>strong{color:#ffe2a0}
+.ru-lobby593 .ru-selected589{border-radius:12px;background:#214957;border-color:#c4ad73}
+.ru-lobby593 .arc-gold563{border-radius:12px;background:linear-gradient(#ffedb2,#d5b060);color:#153543;border:1px solid #fff0bb;box-shadow:0 3px 0 #876c38}
+@media(max-width:350px){.ru-vivid593 .arc-head563 b{font-size:11px}.ru-vivid593 .ru-card-avatar587{display:none}.ru-vivid593 .ru-players587 b{max-width:58px}.ru-vivid593 .ru-players587>button{justify-content:center}.ru-vivid593 .ru-controls587{grid-template-columns:minmax(140px,1fr) 54px 78px;gap:7px}.ru-vivid593 .ru-jump587{width:78px;height:80px;min-height:80px}.ru-vivid593 .ru-attack591{width:54px;height:61px;min-height:61px}.ru-vivid593 .ru-directions587,.ru-vivid593 .ru-directions587 [data-ru-control]{height:72px;min-height:72px}.ru-vivid593 .ru-brief587 b{font-size:11px}}
+@media(orientation:landscape) and (max-height:550px){.ru-vivid593 .arc-head563{flex-basis:32px;min-height:32px}.ru-vivid593 .ru-players587{position:absolute;top:39px;left:8px;width:300px;height:40px;z-index:4;padding:0;background:none}.ru-vivid593 .ru-players587>button{min-height:34px}.ru-vivid593 .ru-brief587{left:auto;top:42px;right:10px;width:260px}.ru-vivid593 .ru-field587{flex:1}.ru-vivid593 .ru-footer587{position:absolute;left:0;right:0;bottom:0;border:0;background:none;pointer-events:none;padding:0 16px max(12px,env(safe-area-inset-bottom));box-shadow:none}.ru-vivid593 .ru-controls587{grid-template-columns:minmax(170px,1fr) 62px 85px;gap:14px}.ru-vivid593 .ru-directions587{width:174px;height:70px}.ru-vivid593 .ru-directions587 [data-ru-control]{height:70px;min-height:70px;pointer-events:auto}.ru-vivid593 .ru-jump587{width:85px;height:80px;min-height:80px;pointer-events:auto}.ru-vivid593 .ru-attack591{width:62px;height:64px;min-height:64px;pointer-events:auto}.ru-vivid593 .ru-help587{display:none}.ru-vivid593 .ru-mission589{top:53px;left:10px;right:auto}.ru-vivid593 .ru-rivals588{top:91px;right:12px}.ru-vivid593 .ru-toast587{top:90px}.ru-vivid593 .ru-boost588{top:105px;bottom:auto}.ru-vivid593 .ru-count587>b{font-size:72px}}
+
+/* Nested custom / late-game character art must obey the same pawn/card box. */
+.ru-vivid593 .ru-sprite587 .sg-monster-visual,.ru-vivid593 .ru-card-avatar587 .sg-monster-visual{display:block!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:100%!important;max-height:100%!important;margin:0!important;padding:0!important}
+.ru-vivid593 .ru-sprite587 .monster-visual img,.ru-vivid593 .ru-card-avatar587 .monster-visual img{width:100%!important;height:100%!important;object-fit:contain;filter:none!important}
+
+.ru-vivid593 .ru-background593{position:absolute;left:0;top:0;display:block;max-width:none!important;max-height:none!important;object-fit:fill!important;pointer-events:none;user-select:none;will-change:transform}

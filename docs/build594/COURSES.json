@@ -1,0 +1,90 @@
+[
+  {
+    "id": "forest",
+    "name": "こもれびアドベンチャー",
+    "lengthBefore": 4920,
+    "lengthAfter": 8520,
+    "ratio": 1.732,
+    "sections": 6,
+    "enemyCount": 23,
+    "checkpoints": 12,
+    "seconds": 300
+  },
+  {
+    "id": "sky",
+    "name": "風車の空中庭園",
+    "lengthBefore": 3300,
+    "lengthAfter": 6900,
+    "ratio": 2.091,
+    "sections": 6,
+    "enemyCount": 18,
+    "checkpoints": 12,
+    "seconds": 240
+  },
+  {
+    "id": "relay",
+    "name": "つながるスイッチ遺跡",
+    "lengthBefore": 2920,
+    "lengthAfter": 6520,
+    "ratio": 2.233,
+    "sections": 6,
+    "enemyCount": 15,
+    "checkpoints": 12,
+    "seconds": 240
+  },
+  {
+    "id": "clock",
+    "name": "カチコチ時計塔",
+    "lengthBefore": 3020,
+    "lengthAfter": 6620,
+    "ratio": 2.192,
+    "sections": 6,
+    "enemyCount": 15,
+    "checkpoints": 10,
+    "seconds": 240
+  },
+  {
+    "id": "coast",
+    "name": "潮騒の浮島",
+    "lengthBefore": 3100,
+    "lengthAfter": 6700,
+    "ratio": 2.161,
+    "sections": 6,
+    "enemyCount": 19,
+    "checkpoints": 11,
+    "seconds": 240
+  },
+  {
+    "id": "frost",
+    "name": "氷晶の回廊",
+    "lengthBefore": 3200,
+    "lengthAfter": 6800,
+    "ratio": 2.125,
+    "sections": 6,
+    "enemyCount": 18,
+    "checkpoints": 11,
+    "seconds": 240
+  },
+  {
+    "id": "crystal",
+    "name": "蛍あかりの水晶洞",
+    "lengthBefore": 3340,
+    "lengthAfter": 6940,
+    "ratio": 2.078,
+    "sections": 6,
+    "enemyCount": 18,
+    "checkpoints": 11,
+    "seconds": 240
+  },
+  {
+    "id": "ember",
+    "name": "灰燼の魔王城",
+    "lengthBefore": 3480,
+    "lengthAfter": 7080,
+    "ratio": 2.034,
+    "sections": 6,
+    "enemyCount": 18,
+    "checkpoints": 11,
+    "seconds": 300
+  }
+]

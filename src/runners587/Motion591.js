@@ -9,7 +9,7 @@ export function remember591(c){
 }
 function extrapolate(c,p,g,at){
  const q={...p},u=c.runnersUI587,self=p.playerId===c.transport.selfId&&!p.auto;
- if(!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
+ if(p.waiting||!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
  const ms=Math.min(150,Math.max(0,at-g.serverAt)),course=course589(g);
  if(self){
   const pending=(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq));

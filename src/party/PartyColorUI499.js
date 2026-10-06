@@ -7,7 +7,7 @@ const self=c=>c.state?.party?.members.find(m=>m.playerId===c.transport.selfId);
 function targetMember(c,u){const p=c.state?.party;if(!p)return null;if(u?.aiSeat500!=null)return host(c)&&!p.members[u.aiSeat500]?{playerId:'ai-slot-'+u.aiSeat500,name:'AI · SLOT '+(u.aiSeat500+1),seatToken485:null,color499:p.aiColors500?.[u.aiSeat500],aiSeat500:u.aiSeat500}:null;return p.members.find(m=>m.playerId===(u?.playerId??c.transport.selfId))}
 const other=(c,u)=>u?.aiSeat500!=null||!!u?.playerId&&u.playerId!==c.transport.selfId;
 const capable=(c,u)=>other(c,u)?c.state.partyMemberColors500===1:c.state.partyColors499===1;
-export function emptyColorAttrs500(c,seat){return host(c)?` data-party-color-open499="ai-slot-${seat}" role="button" tabindex="0" aria-haspopup="dialog" aria-label="この席のAIのカラーを選択"`:''}
+export function emptyColorAttrs500(c,seat){return host(c)&&c.state?.party?.game!=='runners'?` data-party-color-open499="ai-slot-${seat}" role="button" tabindex="0" aria-haspopup="dialog" aria-label="この席のAIのカラーを選択"`:''}
 export function openColor500(c,m){c.partyMember485=null;c.error='';c.partyColorUI499={partyId:c.state.party.id,playerId:m.playerId,...(m.aiSeat500!=null?{aiSeat500:m.aiSeat500}:{}),seatToken485:m.seatToken485??null,draft:color499(m.color499,m.aiSeat500??c.state.party.members.indexOf(m)).id,error:'',pendingAt:0};c.render()}
 
 function current(c){const u=c.partyColorUI499,m=targetMember(c,u);if(!u)return null;if(!m||(other(c,u)&&!host(c))||u.partyId!==c.state.party.id||(m.seatToken485??null)!==u.seatToken485){c.partyColorUI499=null;return null}return m}

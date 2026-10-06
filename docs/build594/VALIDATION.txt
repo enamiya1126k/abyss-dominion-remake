@@ -1,0 +1,186 @@
+Build594 — 2026-10-06
+
+✔ all authored second halves are longer, keep every spawn safe and patrols above solid floor (1.626957ms)
+✔ forest: solo player can finish without any weapon pickups (50.804183ms)
+✔ sky: solo player can finish without any weapon pickups (30.674894ms)
+✔ relay: solo player can finish without any weapon pickups (39.248876ms)
+✔ clock: solo player can finish without any weapon pickups (54.83997ms)
+✔ coast: solo player can finish without any weapon pickups (78.768825ms)
+✔ frost: solo player can finish without any weapon pickups (29.281029ms)
+✔ crystal: solo player can finish without any weapon pickups (50.680341ms)
+✔ ember: solo player can finish without any weapon pickups (29.464337ms)
+✔ one fire shot defeats three enemies, then expires before a fourth (2.249541ms)
+✔ fire opens a shared barrier in two hits, invalidates collision cache and snapshots it; wind cannot (1.235713ms)
+✔ wind air jump consumes one charge, reaches the upper route and cannot repeat until landing (2.116706ms)
+✔ holding jump never spends wind ammo; same-kind pickups add ammo with a cap (0.738884ms)
+✔ each supply gem heals, replenishes ammo and boosts once per player (0.553843ms)
+✔ 1 humans start and finish with exactly that many players and no AI (4.968911ms)
+✔ 2 humans start and finish with exactly that many players and no AI (5.080376ms)
+✔ 3 humans start and finish with exactly that many players and no AI (0.990854ms)
+✔ 4 humans start and finish with exactly that many players and no AI (1.138211ms)
+✔ AI members are excluded and an empty human room cannot start (1.342731ms)
+✔ other minigames still fill empty seats with AI (0.422019ms)
+✔ disconnect and home absence stop inputs without AI; reconnect uses shared flag (47.399356ms)
+✔ thumb seam remains forgiving and 8ms haptics respect rate limit and opt-out (1.432953ms)
+✔ 8 distinct authored maps are co-op, pickups and checkpoints have safe floor (4.434117ms)
+✔ forest: four scripted human inputs complete authored course (157.344171ms)
+✔ sky: four scripted human inputs complete authored course (99.216185ms)
+✔ relay: four scripted human inputs complete authored course (75.042802ms)
+✔ clock: four scripted human inputs complete authored course (58.357978ms)
+✔ coast: four scripted human inputs complete authored course (67.662972ms)
+✔ frost: four scripted human inputs complete authored course (52.285517ms)
+✔ crystal: four scripted human inputs complete authored course (88.267953ms)
+✔ ember: four scripted human inputs complete authored course (59.055556ms)
+✔ swept enemy top gives stomp at fast descent and forgiving edge; side and rising stay distinct (0.414196ms)
+✔ actual stomp permanently defeats enemy and bounces the player (10.378126ms)
+✔ pickup grants a bounded fire weapon; holding attack respects cooldown/ammo (0.562473ms)
+✔ projectile defeats enemies, survives serialization, bounded lifetime (1.316717ms)
+✔ friendly hit knocks back without removing hearts; immunity stops chain juggling (0.341139ms)
+✔ fall and all hearts depleted respawn automatically at shared checkpoint; no knockout results (5.878672ms)
+✔ first goal does not shorten team deadline; all four are required for success (0.666496ms)
+✔ expired input releases attack and movement; restart preserves projectile lifetime (0.632265ms)
+✔ production room rejects old clients and unauthorized course selection; course change clears ready (8.191146ms)
+✔ server input validation, sequence ownership, queued/processed acknowledgments and migration (6.118453ms)
+✔ four real WebSocket clients share course, movement, projectiles, friendly hit, reconnection and same-course replay (209.006462ms)
+ℹ tests 42
+ℹ suites 0
+ℹ pass 42
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 894.625739
+
+Browser touch regression (before human-only steering):
+[
+  {
+    "viewport": "320x568",
+    "threeFinger": true,
+    "slide": true,
+    "cancel": true,
+    "selectionBlocked": true,
+    "keyboardRelease": true,
+    "errors": []
+  },
+  {
+    "viewport": "390x844",
+    "threeFinger": true,
+    "slide": true,
+    "cancel": true,
+    "selectionBlocked": true,
+    "keyboardRelease": true,
+    "errors": []
+  },
+  {
+    "viewport": "844x390",
+    "threeFinger": true,
+    "slide": true,
+    "cancel": true,
+    "selectionBlocked": true,
+    "keyboardRelease": true,
+    "errors": []
+  },
+  {
+    "renderTiming": {
+      "median": 16.699999999999818,
+      "p95": 16.800000000000182,
+      "over34": 0
+    }
+  }
+]
+Final human-only browser coverage:
+[
+  {
+    "people": 1,
+    "viewport": "320x568",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 1,
+    "errors": []
+  },
+  {
+    "people": 2,
+    "viewport": "390x844",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 2,
+    "errors": []
+  },
+  {
+    "people": 3,
+    "viewport": "844x390",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 3,
+    "errors": []
+  },
+  {
+    "people": 4,
+    "viewport": "390x844",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 4,
+    "errors": []
+  }
+]
+Actual wind input and full long courses:
+{
+  "realControlWindJump": true,
+  "upperRouteLanding": true,
+  "scenes": [
+    {
+      "id": "forest",
+      "sections": 6,
+      "lastSection": "森の最終関門"
+    },
+    {
+      "id": "sky",
+      "sections": 6,
+      "lastSection": "天空の連続渡り"
+    },
+    {
+      "id": "relay",
+      "sections": 6,
+      "lastSection": "守護者の参道"
+    },
+    {
+      "id": "clock",
+      "sections": 6,
+      "lastSection": "最上階の防衛線"
+    },
+    {
+      "id": "coast",
+      "sections": 6,
+      "lastSection": "荒波の灯台道"
+    },
+    {
+      "id": "frost",
+      "sections": 6,
+      "lastSection": "吹雪の連続回廊"
+    },
+    {
+      "id": "crystal",
+      "sections": 6,
+      "lastSection": "大聖堂の最後の試練"
+    },
+    {
+      "id": "ember",
+      "sections": 6,
+      "lastSection": "玉座への最終関門"
+    }
+  ],
+  "throttledTiming": {
+    "frames": 344,
+    "median": 16.69999999999709,
+    "p95": 16.799999999999272,
+    "over34": 1
+  },
+  "errors": []
+}
+
+Browser: Chromium 134, Playwright 1.51.1, production CSS and import map.
+The isolated fixture runs actual Runners rules/rendering/controls, normal delayed
+input and snapshots, plus the actual main.js emoji conversion/observer logic.
+It does not execute full unrelated main-game bootstrap. The small icon factory
+dependency for the emoji observer is stubbed; the conversion is not stubbed.
+Headless performance is one 6-second trial at DPR2 with CDP 4x CPU throttle.
+Not a native iPhone/Safari/Android or physical vibration test.
+Automated navigation is a test-only input driver. Runtime has no bot import,
+no AI seat fill, and no AI takeover. Other games retain their existing AI behavior.
+A scoped delta patch based on the exact delivered Build593 source.

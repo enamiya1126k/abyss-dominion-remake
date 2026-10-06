@@ -1,0 +1,65 @@
+Build593 validation — 2026-10-06
+
+Rules: 19 PASS. Includes four AI finishing all 8 courses, stomp, projectiles,
+friendly hit, shared respawn, input validation and protocol compatibility.
+Controls / AI: 5 PASS. Production WebSocket scenario: 4 actual clients PASS.
+Browser: Chromium 134 / Playwright 1.51.1. Production import map + 298 stylesheets.
+Actual main.js emoji conversion/observer source is included in the fixture;
+its icon factory dependency is stubbed, not the conversion or observer logic.
+Full game bootstrap and all unrelated modules are not run in this isolated fixture.
+320x568, 390x844, 844x390: touch controls fit, three-finger movement/jump/attack,
+slide direction, touch cancel, key release, selection suppression, haptic mock.
+Game arrows remain SVG, hearts remain SVG, no replacement pixel-icon nodes.
+8 stage images render, lobby start works, last stage selectable, action-button
+slide works, resized viewport releases held input, nested custom image fits.
+No new runtime errors in these scenarios.
+
+Performance: 390x844 touch, DPR3, CDP 4x CPU throttle. Six seconds of held right
+after countdown. Local fixture uses production rules, 25ms simulation and 50ms
+snapshots. Both versions use the same production emoji observer. Build592 uses
+saved source; Build593 uses the new renderer and controls. No full main bootstrap.
+Single trial per final version, software rendering environment, not an iPhone.
+Larger play field: 523 CSS px -> 632 CSS px (+20.84%). Same target 60fps.
+New background is a transformed image layer; canvas is transparent, renders
+foreground only, uses one CSS pixel per pixel on coarse-pointer devices.
+
+BEFORE / Build592:
+{
+  "mutations": 1021,
+  "frames": 359,
+  "median": 16.699999999999818,
+  "p95": 16.700000000000728,
+  "over34": 0,
+  "canvas": [
+    390,
+    523
+  ],
+  "TaskDuration": 3.134964,
+  "ScriptDuration": 0.821182,
+  "RecalcStyleDuration": 0.330124,
+  "LayoutDuration": 0.0474,
+  "RecalcStyleCount": 368,
+  "LayoutCount": 57
+}
+AFTER / Build593:
+{
+  "mutations": 908,
+  "frames": 360,
+  "median": 16.699999999999818,
+  "p95": 16.799999999999272,
+  "over34": 0,
+  "canvas": [
+    390,
+    632
+  ],
+  "TaskDuration": 2.746629,
+  "ScriptDuration": 0.940777,
+  "RecalcStyleDuration": 0.225974,
+  "LayoutDuration": 0.004131,
+  "RecalcStyleCount": 365,
+  "LayoutCount": 6
+}
+
+Limits: no native iPhone/Safari/Android test. Haptics checked via API mock only.
+No server rule changes. Existing Build591-documented unrelated legacy test
+failures are not claimed fixed; full legacy suite is outside this scoped patch.

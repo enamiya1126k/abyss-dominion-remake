@@ -27,13 +27,13 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
  let fixed=geometry591.get(course);
  if(!fixed){fixed=course.grounds.map(([x,end],i)=>({id:'ground'+i,x,y:300,w:end-x,h:160,ground:true}));geometry591.set(course,fixed);}
  let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
- const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',');
+ const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',');
  if(cache.has(key))return cache.get(key);
 
  const fallen=p=>{const t=world?.crumbles?.[p.id];return t!=null&&elapsed>=t+900&&elapsed<t+4000;};
  const result=[...fixed,
   ...course.platforms.filter(p=>!fallen(p)).map(p=>({...p,oneWay:true,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{})})),
-  ...(course.walls??[]).map(p=>({...p,wall:true})),
+  ...(course.walls??[]).filter(p=>!world.broken?.includes(p.id)).map(p=>({...p,wall:true})),
   ...(course.bridges??[]).filter(p=>world?.switches?.includes(p.id)).map(p=>({...p,bridge:true}))];
  if(cache.size>24)cache.clear();cache.set(key,result);return result;
 }

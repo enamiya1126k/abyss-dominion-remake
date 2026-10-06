@@ -1,0 +1,192 @@
+{
+  "build": 593,
+  "version": "3.1.272",
+  "type": "delta-patch",
+  "baseBuilds": [
+    592
+  ],
+  "serverRestart": false,
+  "deleteFiles": [],
+  "rules": {
+    "runners": 4
+  },
+  "tests": {
+    "rules": 19,
+    "additionalControlsAndAI": 5,
+    "realWebSocketClients": 4,
+    "touchViewports": [
+      "320x568",
+      "390x844",
+      "844x390"
+    ],
+    "stageScenes": 8,
+    "productionEmojiConversion": true,
+    "fullGameBootstrap": false,
+    "haptics": "API invocation verified with mock; physical devices untested",
+    "nativeIPhone": false,
+    "safari": false,
+    "newRuntimeErrors": 0
+  },
+  "files": [
+    {
+      "path": "README_BUILD593.md",
+      "size": 4423,
+      "sha256": "7636f5a0597613b809693ac3b24648f2618e2d6d4e2f16241616e7efa50cb7aa"
+    },
+    {
+      "path": "assets/runners593/clock-card.webp",
+      "size": 26828,
+      "sha256": "3ca8b0003c90997bb235f56de19b2e470c590188c4641fffd3ceddc011715dbb"
+    },
+    {
+      "path": "assets/runners593/clock.webp",
+      "size": 129238,
+      "sha256": "061d3b79fbc40f21dd880b10818ef90d0e0812c383c05f964a68a5df1000809b"
+    },
+    {
+      "path": "assets/runners593/coast-card.webp",
+      "size": 31968,
+      "sha256": "aeb862f33ca6298386626bbded27cbcf92057d905eb5d7ce197b81ba3f6d6574"
+    },
+    {
+      "path": "assets/runners593/coast.webp",
+      "size": 156834,
+      "sha256": "c2d2c738ab18423fd7cfba9a5debe57feb5265d10010d47c862b46eee515d04f"
+    },
+    {
+      "path": "assets/runners593/crystal-card.webp",
+      "size": 26894,
+      "sha256": "cbd8ab12af394b3d72c1141f924c8954751d620db8c10bfd60930975a83dc9fc"
+    },
+    {
+      "path": "assets/runners593/crystal.webp",
+      "size": 123408,
+      "sha256": "485b0c1821453f596ace4907625de5de5eb77ffe2c182b9e1694063563be1a92"
+    },
+    {
+      "path": "assets/runners593/ember-card.webp",
+      "size": 20814,
+      "sha256": "6fdbfb8d2885f08b56cff9e7fdacce49b244b5ff6123dc41e0531df9e3f97cda"
+    },
+    {
+      "path": "assets/runners593/ember.webp",
+      "size": 86574,
+      "sha256": "b3a8ff05d98065b43b8e3b705920d29a236f162425a400308dfc229588a7fcc8"
+    },
+    {
+      "path": "assets/runners593/forest-card.webp",
+      "size": 28368,
+      "sha256": "07e344920e3a23934a4b8ab7914470293e9285df759b89e9c31bec3c27586e06"
+    },
+    {
+      "path": "assets/runners593/forest.webp",
+      "size": 136816,
+      "sha256": "ed0377cb8c7874261c645f1431826a8c1d6b7d0965217a181a653b725a363efc"
+    },
+    {
+      "path": "assets/runners593/frost-card.webp",
+      "size": 27554,
+      "sha256": "9b2ccd8a36f0334c72b2ee56b2b2e5d9df96bd9906c575d7e425e08fc2adaba1"
+    },
+    {
+      "path": "assets/runners593/frost.webp",
+      "size": 122208,
+      "sha256": "c7205a98e8ab2d82c4b18370b9d9f1780493408f2b3c8d3e2cc9beccc4878a20"
+    },
+    {
+      "path": "assets/runners593/relay-card.webp",
+      "size": 32658,
+      "sha256": "42722893d1d6438d971e7f6ff8d95c772dff28fe1b9591be57a7c18d8e979d68"
+    },
+    {
+      "path": "assets/runners593/relay.webp",
+      "size": 163110,
+      "sha256": "27896866b2ca41bfb985152361e27a86ce372a6f0488d8379341de299b879045"
+    },
+    {
+      "path": "assets/runners593/sky-card.webp",
+      "size": 23782,
+      "sha256": "22a07ef484599d6015119cfe9f2976cd2cdabb2a4d457350aac9a7b944d83728"
+    },
+    {
+      "path": "assets/runners593/sky.webp",
+      "size": 106526,
+      "sha256": "ffae56bc1d048727f8d27e0a878db68bcdf5d23ef6046aab69bb16789dc9b989"
+    },
+    {
+      "path": "docs/build593/ART_PROMPTS.json",
+      "size": 7462,
+      "sha256": "75dcff92da01a8792ea353372952081ea04890e8c8361034deb2d09741c3a4dc"
+    },
+    {
+      "path": "docs/build593/VALIDATION.txt",
+      "size": 2568,
+      "sha256": "05305f5333b333ab03608146d9a2403d554ddccc08d9f4d977e1fa8669dc15ec"
+    },
+    {
+      "path": "index.html",
+      "size": 277437,
+      "sha256": "4ab62bb65e1e41fe60962152bd338051aff172a1fbc9009a84fefaba14e5a8d8"
+    },
+    {
+      "path": "src/Styles/build593-runners-world.css",
+      "size": 13149,
+      "sha256": "f09a965b92a23769cc9db7c4c507421acc38c0f8a0a831a373e8069f2ed5f6ce"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "6607ae921f45da1b96d3d2fa21e825ffff32dc902d9ab8482c6c6c8a0efde743"
+    },
+    {
+      "path": "src/runners587/Board587.js",
+      "size": 6847,
+      "sha256": "ff8d319214cec2659be33db20fdebf15b5c712d0fbc7a4d6375edc92da51a6c6"
+    },
+    {
+      "path": "src/runners587/Controls587.js",
+      "size": 4965,
+      "sha256": "8994efed0f15303dd4f50e7f544cc7567b9e768acecc92b376ede4b2e94adf84"
+    },
+    {
+      "path": "src/runners587/Feel588.js",
+      "size": 1538,
+      "sha256": "93a0d3147f38238cf55740213db7488bf7a801e27a87ae2bc2b8a7c51043d89c"
+    },
+    {
+      "path": "src/runners587/Icons593.js",
+      "size": 593,
+      "sha256": "8be9dace107ee5ba3b570939db6f6723c39c6df0f14a4626ce120cc057ad32f7"
+    },
+    {
+      "path": "src/runners587/Presentation589.js",
+      "size": 3586,
+      "sha256": "040550f64a4431ca8693405512f1ec4d3beb74103811c79e202576ebeb99140a"
+    },
+    {
+      "path": "src/runners587/View587.js",
+      "size": 17543,
+      "sha256": "98650be6baf83026f7d2626d256059ee526ccb2eb8edbc3faf638e6910f803e9"
+    },
+    {
+      "path": "src/runners587/World593.js",
+      "size": 6296,
+      "sha256": "95ffddb0eaf2063355626265c88e089eda90c17cad292f2ec7770ecb4dbf0d1a"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "cbeb2a347131c6bcda6f316804b705961e234b4cd368bbcbad973beb7be35fa6"
+    },
+    {
+      "path": "world-raid-offline593-assets.json",
+      "size": 55402,
+      "sha256": "063c1153075753a5ca2c1703ad3f2ddb82332028609faa51c609f742b5d81128"
+    },
+    {
+      "path": "world-raid-offline593-sw.js",
+      "size": 2502,
+      "sha256": "0f4fd26e2139a0d8087814e7674fa00388c034d06cb806c122def4251a7a6235"
+    }
+  ]
+}
