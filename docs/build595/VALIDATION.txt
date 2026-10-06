@@ -1,0 +1,189 @@
+Build595 validation — 2026-10-06
+Automated rules / protocol / movement: 40 passed, 0 failed.
+Real WebSocket clients: 4. Rules revision 6, no AI fill/takeover, disconnect/reconnect, fire barrier sync, wind jump, replay.
+New pit geometry: 8 courses x 6 moving-platform phases. Normal jumping, no wind. Run-up and braking vary with phase.
+No claim of human full-course completion or native-device verification.
+
+browser-results.json
+[
+  {
+    "viewport": "320x568",
+    "threeFinger": true,
+    "slide": true,
+    "cancel": true,
+    "selectionBlocked": true,
+    "keyboardRelease": true,
+    "errors": []
+  },
+  {
+    "viewport": "390x844",
+    "threeFinger": true,
+    "slide": true,
+    "cancel": true,
+    "selectionBlocked": true,
+    "keyboardRelease": true,
+    "errors": []
+  },
+  {
+    "viewport": "844x390",
+    "threeFinger": true,
+    "slide": true,
+    "cancel": true,
+    "selectionBlocked": true,
+    "keyboardRelease": true,
+    "errors": []
+  },
+  {
+    "renderTiming": {
+      "median": 16.699999999999818,
+      "p95": 16.700000000000728,
+      "over34": 0
+    }
+  }
+]
+
+humans-browser-results.json
+[
+  {
+    "people": 1,
+    "viewport": "320x568",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 1,
+    "errors": []
+  },
+  {
+    "people": 2,
+    "viewport": "390x844",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 2,
+    "errors": []
+  },
+  {
+    "people": 3,
+    "viewport": "844x390",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 3,
+    "errors": []
+  },
+  {
+    "people": 4,
+    "viewport": "390x844",
+    "emptySeatsHaveNoAI": true,
+    "goalDenominator": 4,
+    "errors": []
+  }
+]
+
+gameplay-results.json
+{
+  "realControlWindJump": true,
+  "upperRouteLanding": true,
+  "scenes": [
+    {
+      "id": "forest",
+      "sections": 6,
+      "lastSection": "森の最終関門"
+    },
+    {
+      "id": "sky",
+      "sections": 6,
+      "lastSection": "天空の連続渡り"
+    },
+    {
+      "id": "relay",
+      "sections": 6,
+      "lastSection": "守護者の参道"
+    },
+    {
+      "id": "clock",
+      "sections": 6,
+      "lastSection": "最上階の防衛線"
+    },
+    {
+      "id": "coast",
+      "sections": 6,
+      "lastSection": "荒波の灯台道"
+    },
+    {
+      "id": "frost",
+      "sections": 6,
+      "lastSection": "吹雪の連続回廊"
+    },
+    {
+      "id": "crystal",
+      "sections": 6,
+      "lastSection": "大聖堂の最後の試練"
+    },
+    {
+      "id": "ember",
+      "sections": 6,
+      "lastSection": "玉座への最終関門"
+    }
+  ],
+  "throttledTiming": {
+    "frames": 344,
+    "median": 16.69999999999709,
+    "p95": 16.80000000000291,
+    "over34": 0
+  },
+  "errors": []
+}
+
+stress-results.json
+{
+  "frames": 331,
+  "median": 16.699999999999818,
+  "p95": 33.399999999999636,
+  "over34": 9,
+  "humans": 4,
+  "ai": false,
+  "projectiles": 24,
+  "terrainCache": 23,
+  "errors": []
+}
+
+preview-results.json
+[
+  {
+    "course": "forest",
+    "realInputJump": true,
+    "missing": [],
+    "errors": []
+  },
+  {
+    "course": "ember",
+    "realInputJump": true,
+    "missing": [],
+    "errors": []
+  }
+]
+
+jump-motion-results.json
+{
+  "firstResponseMs": 0,
+  "max10msStep": 11.074999999999989,
+  "finalError": 5.722882860936807e-07
+}
+
+motion-results.json
+{
+  "scenario": "25ms physics / 50ms snapshots / 20–120ms delivery jitter",
+  "before": {
+    "rms": 1.7572277775989977,
+    "backwardClock": 3,
+    "negativeSteps": 3,
+    "maxStep": 9.791666666666941,
+    "minStep": -1.9583333333334565
+  },
+  "after": {
+    "rms": 2.0499053919945822e-13,
+    "backwardClock": 0,
+    "negativeSteps": 0,
+    "maxStep": 3.91666666666697,
+    "minStep": 3.916666666666515
+  }
+}
+
+Environment: Linux Chromium headless, mobile viewports 320x568 / 390x844 / 844x390; screenshot DPR 2; coarse-pointer canvas DPR 1.
+CPU throttling is browser emulation, not an iPhone measurement. Stress workload uses synthetic authoritative snapshots for four humans and the 24-projectile cap, with a scrolling camera.
+No physical iPhone/Safari testing. Haptics tested using an 8ms vibration API spy; devices lacking navigator.vibrate show no haptics control.

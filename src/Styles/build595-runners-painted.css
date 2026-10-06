@@ -1,0 +1,19 @@
+/* Painted game assets stay decoded; the controller remains one stable touch surface. */
+.ru-vivid593{background:#122c35}
+.ru-vivid593 .arc-head563{background:linear-gradient(#213e46,#112a34)}
+.ru-vivid593 .ru-players587{background:#112b35}
+.ru-vivid593 .ru-players587>button{background:linear-gradient(100deg,#234954,#142f3b);border-top-color:#e6c98555}
+.ru-vivid593 .ru-brief587>div:first-child,.ru-vivid593 .ru-timer587{background:linear-gradient(135deg,#102c36f5,#1b3c47e8);border-color:#d0b5779c;box-shadow:0 3px 0 #071b2570,inset 0 1px 0 #f6e3a726}
+.ru-vivid593 .ru-field587:after{content:"";position:absolute;bottom:0;left:0;width:var(--journey595,0%);height:3px;background:#ffdf98;box-shadow:0 0 5px #d39a51;z-index:2;pointer-events:none}
+.ru-vivid593 .ru-pawn587>b{border-width:1px;box-shadow:0 2px 5px #07152190}
+.ru-vivid593 .ru-footer587{background:linear-gradient(#203e48,#102833);border-top:1px solid #c4a36c;box-shadow:0 -3px 0 #102b3490}
+.ru-vivid593 .ru-directions587{border-color:#9bada7;box-shadow:0 5px 0 #061c29,inset 0 1px 0 #eee1ab55}
+.ru-vivid593 .ru-directions587 [data-ru-control]{background:linear-gradient(135deg,#4a6f7d,#244451 80%)}
+.ru-vivid593[data-weapon=fire] .ru-attack591>b,.ru-vivid593[data-weapon=wind] .ru-attack591>b{width:30px;height:30px;background:center/contain no-repeat;margin:-4px auto 0}
+.ru-vivid593[data-weapon=fire] .ru-attack591>b{background-image:url('../../assets/runners595/fire.webp')}
+.ru-vivid593[data-weapon=wind] .ru-attack591>b{background-image:url('../../assets/runners595/wind.webp')}
+.ru-vivid593[data-weapon=fire] .ru-attack591>b svg,.ru-vivid593[data-weapon=wind] .ru-attack591>b svg{visibility:hidden}
+.ru-vivid593[data-weapon=wind].has-power591 .ru-attack591{background:radial-gradient(circle at 30% 20%,#73dac5,#287a86 70%,#234b69);border-color:#b6fff1;box-shadow:0 4px 0 #163c50}
+.ru-vivid593 [data-ru-control].is-held,.ru-vivid593 .ru-directions587 [data-ru-control].is-held{background:#c8e9cf;color:#153841;box-shadow:inset 0 4px 0 #639586}
+.ru-lobby593 .ru-course589{box-shadow:0 7px 18px #05192370,inset 0 1px 0 #fff4b92a}
+.ru-lobby593 .ru-course589[aria-pressed=true]{border-color:#ffe2a0;box-shadow:0 0 0 2px #d8b36a55,0 7px 18px #05192370}

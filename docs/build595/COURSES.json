@@ -1,0 +1,162 @@
+[
+  {
+    "id": "forest",
+    "name": "こもれびアドベンチャー",
+    "length": 8520,
+    "goal": 8420,
+    "duration": 240000,
+    "sections": [
+      "こもれびの森",
+      "浮遊遺跡",
+      "魔王城への道",
+      "深緑の見張り道",
+      "木もれ日の空中路",
+      "森の最終関門"
+    ],
+    "spikeTraps": 7,
+    "flyingGuards": 7,
+    "groundGuards": 21,
+    "checkpoints": 7,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "sky",
+    "name": "風車の空中庭園",
+    "length": 6900,
+    "goal": 6800,
+    "duration": 210000,
+    "sections": [
+      "風車の空中庭園",
+      "逆風の回廊",
+      "天空の滑走路",
+      "風車の防衛線",
+      "風乗りの大空洞",
+      "天空の連続渡り"
+    ],
+    "spikeTraps": 2,
+    "flyingGuards": 7,
+    "groundGuards": 16,
+    "checkpoints": 6,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "relay",
+    "name": "つながるスイッチ遺跡",
+    "length": 6520,
+    "goal": 6420,
+    "duration": 210000,
+    "sections": [
+      "つながるスイッチ遺跡",
+      "二つ目の架け橋",
+      "約束の門",
+      "遺跡の守備隊",
+      "もう一つの架け橋",
+      "守護者の参道"
+    ],
+    "spikeTraps": 3,
+    "flyingGuards": 7,
+    "groundGuards": 13,
+    "checkpoints": 6,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "clock",
+    "name": "カチコチ時計塔",
+    "length": 6620,
+    "goal": 6520,
+    "duration": 210000,
+    "sections": [
+      "カチコチ時計塔",
+      "歯車の壁",
+      "秒針の回廊",
+      "歯車の警備区画",
+      "崩落する振り子橋",
+      "最上階の防衛線"
+    ],
+    "spikeTraps": 1,
+    "flyingGuards": 7,
+    "groundGuards": 13,
+    "checkpoints": 5,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "coast",
+    "name": "潮騒の浮島",
+    "length": 6700,
+    "goal": 6600,
+    "duration": 210000,
+    "sections": [
+      "貝がらの浜辺",
+      "潮風の浮島",
+      "夕凪の灯台",
+      "海賊の見張り島",
+      "潮風の高架橋",
+      "荒波の灯台道"
+    ],
+    "spikeTraps": 4,
+    "flyingGuards": 7,
+    "groundGuards": 17,
+    "checkpoints": 6,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "frost",
+    "name": "氷晶の回廊",
+    "length": 6800,
+    "goal": 6700,
+    "duration": 210000,
+    "sections": [
+      "雪明かりの入口",
+      "氷柱の回廊",
+      "オーロラの門",
+      "氷壁の守備隊",
+      "氷晶の上り道",
+      "吹雪の連続回廊"
+    ],
+    "spikeTraps": 6,
+    "flyingGuards": 7,
+    "groundGuards": 16,
+    "checkpoints": 6,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "crystal",
+    "name": "蛍あかりの水晶洞",
+    "length": 6940,
+    "goal": 6840,
+    "duration": 210000,
+    "sections": [
+      "蛍石の洞窟",
+      "星くずの渡り廊下",
+      "水晶の大聖堂",
+      "水晶の見張り道",
+      "星明かりの上段路",
+      "大聖堂の最後の試練"
+    ],
+    "spikeTraps": 5,
+    "flyingGuards": 7,
+    "groundGuards": 16,
+    "checkpoints": 6,
+    "breakableBarriers": 2
+  },
+  {
+    "id": "ember",
+    "name": "灰燼の魔王城",
+    "length": 7080,
+    "goal": 6980,
+    "duration": 240000,
+    "sections": [
+      "赤銅の城門",
+      "火花の回廊",
+      "灰燼の玉座",
+      "魔王軍の防衛線",
+      "溶岩の連続足場",
+      "玉座への最終関門"
+    ],
+    "spikeTraps": 4,
+    "flyingGuards": 7,
+    "groundGuards": 16,
+    "checkpoints": 6,
+    "breakableBarriers": 2
+  }
+]

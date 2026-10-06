@@ -1,6 +1,6 @@
 import {feedback592,thumb592} from './Feedback592.js';
 import {predict591} from './Motion591.js';
-import {clock563 as clock} from '../party/Arcade563.js';
+import {clock595 as clock} from './Timeline595.js';
 import {unlock543} from '../cart/Audio543.js';
 import {keyCode588} from './Feel588.js';
 const game=c=>c.state?.runners,ui=c=>c.runnersUI587,me=c=>game(c)?.players.find(p=>p.playerId===c.transport.selfId);

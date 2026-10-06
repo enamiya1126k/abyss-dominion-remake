@@ -1,3 +1,4 @@
+import {spikes595} from './Art595.js';
 import {hazard589} from './Courses589.js';
 const line=(c,x1,y1,x2,y2)=>{c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();};
 function label(c,text,x,y,color='#fff0c2') {c.font='bold 10px "Noto Sans JP",sans-serif';c.textAlign='center';const width=c.measureText(text).width+16;c.fillStyle='#102f35e8';c.beginPath();c.roundRect(x-width/2,y-12,width,19,5);c.fill();c.fillStyle=color;c.fillText(text,x,y+1);}
@@ -46,6 +47,7 @@ export function scenery589(c,g,course,left,right,at){
   if(age>=0){c.fillStyle='#ebba71';c.fillRect(p.x,p.y-5,p.w*Math.max(0,1-age/900),3);}else label(c,'止まると崩れる',p.x+p.w/2,p.y+65,'#ffcf99');
  }
  for(const h of course.hazards.filter(visible)){
+  if(h.kind==='spikes'){spikes595(c,h);continue;}
   const state=hazard589(h,g.elapsed);c.fillStyle='#302f40';c.fillRect(h.x,h.y-6,h.w,6);c.strokeStyle=state.active?'#ffe1c2':state.warning?'#ffc06d':'#779697';c.lineWidth=2;for(let x=h.x+5;x<h.x+h.w-4;x+=8)line(c,x,h.y-5,x+2,h.y-1);
   if(state.active){const fill=c.createLinearGradient(h.x,h.y-h.h,h.x,h.y);fill.addColorStop(0,'#d4f8ff00');fill.addColorStop(.3,'#dcfaffb0');fill.addColorStop(1,'#b5e8ef');c.fillStyle=fill;for(let i=0;i<5;i++){const x=h.x+6+i*(h.w-12)/4,height=h.h-(i%2)*8;c.beginPath();c.ellipse(x,h.y-height/2,7+Math.sin(at/100+i)*2,height/2,0,0,7);c.fill();}label(c,'蒸気に注意',h.x+h.w/2,h.y-h.h-12,'#e5faff');}
   else if(state.warning){c.fillStyle='#ffd98d';c.font='bold 20px sans-serif';c.textAlign='center';c.fillText('!',h.x+h.w/2,h.y-13);}

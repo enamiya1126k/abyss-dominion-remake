@@ -25,16 +25,19 @@ const geometry591=new WeakMap();
 const frames591=new WeakMap();
 export function surfaces587(elapsed=0,course=COURSE587,world={}){
  let fixed=geometry591.get(course);
- if(!fixed){fixed=course.grounds.map(([x,end],i)=>({id:'ground'+i,x,y:300,w:end-x,h:160,ground:true}));geometry591.set(course,fixed);}
+ if(!fixed){fixed={ground:course.grounds.map(([x,end],i)=>({id:'ground'+i,x,y:300,w:end-x,h:160,ground:true})),
+  still:course.platforms.filter(p=>!p.move&&!p.crumble).map(p=>({...p,oneWay:true})),
+  moving:course.platforms.filter(p=>p.move||p.crumble).map(p=>({...p,oneWay:true})),
+  walls:(course.walls??[]).map(p=>({...p,wall:true})),bridges:(course.bridges??[]).map(p=>({...p,bridge:true}))};geometry591.set(course,fixed);}
  let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
  const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',');
  if(cache.has(key))return cache.get(key);
 
  const fallen=p=>{const t=world?.crumbles?.[p.id];return t!=null&&elapsed>=t+900&&elapsed<t+4000;};
- const result=[...fixed,
-  ...course.platforms.filter(p=>!fallen(p)).map(p=>({...p,oneWay:true,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{})})),
-  ...(course.walls??[]).filter(p=>!world.broken?.includes(p.id)).map(p=>({...p,wall:true})),
-  ...(course.bridges??[]).filter(p=>world?.switches?.includes(p.id)).map(p=>({...p,bridge:true}))];
+ const result=[...fixed.ground,...fixed.still,
+  ...fixed.moving.filter(p=>!fallen(p)).map(p=>({...p,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{})})),
+  ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
+  ...fixed.bridges.filter(p=>world?.switches?.includes(p.id))];
  if(cache.size>24)cache.clear();cache.set(key,result);return result;
 }
-export function enemyAt587(spec,elapsed){const width=spec.max-spec.min,offset=spec.x-spec.min,travel=(offset+elapsed/1000*spec.speed)%(width*2);return{...spec,x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};}
+export function enemyAt587(spec,elapsed){const width=Math.max(1,spec.max-spec.min),offset=spec.x-spec.min,travel=(offset+elapsed/1000*spec.speed)%(width*2);return{...spec,y:spec.y+(spec.flying?Math.sin(elapsed/(spec.period??1800)*Math.PI*2)*(spec.bob??12):0),x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};}

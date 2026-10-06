@@ -10,15 +10,12 @@ export function remember591(c){
 function extrapolate(c,p,g,at){
  const q={...p},u=c.runnersUI587,self=p.playerId===c.transport.selfId&&!p.auto;
  if(p.waiting||!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
- const ms=Math.min(150,Math.max(0,at-g.serverAt)),course=course589(g);
- if(self){
-  const pending=(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq));
-  for(const i of pending)control587(q,i.target,g.serverAt);
-  control587(q,u.intent??{axis:0,jump:false,attack:false},g.serverAt);
- }
+ const ms=Math.min(200,Math.max(0,at-g.serverAt)),course=course589(g);
+ const pending=self?(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq)):[];let input=0;
  const defeated=new Set();
  for(let dt=0;dt<ms;){
-  const step=Math.min(RUN587.step,ms-dt);dt+=step;
+  const step=RUN587.step;const prior={x:q.x,y:q.y};dt+=step;
+  while(input<pending.length&&pending[input].at<=g.serverAt+dt){const i=pending[input++];control587(q,i.target,Math.max(g.serverAt,i.at));}
   const {before}=stepRunner587(q,g.serverAt+dt,g.elapsed+dt,step/1000,g);
   for(const e of g.enemies){
    if(e.defeated||defeated.has(e.id))continue;
@@ -27,6 +24,7 @@ function extrapolate(c,p,g,at){
   }
   const spring=course.springs.find(s=>q.grounded&&Math.abs(s.x-q.x)<21&&Math.abs(s.y-q.y)<5);
   if(spring){q.vy=-(spring.power??RUN587.spring);q.grounded=false;q.lastGroundAt=-1e9;q.springFlight=true;}
+  if(dt>ms){const f=(ms-(dt-step))/step;q.x=prior.x+(q.x-prior.x)*f;q.y=prior.y+(q.y-prior.y)*f;}
  }
  return q;
 }
