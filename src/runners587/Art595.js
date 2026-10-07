@@ -1,3 +1,4 @@
+import {rune597} from './Elements597.js';
 import {platform593,pickup593,enemy593,barrier594} from './World593.js';
 const assets=new Map();
 export const artURL595=id=>new URL('../../assets/runners'+(['ice','steam'].includes(id)?596:595)+'/'+id+'.webp',import.meta.url).href;
@@ -58,7 +59,7 @@ export function enemy595(c,p,at){
  c.save();c.translate(p.x,p.y);c.scale(p.dir,p.flying?.94+Math.sin(at/100)*.06:1);
  c.drawImage(a.image,-w/2,-h,w,h);c.restore();
 }
-export function pickup595(c,item,at){
+export function pickup595(c,item,at){if(!['fire','wind'].includes(item.kind)){rune597(c,item.kind,item.x,item.y+Math.sin(at/320+item.x)*3);return;}
  const a=load(item.kind);if(!a.ready)return pickup593(c,item,at);
  const bob=Math.sin(at/320+item.x)*3;c.drawImage(a.image,item.x-19,item.y-19+bob,38,38);
 }
@@ -107,5 +108,5 @@ export function barrier595(c,wall,hits=0){
  const count=Math.ceil(wall.h/wall.w),h=wall.h/count;
  for(let i=0;i<count;i++)c.drawImage(a.image,wall.x,wall.y+i*h,wall.w,h);
  if(hits){c.strokeStyle='#301c27';c.lineWidth=2;c.beginPath();c.moveTo(wall.x+23,wall.y);c.lineTo(wall.x+13,wall.y+wall.h*.3);c.lineTo(wall.x+28,wall.y+wall.h*.6);c.lineTo(wall.x+15,wall.y+wall.h);c.stroke();}
- c.font='bold 10px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillStyle='#fff2c1';c.fillText(hits?'あと１発':'火でこわせる',wall.x+wall.w/2,wall.y-12);
+
 }

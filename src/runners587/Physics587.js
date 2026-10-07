@@ -3,7 +3,7 @@ import {course589} from './Courses589.js';
 export const RUN587=Object.freeze({step:25,countdown:3000,duration:75000,grace:16000,lives:3,radius:11,height:28,speed:235,boostSpeed:280,accel:1900,brake:2600,airAccel:1800,gravity:1080,fallGravity:1350,jump:470,shortJump:275,spring:610,coyote:125,buffer:150,inputTTL:350,respawn:700,invincible:1200,wallJump:465,wallPush:260,wallSlide:92,buddyJump:550});
 export const clamp587=(n,a,b)=>Math.max(a,Math.min(b,n));
 const approach=(v,target,d)=>v<target?Math.min(target,v+d):Math.max(target,v-d);
-export function control587(p,target,at){const held=!!target.jump;if(held&&!p.jumpHeld)p.jumpBufferUntil=at+RUN587.buffer;p.jumpHeld=held;p.attackHeld=!!target.attack;p.axis=target.axis;p.controlAt=at;}
+export function control587(p,target,at){const held=!!target.jump;if(held&&!p.jumpHeld)p.jumpBufferUntil=at+RUN587.buffer;p.jumpHeld=held;p.attackHeld=!!target.attack;if(typeof target.pause==='boolean')p.paused=target.pause;p.axis=target.axis;p.controlAt=at;}
 export function enemyContact588(p,e,before){
  const top=e.y-24,dx=Math.abs(p.x-e.x);
  // Swept feet crossing the top wins over side damage, even at high fall speed.
@@ -24,7 +24,7 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
   else if(p.wallSide&&at-(p.wallAt??-1e9)<=100&&at>=(p.wallLockUntil??0)){
    p.vy=-C.wallJump;p.wallKickVx=-p.wallSide*C.wallPush;p.vx=p.wallKickVx;p.facing=-p.wallSide;p.wallLockUntil=at+140;p.wallSide=0;p.wallAt=-1e9;p.springFlight=true;wallJumped=true;
   }
-  else if(!p.grounded&&p.weapon==='wind'&&p.ammo>0&&!p.airJumpUsed){p.vy=-C.jump;p.ammo--;p.airJumpUsed=true;p.springFlight=true;windJumped=true;}
+  else if(!p.grounded&&p.weapon==='wind'&&!p.airJumpUsed){p.vy=-C.jump;p.airJumpUsed=true;p.springFlight=true;windJumped=true;}
   if(jumped||wallJumped||windJumped){p.grounded=false;p.platformId=null;p.lastGroundAt=-1e9;p.jumpBufferUntil=0;}
  }
  if(!p.jumpHeld&&!p.springFlight&&p.vy<-C.shortJump)p.vy=-C.shortJump;

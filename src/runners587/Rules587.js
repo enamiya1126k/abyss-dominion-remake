@@ -6,18 +6,27 @@ import {course589,readyGate589,inHazard589} from './Courses589.js';
 import {mechanics589} from './Mechanics589.js';
 import {RUN587 as C,control587,stepRunner587,enemyContact588} from './Physics587.js';
 import {rank588} from './Feel588.js';
-export const makeRunners587=args=>({...make580('runners',{...args,members:args.members.filter(m=>!m.ai)}),rules587:6,courseId:'forest',switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},elapsed:0,stage:'ready',enemies:[],finishAt:null});
+export const makeRunners587=args=>({...make580('runners',{...args,members:args.members.filter(m=>!m.ai)}),rules587:7,courseId:'forest',switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},elapsed:0,stage:'ready',enemies:[],finishAt:null});
 export const signature587=g=>!g?null:['lobby','result'].includes(g.phase)?g:{id:g.id,phase:'play',players:g.players.map(p=>[p.playerId,p.speciesId,p.color499])};
 export function startRunners587(g,now,seed=587){if(g.phase!=='lobby')return false;const course=course589(g);g.courseId=course.id;g.players=g.members.filter(m=>!m.departed&&!m.ai).map((m,seat)=>({playerId:m.playerId,name:m.name,seat,ai:false,auto:false,waiting:false,color499:m.color499,speciesId:m.choice?.speciesId??'slime'}));if(!g.players.length)return false;assignColors499(g.players);g.seed=seed>>>0||587;
- for(const p of g.players){delete p.score;Object.assign(p,{x:90+p.seat*24,y:300,vx:0,vy:0,axis:0,facing:1,grounded:true,platformId:'ground0',lastGroundAt:now,controlAt:now,jumpHeld:false,jumpBufferUntil:0,airJumpUsed:false,springFlight:false,lives:C.lives,alive:true,respawnAt:0,invincibleUntil:0,boostUntil:0,gems:[],checkpoint:0,furthest:90,finishTime:null,outAt:null,lastSeq:0,powers:[],weapon:null,ammo:0,attackHeld:false,shotAt:0,shots:0,kills:0,pranks:0,bumpUntil:0,bumpSafeUntil:0,stomps:0,jumps:0,wallJumps:0,buddyBounces:0,buddyUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
- Object.assign(g,{phase:'countdown',stage:'ready',phaseAt:now,lastAt:now,serverAt:now,startAt:now+C.countdown,deadline:now+C.countdown+course.duration,elapsed:0,finishAt:null,switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},enemies:course.enemies.map(e=>({...e,downUntil:0})),results:[],winnerIds:[]});g.revision++;return true;
+ for(const p of g.players){delete p.score;Object.assign(p,{x:90+p.seat*24,y:300,vx:0,vy:0,axis:0,facing:1,grounded:true,platformId:'ground0',lastGroundAt:now,controlAt:now,jumpHeld:false,jumpBufferUntil:0,airJumpUsed:false,springFlight:false,lives:1,deaths:0,falls:0,paused:false,alive:true,respawnAt:0,invincibleUntil:0,boostUntil:0,gems:[],checkpoint:0,furthest:90,finishTime:null,outAt:null,lastSeq:0,powers:[],weapon:null,ammo:0,attackHeld:false,shotAt:0,shots:0,kills:0,pranks:0,bumpUntil:0,bumpSafeUntil:0,stomps:0,jumps:0,wallJumps:0,buddyBounces:0,buddyUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
+ Object.assign(g,{phase:'countdown',stage:'ready',phaseAt:now,lastAt:now,serverAt:now,startAt:now+C.countdown,deadline:now+C.countdown+course.duration,elapsed:0,finishAt:null,switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},enemies:course.enemies.map(e=>({...e,downUntil:0})),results:[],winnerIds:[]});g.revision++;return true;
 }
-export function validRunners587(g,p,m){return g.phase==='play'&&g.stage==='run'&&p?.alive&&!p.waiting&&p.finishTime==null&&!p.respawnAt&&m.action==='control'&&m.target&&[-1,0,1].includes(m.target.axis)&&typeof m.target.jump==='boolean'&&typeof m.target.attack==='boolean';}
+export function validRunners587(g,p,m){return g.phase==='play'&&g.stage==='run'&&p?.alive&&(!p.waiting||typeof m.target?.pause==='boolean')&&p.finishTime==null&&(!p.respawnAt||typeof m.target?.pause==='boolean')&&m.action==='control'&&m.target&&[-1,0,1].includes(m.target.axis)&&typeof m.target.jump==='boolean'&&typeof m.target.attack==='boolean';}
 export function inputRunners587(g,p,m){if(!validRunners587(g,p,m))return false;p.lastSeq=Math.max(p.lastSeq,m.seq??0);control587(p,m.target,g.lastAt);return true;}
-function respawn(g,p){const course=course589(g);p.checkpoint=Math.max(p.checkpoint,g.teamCheckpoint??0);const cp=course.checkpoints[p.checkpoint];Object.assign(p,{x:cp.x,y:cp.y,vx:0,vy:0,axis:0,jumpHeld:false,jumpBufferUntil:0,airJumpUsed:false,controlAt:g.lastAt,grounded:true,platformId:surfaces587(g.elapsed,course,g).find(s=>s.ground&&cp.x>=s.x&&cp.x<s.x+s.w)?.id,alive:true,lives:Math.max(1,p.lives),powers:[],weapon:null,ammo:0,attackHeld:false,bumpUntil:0,bumpSafeUntil:0,respawnAt:0,invincibleUntil:g.lastAt+1600,boostUntil:0,springFlight:false,lastGroundAt:g.lastAt,wallSide:0,wallAt:-1e9,wallLockUntil:0,buddyUntil:0});emit(g,'respawn',{seat:p.seat,x:p.x,y:p.y});}
-export function hurtRunners587(g,p,cause='fall'){if(!p.alive||p.respawnAt||p.finishTime!=null)return false;if(cause!=='fall'&&g.lastAt<p.invincibleUntil)return false;p.lives--;p.vx=0;p.vy=0;p.axis=0;p.jumpHeld=false;p.jumpBufferUntil=0;p.boostUntil=0;if(p.lives<=0){p.alive=false;p.outAt=g.lastAt;p.respawnAt=0;}else p.respawnAt=g.lastAt+C.respawn;emit(g,p.alive?'miss':'out',{seat:p.seat,cause,x:p.x,y:p.y,lives:p.lives});return true;}
+function respawn(g,p){const course=course589(g);p.checkpoint=Math.max(p.checkpoint,g.teamCheckpoint??0);const cp=course.checkpoints[p.checkpoint];Object.assign(p,{x:cp.x,y:cp.y,vx:0,vy:0,axis:0,jumpHeld:false,jumpBufferUntil:0,airJumpUsed:false,controlAt:g.lastAt,grounded:true,platformId:surfaces587(g.elapsed,course,g).find(s=>s.ground&&cp.x>=s.x&&cp.x<s.x+s.w)?.id,alive:true,lives:Math.max(1,p.lives),attackHeld:false,bumpUntil:0,bumpSafeUntil:0,respawnAt:0,invincibleUntil:g.lastAt+1600,boostUntil:0,springFlight:false,lastGroundAt:g.lastAt,wallSide:0,wallAt:-1e9,wallLockUntil:0,buddyUntil:0});emit(g,'respawn',{seat:p.seat,x:p.x,y:p.y});}
+export function hurtRunners587(g,p,cause='fall'){
+ if(!p.alive||p.respawnAt||p.finishTime!=null||p.waiting)return false;
+ if(cause!=='fall'&&g.lastAt<p.invincibleUntil)return false;
+ if(cause!=='fall'&&p.weapon==='stone'&&g.lastAt>=(p.shieldAt??0)){p.shieldAt=g.lastAt+3500;p.invincibleUntil=g.lastAt+900;emit(g,'shield',{seat:p.seat,x:p.x,y:p.y});return false;}
+ p.deaths=(p.deaths??0)+1;p.lives=1;p.alive=true;
+ if(cause==='fall'){p.falls=(p.falls??0)+1;p.respawnAt=g.lastAt+C.respawn;p.vx=p.vy=p.axis=0;p.jumpHeld=false;p.jumpBufferUntil=0;}
+ else p.invincibleUntil=g.lastAt+1600;
+ emit(g,'miss',{seat:p.seat,cause,x:p.x,y:p.y,deaths:p.deaths});return true;
+}
+
 export function finishRunners587(g){const course=course589(g);g.teamClear=course.mode==='coop'&&readyGate589(g)&&g.players.every(p=>p.finishTime!=null);
- g.results=g.players.map(p=>({seat:p.seat,playerId:p.playerId,rank:course.mode==='coop'?(g.teamClear?1:0):rank588(g,p),finishTime:p.finishTime,distance:Math.min(100,Math.floor(p.furthest/course.goal*100)),lives:p.lives})).sort((a,b)=>a.rank-b.rank||a.seat-b.seat);
+ g.results=g.players.map(p=>({seat:p.seat,playerId:p.playerId,rank:rank588(g,p),finishTime:p.finishTime,distance:Math.min(100,Math.floor(p.furthest/course.goal*100)),lives:p.lives,deaths:p.deaths??0,falls:p.falls??0})).sort((a,b)=>a.rank-b.rank||a.seat-b.seat);
  g.winnerIds=g.results.filter(r=>r.rank===1).map(r=>r.playerId);g.stage='finish';g.finishAt=g.lastAt+1600;emit(g,'last',{winnerIds:g.winnerIds});
 }
 export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
@@ -27,10 +36,17 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
  let changed=false;while(g.lastAt+C.step<=now&&g.phase!=='result'){g.lastAt+=C.step;changed=true;
   if(g.phase==='countdown'){inputs.clear();if(g.lastAt<g.startAt)continue;g.phase='play';g.stage='run';g.phaseAt=g.lastAt;emit(g,'start');}
   if(g.stage==='finish'){inputs.clear();if(g.lastAt>=g.finishAt){g.phase='result';g.phaseAt=g.lastAt;emit(g,'finish');}continue;}
-  g.elapsed=g.lastAt-g.startAt;const previous=new Map();
-  for(const p of g.players){const wasWaiting=p.waiting;p.auto=false;p.waiting=absent.has(p.playerId);const list=inputs.get(p.playerId)??[];inputs.delete(p.playerId);if(p.finishTime!=null)continue;
-   if(p.waiting){p.axis=0;p.vx=0;p.vy=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;continue;}
-   if(wasWaiting&&p.alive)respawn(g,p);
+  // Pause commands remain acceptable while suspended so a foreground return can resume.
+  for(const p of g.players)for(const m of inputs.get(p.playerId)??[])if((!Number.isFinite(m.at)||m.at<=g.lastAt)&&typeof m.target?.pause==='boolean')p.paused=m.target.pause;
+  if(g.players.some(p=>p.finishTime==null)&&g.players.every(p=>p.finishTime!=null||p.paused||absent.has(p.playerId))){
+   g.startAt+=C.step;g.deadline+=C.step;
+   for(const p of g.players){p.waiting=p.finishTime==null;p.axis=0;p.jumpHeld=false;p.attackHeld=false;if(p.respawnAt)p.respawnAt+=C.step;if(p.invincibleUntil)p.invincibleUntil+=C.step;}
+   inputs.clear();continue;
+  }
+  g.elapsed=g.lastAt-g.startAt;for(const e of g.enemies)if(e.frozenUntil&&g.elapsed>=e.frozenUntil){e.motionOffset=(e.motionOffset??0)+e.frozenUntil-e.frozenAt;e.frozenUntil=0;}const previous=new Map();
+  for(const p of g.players){const wasWaiting=p.waiting;p.auto=false;p.waiting=absent.has(p.playerId)||!!p.paused;const list=inputs.get(p.playerId)??[];inputs.delete(p.playerId);if(p.finishTime!=null)continue;
+   if(p.waiting){if(!wasWaiting){const s=surfaces587(g.elapsed,course,g).find(s=>s.id===p.platformId);p.waitSurface=s?{x:s.x,y:s.y}:null;}p.axis=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;if(p.respawnAt)p.respawnAt+=C.step;if(p.invincibleUntil)p.invincibleUntil+=C.step;continue;}
+   if(wasWaiting&&p.alive){const s=surfaces587(g.elapsed,course,g).find(s=>s.id===p.platformId);if(s&&p.waitSurface){p.x+=s.x-p.waitSurface.x;p.y=s.y;}p.waitSurface=null;p.invincibleUntil=g.lastAt+1600;p.controlAt=g.lastAt;}
    if(p.respawnAt){if(g.lastAt>=p.respawnAt)respawn(g,p);else continue;}
    if(!p.alive)continue;
    {const future=[];for(const m of list){if(Number.isFinite(m.at)&&m.at>g.lastAt){future.push(m);continue;}if(m.round==null||m.round===g.round)inputRunners587(g,p,m);}if(future.length)inputs.set(p.playerId,future);}
@@ -43,7 +59,7 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
    }
    if(!p.alive||p.respawnAt)continue;
    const spring=course.springs.find(s=>p.grounded&&Math.abs(s.x-p.x)<21&&Math.abs(s.y-p.y)<5);if(spring){p.vy=-(spring.power??C.spring);p.grounded=false;p.lastGroundAt=-1e9;p.springFlight=true;emit(g,'spring',{seat:p.seat,x:spring.x,y:spring.y});}
-   for(const gem of course.gems)if(!p.gems.includes(gem.id)&&Math.hypot(p.x-gem.x,p.y-C.height/2-gem.y)<25){p.gems.push(gem.id);p.boostUntil=g.lastAt+4000;p.lives=Math.min(3,p.lives+1);if(p.weapon)p.ammo=Math.min(p.weapon==='fire'?28:20,p.ammo+4);emit(g,'boost',{seat:p.seat,x:gem.x,y:gem.y});}
+   for(const gem of course.gems)if(!p.gems.includes(gem.id)&&Math.hypot(p.x-gem.x,p.y-C.height/2-gem.y)<25){p.gems.push(gem.id);p.boostUntil=g.lastAt+4000;emit(g,'boost',{seat:p.seat,x:gem.x,y:gem.y});}
    for(let i=p.checkpoint+1;i<course.checkpoints.length;i++){const cp=course.checkpoints[i];if(p.x>=cp.x&&p.y<=cp.y+15){p.checkpoint=i;const fresh=i>(g.teamCheckpoint??0);g.teamCheckpoint=Math.max(g.teamCheckpoint,i);emit(g,'checkpoint',{seat:p.seat,checkpoint:i});if(fresh)for(const friend of g.players){if(friend.alive||friend.finishTime!=null)continue;friend.alive=true;friend.lives=1;friend.checkpoint=i;friend.respawnAt=g.lastAt+C.respawn;friend.outAt=null;g.rescues++;emit(g,'rescue',{seat:friend.seat,helper:p.seat,x:cp.x,y:cp.y});}}}
    p.furthest=Math.max(p.furthest,p.x);
   }
@@ -57,4 +73,4 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
  }
  g.serverAt=g.lastAt;g.updatedAt=now;if(changed)g.revision++;return changed;
 }
-export function publicRunners587(g,selfId){return{...publicBase580(g),rules587:g.rules587,courseId:g.courseId??'forest',switches:[...(g.switches??[])],switchBy:{...(g.switchBy??{})},broken:[...(g.broken??[])],barrierHits:{...(g.barrierHits??{})},crumbles:{...(g.crumbles??{})},rescues:g.rescues,teamClear:g.teamClear,teamCheckpoint:g.teamCheckpoint,projectiles:g.projectiles.map(b=>({...b})),stage:g.stage,elapsed:g.elapsed,finishAt:g.finishAt,enemies:g.enemies.map(e=>({...e})),players:g.players.map(({inputSeq563,botWait,...p})=>({...p,gems:[...p.gems],powers:[...p.powers],processedSeq:p.lastSeq,lastSeq:p.playerId===selfId?Math.max(p.lastSeq,inputSeq563??0):0}))};}
+export function publicRunners587(g,selfId){return{...publicBase580(g),rules587:g.rules587,courseId:g.courseId??'forest',switches:[...(g.switches??[])],switchBy:{...(g.switchBy??{})},broken:[...(g.broken??[])],barrierHits:{...(g.barrierHits??{})},ventsOff:{...(g.ventsOff??{})},crumbles:{...(g.crumbles??{})},rescues:g.rescues,teamClear:g.teamClear,teamCheckpoint:g.teamCheckpoint,projectiles:g.projectiles.map(b=>({...b})),stage:g.stage,elapsed:g.elapsed,finishAt:g.finishAt,enemies:g.enemies.map(e=>({...e})),players:g.players.map(({inputSeq563,botWait,...p})=>({...p,gems:[...p.gems],powers:[...p.powers],processedSeq:p.lastSeq,lastSeq:p.playerId===selfId?Math.max(p.lastSeq,inputSeq563??0):0}))};}

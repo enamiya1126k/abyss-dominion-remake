@@ -1,0 +1,28 @@
+✔ contact flashes in place, unlimited lives and one miss during immunity (6.19536ms)
+✔ only a fall respawns and retains the selected form (1.809114ms)
+✔ spike sides block harmlessly; landing on the top registers contact (6.099044ms)
+✔ disconnected solo pauses time and resumes exact coordinates instead of checkpoint (6.635335ms)
+✔ explicit background pause can be resumed through validated input (0.794065ms)
+✔ ranking prioritizes finish then fewer misses, then time (2.043538ms)
+✔ each box has independent damage and cannot remove an entire stack (1.694102ms)
+✔ all six forms fire repeatedly without ammunition; ice freezes, water suppresses steam (4.597186ms)
+✔ forest offers six forms, wide steam and a safe crusher refuge (0.354484ms)
+✔ sky offers six forms, wide steam and a safe crusher refuge (0.21004ms)
+✔ relay offers six forms, wide steam and a safe crusher refuge (0.182403ms)
+✔ clock offers six forms, wide steam and a safe crusher refuge (0.512762ms)
+✔ coast offers six forms, wide steam and a safe crusher refuge (0.177517ms)
+✔ frost offers six forms, wide steam and a safe crusher refuge (0.204589ms)
+✔ crystal offers six forms, wide steam and a safe crusher refuge (0.342384ms)
+✔ ember offers six forms, wide steam and a safe crusher refuge (0.139033ms)
+✔ crusher refuge protects through a complete cycle and allows jumping out (14.818585ms)
+✔ crumbling platform shakes before removal and returns after falling (0.714338ms)
+✔ four real WebSocket clients share course, movement, projectiles, friendly hit, reconnection and same-course replay (147.823634ms)
+✔ roster retains protocol 7 and rejects an old ready request (1.393072ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 370.745577

@@ -2,7 +2,7 @@ import {RUN587,control587,stepRunner587,enemyContact588} from './Physics587.js';
 import {course589} from './Courses589.js';
 import {enemyAt587,surfaces587} from './Level587.js';
 function ground596(q,g,at,sourceAt=at){
- if(!q.grounded||!q.platformId||q.respawnAt||!q.alive||q.finishTime!=null)return q;
+ if(q.waiting||q.paused||!q.grounded||!q.platformId||q.respawnAt||!q.alive||q.finishTime!=null)return q;
  const course=course589(g),elapsed=g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),s=surfaces587(elapsed,course,g).find(s=>s.id===q.platformId);
  if(!s||Math.abs(q.y-s.y)>32)return q;
  // Snapshot interpolation can lag by 75ms, but a rider and their platform

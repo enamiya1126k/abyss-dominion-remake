@@ -1,3 +1,4 @@
+import {crusherAt597} from './Gimmicks597.js';
 import {course589,inHazard589} from './Courses589.js';
 import {RUN587 as C} from './Physics587.js';
 
@@ -22,7 +23,8 @@ export function mechanics589(g,previous,emit,hurt){
  }
  for(const p of g.players){
   if(!usable(p))continue;
-  if(inHazard589(p,course,g.elapsed)){hurt(g,p,course.hazards.some(h=>h.kind==='spikes'&&p.x+10>h.x&&p.x-10<h.x+h.w&&p.y>h.y-h.h)?'spikes':'steam');continue;}
+  for(const h of course.crushers??[]){const s=crusherAt597(h,g.elapsed);if(p.x+10<=h.x||p.x-10>=h.x+h.w||p.y-28>=s.bottom||p.y<=s.bottom-180)continue;if(s.bottom<=272&&p.vy<0){p.y=s.bottom+28;p.vy=0;}else if(s.bottom>272)hurt(g,p,'crush');}
+  if(inHazard589(p,course,g.elapsed,g)){hurt(g,p,course.hazards.some(h=>h.kind==='spikes'&&p.x+10>h.x&&p.x-10<h.x+h.w&&p.y>h.y-h.h)?'spikes':'steam');continue;}
   if(p.grounded&&course.platforms.some(s=>s.id===p.platformId&&s.crumble)&&g.crumbles[p.platformId]==null){g.crumbles[p.platformId]=g.elapsed;emit(g,'crumble',{seat:p.seat,x:p.x,y:p.y,platform:p.platformId});}
   for(const s of course.switches){
    if(g.switches.includes(s.id)||!p.grounded||Math.abs(p.x-s.x)>24||Math.abs(p.y-s.y)>4)continue;

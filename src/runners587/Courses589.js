@@ -1,3 +1,4 @@
+import {adventure597} from './Gimmicks597.js';
 import {challenge595} from './Challenge595.js';
 import {expedition594} from './Expedition594.js';
 import {EXTRA591,adventure591} from './Adventures591.js';
@@ -37,11 +38,11 @@ export const COURSES589=Object.freeze([
   platforms:[platform('c0',305,244,85),platform('c1',540,231,90),platform('c2',740,250,80,{crumble:true}),platform('c3',1200,235,100),platform('c4',1490,250,95,{crumble:true}),platform('c5',1930,236,95),platform('c6',2160,249,100,{crumble:true}),platform('c7',2700,230,100)],
   springs:[],gems:[{id:'c-gem0',x:450,y:143},{id:'c-gem1',x:1100,y:123},{id:'c-gem2',x:1830,y:133},{id:'c-gem3',x:2610,y:128}],enemies:[],
   hazards:[{id:'vent0',x:950,y:300,w:56,h:59,period:3100,on:950,offset:800},{id:'vent1',x:1990,y:300,w:62,h:59,period:3300,on:950,offset:1600},{id:'vent2',x:2785,y:300,w:55,h:59,period:2900,on:850,offset:400}]}
-,...EXTRA591].map(adventure591).map(expedition594).map(challenge595));
+,...EXTRA591].map(adventure591).map(expedition594).map(challenge595).map(adventure597));
 export const course589=value=>COURSES589.find(c=>c.id===(typeof value==='string'?value:value?.courseId))??COURSES589[0];
 export const readyGate589=g=>course589(g).switches.every(s=>g.switches?.includes(s.id));
 export const hazard589=(h,elapsed)=>{const phase=((elapsed+h.offset)%h.period+h.period)%h.period;return{active:phase<h.on,warning:phase>h.period-650,phase};};
-export const inHazard589=(p,course,elapsed)=>course.hazards.some(h=>hazard589(h,elapsed).active&&p.x+10>h.x&&p.x-10<h.x+h.w&&p.y>h.y-h.h&&p.y-28<h.y);
+export const inHazard589=(p,course,elapsed,world={})=>course.hazards.some(h=>!(world.ventsOff?.[h.id]>world.lastAt)&&hazard589(h,elapsed).active&&p.x+10>h.x&&p.x-10<h.x+h.w&&(h.kind==='spikes'?p.y>=h.y-h.h-1:p.y>h.y-h.h)&&p.y-28<h.y);
 export function configureRunners589(g,party,member,m){
  if(m.kind!=='course')return false;
  if(party.hostId!==member.playerId)throw Error('コースは部屋主が選べます');

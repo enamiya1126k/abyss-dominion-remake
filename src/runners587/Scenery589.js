@@ -1,7 +1,8 @@
 import {spikes595,steam596} from './Art595.js';
 import {hazard589} from './Courses589.js';
 const line=(c,x1,y1,x2,y2)=>{c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();};
-function label(c,text,x,y,color='#fff0c2') {c.font='bold 10px "Noto Sans JP",sans-serif';c.textAlign='center';const width=c.measureText(text).width+16;c.fillStyle='#102f35e8';c.beginPath();c.roundRect(x-width/2,y-12,width,19,5);c.fill();c.fillStyle=color;c.fillText(text,x,y+1);}
+function label(){}
+
 export function backdrop589(c,r,course,at){
  if(course.id==='forest')return;
  const {width:w,height:h}=r;c.save();
@@ -41,14 +42,14 @@ export function scenery589(c,g,course,left,right,at){
   c.save();c.translate(s.x,y-41);c.rotate(Math.PI/4);c.shadowColor=on?'#86ffd2':'#f9ca79';c.shadowBlur=on?16:8;c.fillStyle=on?'#b5ffdc':'#f0cc82';c.fillRect(-8,-8,16,16);c.restore();c.fillStyle='#183f42';c.font='bold 10px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillText(on?'✓':s.label,s.x,y-37);label(c,on?'橋がつながった！':'ここを踏むと橋が開く',s.x,y-71,on?'#c1ffdd':'#ffe0a0');
  }
  for(const p of course.platforms.filter(p=>p.crumble&&visible(p))){
-  const start=g.crumbles[p.id],age=start==null?-1:g.elapsed-start;
-  if(age>=900&&age<4000){c.strokeStyle='#e4bc7866';c.setLineDash([5,7]);line(c,p.x,p.y+3,p.x+p.w,p.y+3);c.setLineDash([]);continue;}
-  c.strokeStyle=age>=0?'#ffb077':'#e4b779';c.lineWidth=2;for(let x=p.x+15;x<p.x+p.w;x+=28){c.beginPath();c.moveTo(x,p.y+2);c.lineTo(x+5,p.y+8);c.lineTo(x,p.y+14);c.lineTo(x+6,p.y+18);c.stroke();}
-  if(age>=0){c.fillStyle='#ebba71';c.fillRect(p.x,p.y-5,p.w*Math.max(0,1-age/900),3);}else label(c,'止まると崩れる',p.x+p.w/2,p.y+65,'#ffcf99');
+  const start=g.crumbles[p.id],age=start==null?-1:g.elapsed-start;if(age>=900)continue;
+  const shake=age<0?0:Math.sin(at/24)*Math.min(5,age/160);c.save();c.translate(shake,age<0?0:Math.sin(at/31)*2);
+  c.strokeStyle=age>=0?'#ffca83':'#9a754e';c.lineWidth=age>=0?2:1;for(let x=p.x+17;x<p.x+p.w-12;x+=29){c.beginPath();c.moveTo(x,p.y+1);c.lineTo(x+5,p.y+8);c.lineTo(x-2,p.y+14);c.lineTo(x+4,p.y+22);c.stroke();}
+  if(age>=0)for(let i=0;i<4;i++){c.fillStyle='#d8b77c';c.fillRect(p.x+13+i*21,p.y+30+(at/8+i*9)%23,3,3);}c.restore();
  }
  for(const h of course.hazards.filter(visible)){
   if(h.kind==='spikes'){spikes595(c,h);continue;}
-  const state=hazard589(h,g.elapsed);
+  const state=hazard589(h,g.elapsed);if(g.ventsOff?.[h.id]>g.serverAt){state.active=false;state.warning=false;}if(h.wide){for(let x=0;x<h.w;x+=54)steam596(c,{...h,x:h.x+x,w:Math.min(54,h.w-x)},state,at);continue;}
   if(!steam596(c,h,state,at)){c.fillStyle='#302f40';c.fillRect(h.x,h.y-6,h.w,6);}
   if(state.active)label(c,'蒸気に注意',h.x+h.w/2,h.y-h.h-12,'#e5faff');
   else if(state.warning){c.fillStyle='#ffd98d';c.font='bold 20px sans-serif';c.textAlign='center';c.fillText('!',h.x+h.w/2,h.y-13);}

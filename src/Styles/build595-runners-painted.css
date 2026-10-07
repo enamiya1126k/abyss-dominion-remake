@@ -23,3 +23,11 @@
 .ru-vivid593 .ru-sprite587{place-items:end center}
 .ru-vivid593 .ru-sprite587>*,.ru-vivid593 .ru-sprite587 .monster-visual img{object-position:center bottom}
 .ru-vivid593 .ru-pawn587.is-entering596>b,.ru-vivid593 .ru-pawn587.is-entering596>mark,.ru-vivid593 .ru-pawn587.is-entering596>i{visibility:hidden}
+
+/* Build597: actions and environmental animation carry the explanations. */
+.ru-vivid593 .ru-help587>b,.ru-vivid593 .ru-help587>span,.ru-vivid593 .ru-toast587,[data-ru-ammo]{display:none!important}
+.ru-vivid593 .ru-attack591>b{width:32px!important;height:32px!important;background:none!important;margin:0 auto!important}
+.ru-vivid593 .ru-attack591>b svg{visibility:visible!important;width:100%;height:100%}
+.ru-vivid593 .ru-pawn587[data-form]:not([data-form=""]):after{content:"";position:absolute;bottom:1px;left:8%;width:84%;height:15%;border:2px solid var(--form);border-radius:50%;box-shadow:0 -3px 8px var(--form);pointer-events:none}
+.ru-vivid593 .ru-pawn587.is-entering596:after{display:none}
+.ru-team-avatars589 span{font-size:12px;line-height:1.6}
