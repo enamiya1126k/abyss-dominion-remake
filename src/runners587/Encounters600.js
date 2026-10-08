@@ -8,10 +8,16 @@ export function bossPosition600(b,elapsed){return b.phase==='dash'?Math.max(b.le
 export function bossStomp600(p,b,old){return b.hp>0&&b.phase!=='sleep'&&Math.abs(p.x-b.x)<=39&&p.vy>=0&&old.y<=b.y-50&&p.y>=b.y-64&&p.y-28<b.y;}
 export function initEncounters600(g,course){
  g.waves600={};g.rollerBroken600={};g.enemyShots600=[];g.boss600=course.boss600?{...course.boss600,phase:'sleep',phaseAt:0,turn:0,hitUntil:0,dir:-1}:null;
+ if(g.boss600){const b=g.boss600,n=g.players.filter(p=>!p.departed).length;b.maxHp=b.hp=Math.round(b.maxHp*(1+.45*Math.max(0,n-1)));b.lastHitSeat601=null;b.lastHitAt601=-1e9;b.comboUntil601=0;}
  for(const e of g.enemies)if(e.prefrozen600)e.ice={x:e.x,y:e.y,dir:-1,vx:0,vy:0,at:0,until:1e9,kicker:null,grace:0};
 }
-export function hitBoss600(g,seat,amount,emit){
+export function hitBoss600(g,seat,amount,emit,impact={}){
  const b=g.boss600;if(!b||b.hp<=0||b.phase==='sleep'||g.elapsed<b.hitUntil)return false;
+ const shield=['wave','fire'].includes(b.pattern)&&['warn','dash'].includes(b.phase);
+ if(shield&&impact.kind==='shot'&&Math.sign(impact.x-b.x)===b.dir){emit(g,'boss-block',{seat,x:b.x+b.dir*30,y:b.y-32});return false;}
+ const combo=seat!=null&&b.lastHitSeat601!=null&&seat!==b.lastHitSeat601&&g.elapsed-b.lastHitAt601<=1500&&g.elapsed>=(b.comboUntil601??0);
+ if(combo){amount+=2;b.phase='stunned';b.phaseAt=g.elapsed;b.comboUntil601=g.elapsed+2600;emit(g,'boss-combo',{seat,helper:b.lastHitSeat601,x:b.x,y:b.y-36});}
+ b.lastHitSeat601=seat;b.lastHitAt601=g.elapsed;
  b.hp=Math.max(0,b.hp-amount);b.hitUntil=g.elapsed+160;emit(g,'boss-hit',{seat,x:b.x,y:b.y-38});
  if(!b.hp){b.phase='down';b.phaseAt=g.elapsed;g.enemyShots600=[];if(g.players[seat])g.players[seat].kills++;emit(g,'boss-defeat',{seat,x:b.x,y:b.y});}
  return true;
@@ -46,7 +52,7 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
   }
   if(b.phase==='dash'){b.x=Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*(b.hp<=b.maxHp/2?165:130)*.025));if(age>=850){b.phase='rest';b.phaseAt=now;}}
   if(b.phase==='cast'&&age>=350){b.phase='rest';b.phaseAt=now;}
-  if(b.phase==='rest'&&age>=1000&&target){b.turn++;b.phase='warn';b.phaseAt=now;b.dir=target.x<b.x?-1:1;}
+  if((b.phase==='rest'&&age>=1000||b.phase==='stunned'&&age>=1400)&&target){b.turn++;b.phase='warn';b.phaseAt=now;b.dir=target.x<b.x?-1:1;}
   for(const p of players){const old=previous.get(p.seat);if(!old||Math.abs(p.x-b.x)>39)continue;
    const top=b.y-62;
    if(bossStomp600(p,b,old)){hitBoss600(g,p.seat,2,emit);stomp(p,{y:top+24});emit(g,'stomp',{seat:p.seat,x:b.x,y:top});}

@@ -1,0 +1,6 @@
+.ru-stars601{position:absolute;top:70px;left:12px;z-index:4;display:flex;align-items:center;gap:8px;padding:5px 8px;border:1px solid #d5bf85aa;border-radius:10px;background:#143844e8;pointer-events:none}
+.ru-stars601>span{display:flex;gap:4px}.ru-stars601 svg{width:22px;height:22px;display:block}.ru-stars601 small{font-size:10px;color:#c3efd7;border-left:1px solid #658f86;padding-left:8px;white-space:nowrap}
+.ru-vivid593 .ru-message587.is-respawn601{left:22%;right:22%;padding:14px 9px;gap:5px}.ru-message587.is-respawn601 b{font-size:27px;font-variant-numeric:tabular-nums}.ru-message587.is-respawn601 small{font-size:10px;letter-spacing:.5px}
+.ru-result-stars601{display:flex;justify-content:center;gap:12px;margin:15px auto 4px}.ru-result-stars601 svg{width:42px;height:42px}.ru-result601 p{margin-top:4px}
+@media(max-width:350px){.ru-stars601{left:8px;gap:5px;padding:5px}.ru-stars601 svg{width:18px;height:18px}.ru-stars601 small{font-size:8px;padding-left:5px}.ru-vivid593 .ru-mission589{right:8px;max-width:125px}}
+@media(orientation:landscape) and (max-height:550px){.ru-stars601{top:86px;left:12px}.ru-stars601 svg{width:18px;height:18px}}

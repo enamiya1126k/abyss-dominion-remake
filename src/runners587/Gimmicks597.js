@@ -1,7 +1,7 @@
 import {crumble600} from './Terrain600.js';
 // Authored course upgrades and shared deterministic timing (server + client).
 export const ELEMENTS597={fire:{name:'火',color:'#ffb16a',cooldown:620,hits:3},wind:{name:'風',color:'#9af7da',cooldown:480,hits:1},ice:{name:'氷',color:'#a4dcff',cooldown:470,hits:1},thunder:{name:'雷',color:'#ffe879',cooldown:650,hits:3},stone:{name:'土',color:'#dab88b',cooldown:700,hits:2},water:{name:'水',color:'#64cffa',cooldown:390,hits:2}};
-export function crusherAt597(h,elapsed){const p=((elapsed+h.offset)%6000+6000)%6000;const f=p<1400?0:p<3400?(p-1400)/2000:p<4100?1:p<5600?1-(p-4100)/1500:0;return {bottom:208+f*98,closing:p>=1400&&p<3400,f};}
+export function crusherAt597(h,elapsed){const p=((elapsed+h.offset)%6000+6000)%6000;const f=p<1400?0:p<3400?(p-1400)/2000:p<4100?1:p<5600?1-(p-4100)/1500:0;return {bottom:(h.y??300)-92+f*98,closing:p>=1400&&p<3400,f};}
 export const crumbleAt597=crumble600;
 export function adventure597(course){
  const walls=course.walls.flatMap(w=>!w.breakable?[w]:Array.from({length:Math.ceil(w.h/w.w)},(_,i)=>({...w,id:w.id+'-box'+i,y:w.y+i*w.h/Math.ceil(w.h/w.w),h:w.h/Math.ceil(w.h/w.w),box:true})));
@@ -32,3 +32,6 @@ export function adventure597(course){
  const checkpoints=course.checkpoints.map(p=>{const floor=grounds.find(([a,b])=>p.x>=a&&p.x<=b);return {...p,y:floor?.[2]??300};});
  return {...course,grounds,platforms,walls,hazards,crushers,enemies,pickups,checkpoints,tag:'何度でも挑戦・ミス数勝負',description:'６属性を切り替え、崩落・蒸気・迫る天井を突破。復活も攻撃も無制限。全員のゴールを目指し、ミスの少なさで競おう。',features:['６属性・弾数無制限','ミス数で競う冒険'],sections:course.sections.map(s=>({...s,sub:''}))};
 }
+
+// The collision rectangle is exactly the visible stone block, including its top.
+export function crusherSurface601(h,elapsed){const q=crusherAt597(h,elapsed);return {id:'crusher:'+h.id,x:h.x,y:q.bottom-145,w:h.w,h:145,wall:true,crusher:true,move:{axis:'y'},closing:q.closing};}

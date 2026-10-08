@@ -1,4 +1,4 @@
-import {crusherAt597} from './Gimmicks597.js';
+import {buddyContact601,bounceBuddy601} from './Coop601.js';
 import {CRUMBLE600} from './Terrain600.js';
 import {course589,inHazard589} from './Courses589.js';
 import {RUN587 as C} from './Physics587.js';
@@ -14,17 +14,15 @@ export function mechanics589(g,previous,emit,hurt){
   for(const base of g.players){
    if(base===rider||!usable(base))continue;
    const old=previous.get(base.seat);if(!old)continue;
-   const top=base.y-C.height,oldTop=old.y-C.height;
-   if(Math.abs(rider.x-base.x)<23&&before.y<=oldTop+3&&rider.y>=top&&rider.y<=base.y+10&&rider.y-before.y>=base.y-old.y){pairs.push({rider,base,top});break;}
+   if(buddyContact601(rider,before,base,old,g.lastAt)){pairs.push({rider,base});break;}
   }
  }
- for(const {rider,base,top} of pairs){
-  rider.y=top;rider.vy=-C.buddyJump;rider.grounded=false;rider.platformId=null;rider.lastGroundAt=-1e9;rider.jumpBufferUntil=0;rider.springFlight=true;rider.buddyUntil=g.lastAt+300;rider.buddyBounces++;
+ for(const {rider,base} of pairs){
+  bounceBuddy601(rider,base,g.lastAt);
   emit(g,'buddy',{seat:rider.seat,helper:base.seat,x:rider.x,y:rider.y});
  }
  for(const p of g.players){
   if(!usable(p))continue;
-  for(const h of course.crushers??[]){const s=crusherAt597(h,g.elapsed);if(p.x+10<=h.x||p.x-10>=h.x+h.w||p.y-28>=s.bottom||p.y<=s.bottom-180)continue;if(s.bottom<=272&&p.vy<0){p.y=s.bottom+28;p.vy=0;}else if(s.bottom>272)hurt(g,p,'crush');}
   if(inHazard589(p,course,g.elapsed,g)){hurt(g,p,course.hazards.some(h=>h.kind==='spikes'&&p.x+10>h.x&&p.x-10<h.x+h.w&&p.y>h.y-h.h)?'spikes':'steam');continue;}
   if(p.grounded&&course.platforms.some(s=>s.id===p.platformId&&s.crumble)&&g.crumbles[p.platformId]==null){g.crumbles[p.platformId]=g.elapsed;emit(g,'crumble',{seat:p.seat,x:p.x,y:p.y,platform:p.platformId});}
   for(const s of course.switches){

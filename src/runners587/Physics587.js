@@ -1,6 +1,6 @@
 import {surfaces587} from './Level587.js';
 import {course589} from './Courses589.js';
-export const RUN587=Object.freeze({step:25,countdown:3000,duration:75000,grace:16000,lives:3,radius:11,height:28,speed:235,boostSpeed:280,accel:1900,brake:2600,airAccel:1800,gravity:1080,fallGravity:1350,jump:470,shortJump:275,spring:610,coyote:125,buffer:150,inputTTL:350,respawn:700,invincible:1200,wallJump:465,wallPush:260,wallSlide:92,buddyJump:550});
+export const RUN587=Object.freeze({step:25,countdown:3000,duration:75000,grace:16000,lives:3,radius:11,height:28,speed:235,boostSpeed:280,accel:1900,brake:2600,airAccel:1800,gravity:1080,fallGravity:1350,jump:470,shortJump:275,spring:610,coyote:125,buffer:150,inputTTL:350,respawn:700,invincible:1200,wallJump:465,wallPush:260,wallSlide:92,buddyJump:620});
 export const clamp587=(n,a,b)=>Math.max(a,Math.min(b,n));
 const approach=(v,target,d)=>v<target?Math.min(target,v+d):Math.max(target,v-d);
 export function control587(p,target,at){const held=!!target.jump;if(held&&!p.jumpHeld)p.jumpBufferUntil=at+RUN587.buffer;p.jumpHeld=held;p.attackHeld=!!target.attack;if(typeof target.pause==='boolean')p.paused=target.pause;p.axis=target.axis;p.controlAt=at;}
@@ -55,16 +55,27 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  p.vy=Math.min(750,p.vy+(p.vy>0?C.fallGravity:C.gravity)*dt);
  if(wallSide&&p.axis===wallSide&&!p.grounded&&p.vy>C.wallSlide)p.vy=C.wallSlide;
  p.y+=p.vy*dt;p.grounded=false;p.platformId=null;
- if(p.vy<0){
-  for(const s of surfaces){if(s.oneWay||p.x+C.radius<=s.x||p.x-C.radius>=s.x+s.w)continue;
-   if(before.y-C.height>=s.y+s.h&&p.y-C.height<s.y+s.h){p.y=s.y+s.h+C.height;p.vy=0;}
-  }
- }else{
-  let hit=null;
-  for(const s of surfaces){const old=s.move||s.crumble?(previous.find(q=>q.id===s.id)??s):s;const top=before.grounded&&carriedId===s.id?s.y:old.y;if(p.x+C.radius>s.x&&p.x-C.radius<s.x+s.w&&before.y<=top+1&&p.y>=s.y&&(!hit||s.y<hit.y))hit=s;}
-  if(hit){impact=p.vy;p.y=hit.y;p.vy=0;p.grounded=true;p.platformId=hit.id;p.lastGroundAt=at;p.springFlight=false;landed=true;p.wallSide=0;p.wallLockUntil=0;p.reboundJump599=false;p.airJumps598=0;p.airJumpUsed=false;
-   if(hit.spring){spring=hit;Object.assign(p,{vy:-(hit.power??C.spring),grounded:false,platformId:null,lastGroundAt:-1e9,springFlight:true,jumpBufferUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
+ // Solve moving ceilings in relative coordinates: touching is not crushing.
+ let ceiling=null,crushed601=false;
+ for(const s of surfaces){
+  if(s.oneWay||p.x+C.radius<=s.x+.05||p.x-C.radius>=s.x+s.w-.05)continue;
+  const old=s.move?(previous.find(q=>q.id===s.id)??s):s,bottom=s.y+s.h,oldBottom=old.y+old.h;
+  if(before.y-C.height>=oldBottom-.05&&p.y-C.height<bottom){
+   p.y=bottom+C.height;p.vy=Math.max(0,p.vy);ceiling=s;
   }
  }
- return {before,jumped,wallJumped,windJumped,landed,spring,impact,surfaces};
+ let hit=null;
+ for(const s of surfaces){
+  const old=s.move||s.crumble?(previous.find(q=>q.id===s.id)??s):s;
+  const top=before.grounded&&carriedId===s.id?s.y:old.y;
+  if(p.x+C.radius>s.x&&p.x-C.radius<s.x+s.w&&before.y<=top+1&&p.y>=s.y&&(!hit||s.y<hit.y))hit=s;
+ }
+ if(hit){impact=p.vy;p.y=hit.y;p.vy=0;p.grounded=true;p.platformId=hit.id;p.lastGroundAt=at;p.springFlight=false;landed=true;p.wallSide=0;p.wallLockUntil=0;p.reboundJump599=false;p.airJumps598=0;p.airJumpUsed=false;
+  if(hit.spring){spring=hit;Object.assign(p,{vy:-(hit.power??C.spring),grounded:false,platformId:null,lastGroundAt:-1e9,springFlight:true,jumpBufferUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
+ }
+ // Only a descending solid AND a supporting floor leaving less than body height
+ // can crush. Safe sides, a ride on top, and a head bump never kill on their own.
+ if(ceiling?.crusher&&ceiling.closing&&hit&&ceiling.id!==hit.id&&hit.y-(ceiling.y+ceiling.h)<C.height-.1)crushed601=true;
+
+ return {before,jumped,wallJumped,windJumped,landed,spring,impact,surfaces,crushed601};
 }

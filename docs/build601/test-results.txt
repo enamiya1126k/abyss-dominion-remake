@@ -1,0 +1,754 @@
+TAP version 13
+# Subtest: forest moving press carries a player safely on top for a full cycle
+ok 1 - forest moving press carries a player safely on top for a full cycle
+  ---
+  duration_ms: 48.306176
+  type: 'test'
+  ...
+# Subtest: clock moving press carries a player safely on top for a full cycle
+ok 2 - clock moving press carries a player safely on top for a full cycle
+  ---
+  duration_ms: 31.488276
+  type: 'test'
+  ...
+# Subtest: ember moving press carries a player safely on top for a full cycle
+ok 3 - ember moving press carries a player safely on top for a full cycle
+  ---
+  duration_ms: 22.700074
+  type: 'test'
+  ...
+# Subtest: closed press side is a harmless wall and supports a real wall kick
+ok 4 - closed press side is a harmless wall and supports a real wall kick
+  ---
+  duration_ms: 8.78647
+  type: 'test'
+  ...
+# Subtest: jumping into the underside of a moving press bumps the head, without a death
+ok 5 - jumping into the underside of a moving press bumps the head, without a death
+  ---
+  duration_ms: 2.179883
+  type: 'test'
+  ...
+# Subtest: a genuinely closing press against a floor respawns once, ignoring invincibility
+ok 6 - a genuinely closing press against a floor respawns once, ignoring invincibility
+  ---
+  duration_ms: 3.003021
+  type: 'test'
+  ...
+# Subtest: standing in the recess is safe while the press closes and reopens
+ok 7 - standing in the recess is safe while the press closes and reopens
+  ---
+  duration_ms: 24.3933
+  type: 'test'
+  ...
+# Subtest: forest has three optional stars; both seal pads can be stood on and open for two players
+ok 8 - forest has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 9.545967
+  type: 'test'
+  ...
+# Subtest: sky has three optional stars; both seal pads can be stood on and open for two players
+ok 9 - sky has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 7.674791
+  type: 'test'
+  ...
+# Subtest: relay has three optional stars; both seal pads can be stood on and open for two players
+ok 10 - relay has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 5.201084
+  type: 'test'
+  ...
+# Subtest: clock has three optional stars; both seal pads can be stood on and open for two players
+ok 11 - clock has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 4.977378
+  type: 'test'
+  ...
+# Subtest: coast has three optional stars; both seal pads can be stood on and open for two players
+ok 12 - coast has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 3.752347
+  type: 'test'
+  ...
+# Subtest: frost has three optional stars; both seal pads can be stood on and open for two players
+ok 13 - frost has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 4.092341
+  type: 'test'
+  ...
+# Subtest: crystal has three optional stars; both seal pads can be stood on and open for two players
+ok 14 - crystal has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 6.11121
+  type: 'test'
+  ...
+# Subtest: ember has three optional stars; both seal pads can be stood on and open for two players
+ok 15 - ember has three optional stars; both seal pads can be stood on and open for two players
+  ---
+  duration_ms: 3.880791
+  type: 'test'
+  ...
+# Subtest: a single player cannot fake two simultaneous seal occupants or collect the locked star
+ok 16 - a single player cannot fake two simultaneous seal occupants or collect the locked star
+  ---
+  duration_ms: 0.921612
+  type: 'test'
+  ...
+# Subtest: a reached flag updates every teammate including a waiting player, without teleporting active friends
+ok 17 - a reached flag updates every teammate including a waiting player, without teleporting active friends
+  ---
+  duration_ms: 3.766569
+  type: 'test'
+  ...
+# Subtest: death counter distinguishes fatal falls and crushing from contact misses
+ok 18 - death counter distinguishes fatal falls and crushing from contact misses
+  ---
+  duration_ms: 1.2781
+  type: 'test'
+  ...
+# Subtest: buddy boost crosses an aerial gap ordinary jumping cannot, and grants a fresh jump
+ok 19 - buddy boost crosses an aerial gap ordinary jumping cannot, and grants a fresh jump
+  ---
+  duration_ms: 2.907841
+  type: 'test'
+  ...
+# Subtest: bosses keep solo recovery windows, shield the front, and reward alternating teammates
+ok 20 - bosses keep solo recovery windows, shield the front, and reward alternating teammates
+  ---
+  duration_ms: 1.154474
+  type: 'test'
+  ...
+# Subtest: steam corridors are specific to two worlds; secret rooms have an above-ground visible clue
+ok 21 - steam corridors are specific to two worlds; secret rooms have an above-ground visible clue
+  ---
+  duration_ms: 0.725867
+  type: 'test'
+  ...
+# Subtest: bomb host exit transfers leadership and keeps other players moving
+ok 22 - bomb host exit transfers leadership and keeps other players moving
+  ---
+  duration_ms: 18.50636
+  type: 'test'
+  ...
+# Subtest: pinball host exit transfers leadership and keeps other players moving
+ok 23 - pinball host exit transfers leadership and keeps other players moving
+  ---
+  duration_ms: 30.652789
+  type: 'test'
+  ...
+# Subtest: lava host exit transfers leadership and keeps other players moving
+ok 24 - lava host exit transfers leadership and keeps other players moving
+  ---
+  duration_ms: 13.178703
+  type: 'test'
+  ...
+# Subtest: chairs host exit transfers leadership and keeps other players moving
+ok 25 - chairs host exit transfers leadership and keeps other players moving
+  ---
+  duration_ms: 14.819487
+  type: 'test'
+  ...
+# Subtest: walls host exit transfers leadership and keeps other players moving
+ok 26 - walls host exit transfers leadership and keeps other players moving
+  ---
+  duration_ms: 15.763437
+  type: 'test'
+  ...
+# Subtest: fire breaks one box with 2 actual collisions, preserving the rest of its stack
+ok 27 - fire breaks one box with 2 actual collisions, preserving the rest of its stack
+  ---
+  duration_ms: 11.993713
+  type: 'test'
+  ...
+# Subtest: stone breaks one box with 1 actual collisions, preserving the rest of its stack
+ok 28 - stone breaks one box with 1 actual collisions, preserving the rest of its stack
+  ---
+  duration_ms: 1.41097
+  type: 'test'
+  ...
+# Subtest: wind breaks one box with 4 actual collisions, preserving the rest of its stack
+ok 29 - wind breaks one box with 4 actual collisions, preserving the rest of its stack
+  ---
+  duration_ms: 2.375117
+  type: 'test'
+  ...
+# Subtest: ice breaks one box with 4 actual collisions, preserving the rest of its stack
+ok 30 - ice breaks one box with 4 actual collisions, preserving the rest of its stack
+  ---
+  duration_ms: 2.515649
+  type: 'test'
+  ...
+# Subtest: thunder breaks one box with 4 actual collisions, preserving the rest of its stack
+ok 31 - thunder breaks one box with 4 actual collisions, preserving the rest of its stack
+  ---
+  duration_ms: 0.988864
+  type: 'test'
+  ...
+# Subtest: water breaks one box with 4 actual collisions, preserving the rest of its stack
+ok 32 - water breaks one box with 4 actual collisions, preserving the rest of its stack
+  ---
+  duration_ms: 1.077467
+  type: 'test'
+  ...
+# Subtest: projectile visible edge grazes a box and a fast shot cannot tunnel through it
+ok 33 - projectile visible edge grazes a box and a fast shot cannot tunnel through it
+  ---
+  duration_ms: 0.840329
+  type: 'test'
+  ...
+# Subtest: falling ledge carries its rider for 1.8 seconds and allows a fresh jump during the fall
+ok 34 - falling ledge carries its rider for 1.8 seconds and allows a fresh jump during the fall
+  ---
+  duration_ms: 8.398523
+  type: 'test'
+  ...
+# Subtest: vertical moving platforms never alternate grounded and airborne for a stationary rider
+ok 35 - vertical moving platforms never alternate grounded and airborne for a stationary rider
+  ---
+  duration_ms: 16.831755
+  type: 'test'
+  ...
+# Subtest: fractional prediction does not borrow a future landing flag or snap down early
+ok 36 - fractional prediction does not borrow a future landing flag or snap down early
+  ---
+  duration_ms: 2.418253
+  type: 'test'
+  ...
+# Subtest: respawn discards old airborne input even if intermediate death packets were missed
+ok 37 - respawn discards old airborne input even if intermediate death packets were missed
+  ---
+  duration_ms: 12.127696
+  type: 'test'
+  ...
+# Subtest: inputs received while respawning are acknowledged but never replayed as a ghost jump
+ok 38 - inputs received while respawning are acknowledged but never replayed as a ghost jump
+  ---
+  duration_ms: 2.008864
+  type: 'test'
+  ...
+# Subtest: turning in the air does not change the camera anchor; deep rooms stay in view
+ok 39 - turning in the air does not change the camera anchor; deep rooms stay in view
+  ---
+  duration_ms: 0.319643
+  type: 'test'
+  ...
+# Subtest: forest has sparse forms, safe item positions and valid checkpoint surfaces
+ok 40 - forest has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.7682
+  type: 'test'
+  ...
+# Subtest: sky has sparse forms, safe item positions and valid checkpoint surfaces
+ok 41 - sky has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.17894
+  type: 'test'
+  ...
+# Subtest: relay has sparse forms, safe item positions and valid checkpoint surfaces
+ok 42 - relay has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 1.280845
+  type: 'test'
+  ...
+# Subtest: clock has sparse forms, safe item positions and valid checkpoint surfaces
+ok 43 - clock has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.229797
+  type: 'test'
+  ...
+# Subtest: coast has sparse forms, safe item positions and valid checkpoint surfaces
+ok 44 - coast has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.154974
+  type: 'test'
+  ...
+# Subtest: frost has sparse forms, safe item positions and valid checkpoint surfaces
+ok 45 - frost has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.101713
+  type: 'test'
+  ...
+# Subtest: crystal has sparse forms, safe item positions and valid checkpoint surfaces
+ok 46 - crystal has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.164188
+  type: 'test'
+  ...
+# Subtest: ember has sparse forms, safe item positions and valid checkpoint surfaces
+ok 47 - ember has sparse forms, safe item positions and valid checkpoint surfaces
+  ---
+  duration_ms: 0.108354
+  type: 'test'
+  ...
+# Subtest: forest spawns three groups of four only once, with both ground and flying attackers
+ok 48 - forest spawns three groups of four only once, with both ground and flying attackers
+  ---
+  duration_ms: 1.305962
+  type: 'test'
+  ...
+# Subtest: firebar collision uses the same rotating points as its drawing and tide height changes danger
+ok 49 - firebar collision uses the same rotating points as its drawing and tide height changes danger
+  ---
+  duration_ms: 6.759469
+  type: 'test'
+  ...
+# Subtest: a rolling ice hazard can be shot apart and does not hurt afterward in that cycle
+ok 50 - a rolling ice hazard can be shot apart and does not hurt afterward in that cycle
+  ---
+  duration_ms: 1.503331
+  type: 'test'
+  ...
+# Subtest: relay hidden chamber catches a real fall and its spring can launch above the exit
+ok 51 - relay hidden chamber catches a real fall and its spring can launch above the exit
+  ---
+  duration_ms: 6.073903
+  type: 'test'
+  ...
+# Subtest: crystal hidden chamber catches a real fall and its spring can launch above the exit
+ok 52 - crystal hidden chamber catches a real fall and its spring can launch above the exit
+  ---
+  duration_ms: 5.364932
+  type: 'test'
+  ...
+# Subtest: forest boss telegraphs, damages, takes attacks and stomps, and unlocks the gate
+ok 53 - forest boss telegraphs, damages, takes attacks and stomps, and unlocks the gate
+  ---
+  duration_ms: 2.286693
+  type: 'test'
+  ...
+# Subtest: relay boss telegraphs, damages, takes attacks and stomps, and unlocks the gate
+ok 54 - relay boss telegraphs, damages, takes attacks and stomps, and unlocks the gate
+  ---
+  duration_ms: 0.787439
+  type: 'test'
+  ...
+# Subtest: ember boss telegraphs, damages, takes attacks and stomps, and unlocks the gate
+ok 55 - ember boss telegraphs, damages, takes attacks and stomps, and unlocks the gate
+  ---
+  duration_ms: 5.176869
+  type: 'test'
+  ...
+# Subtest: contact flashes in place, unlimited lives and one miss during immunity
+ok 56 - contact flashes in place, unlimited lives and one miss during immunity
+  ---
+  duration_ms: 12.227457
+  type: 'test'
+  ...
+# Subtest: only a fall respawns and retains the selected form
+ok 57 - only a fall respawns and retains the selected form
+  ---
+  duration_ms: 9.904308
+  type: 'test'
+  ...
+# Subtest: spike sides block harmlessly; landing on the top registers contact
+ok 58 - spike sides block harmlessly; landing on the top registers contact
+  ---
+  duration_ms: 4.840511
+  type: 'test'
+  ...
+# Subtest: disconnected solo pauses time and resumes exact coordinates instead of checkpoint
+ok 59 - disconnected solo pauses time and resumes exact coordinates instead of checkpoint
+  ---
+  duration_ms: 2.898067
+  type: 'test'
+  ...
+# Subtest: explicit background pause can be resumed through validated input
+ok 60 - explicit background pause can be resumed through validated input
+  ---
+  duration_ms: 1.429919
+  type: 'test'
+  ...
+# Subtest: ranking prioritizes finish then fewer misses, then time
+ok 61 - ranking prioritizes finish then fewer misses, then time
+  ---
+  duration_ms: 3.877406
+  type: 'test'
+  ...
+# Subtest: each box has independent damage and cannot remove an entire stack
+ok 62 - each box has independent damage and cannot remove an entire stack
+  ---
+  duration_ms: 4.149757
+  type: 'test'
+  ...
+# Subtest: all six forms fire repeatedly without ammunition; ice freezes, water suppresses steam
+ok 63 - all six forms fire repeatedly without ammunition; ice freezes, water suppresses steam
+  ---
+  duration_ms: 15.399923
+  type: 'test'
+  ...
+# Subtest: forest offers six forms and any remaining press has a safe refuge
+ok 64 - forest offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.660828
+  type: 'test'
+  ...
+# Subtest: sky offers six forms and any remaining press has a safe refuge
+ok 65 - sky offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.34454
+  type: 'test'
+  ...
+# Subtest: relay offers six forms and any remaining press has a safe refuge
+ok 66 - relay offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.123928
+  type: 'test'
+  ...
+# Subtest: clock offers six forms and any remaining press has a safe refuge
+ok 67 - clock offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.143457
+  type: 'test'
+  ...
+# Subtest: coast offers six forms and any remaining press has a safe refuge
+ok 68 - coast offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.064948
+  type: 'test'
+  ...
+# Subtest: frost offers six forms and any remaining press has a safe refuge
+ok 69 - frost offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.051087
+  type: 'test'
+  ...
+# Subtest: crystal offers six forms and any remaining press has a safe refuge
+ok 70 - crystal offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 1.453796
+  type: 'test'
+  ...
+# Subtest: ember offers six forms and any remaining press has a safe refuge
+ok 71 - ember offers six forms and any remaining press has a safe refuge
+  ---
+  duration_ms: 0.154423
+  type: 'test'
+  ...
+# Subtest: crusher refuge protects through a complete cycle and allows jumping out
+ok 72 - crusher refuge protects through a complete cycle and allows jumping out
+  ---
+  duration_ms: 36.030065
+  type: 'test'
+  ...
+# Subtest: crumbling platform remains solid while falling, then disappears
+ok 73 - crumbling platform remains solid while falling, then disappears
+  ---
+  duration_ms: 1.339202
+  type: 'test'
+  ...
+# Subtest: patrolling bugs reverse continuously on all eight courses, without wrapping
+ok 74 - patrolling bugs reverse continuously on all eight courses, without wrapping
+  ---
+  duration_ms: 52.160697
+  type: 'test'
+  ...
+# Subtest: contact recoil moves away from the source, once during immunity; crush overrides immunity and earth shield
+ok 75 - contact recoil moves away from the source, once during immunity; crush overrides immunity and earth shield
+  ---
+  duration_ms: 15.706262
+  type: 'test'
+  ...
+# Subtest: wind gets exactly two mid-air jumps, reset only on landing; thunder runs faster
+ok 76 - wind gets exactly two mid-air jumps, reset only on landing; thunder runs faster
+  ---
+  duration_ms: 5.437692
+  type: 'test'
+  ...
+# Subtest: fire tap emits a complete three-shot burst without ammunition
+ok 77 - fire tap emits a complete three-shot burst without ammunition
+  ---
+  duration_ms: 3.359634
+  type: 'test'
+  ...
+# Subtest: frozen enemy is a safe standing platform and supports the player
+ok 78 - frozen enemy is a safe standing platform and supports the player
+  ---
+  duration_ms: 6.673859
+  type: 'test'
+  ...
+# Subtest: side contact kicks ice, spares the kicker, hits another player and kills a bug
+ok 79 - side contact kicks ice, spares the kicker, hits another player and kills a bug
+  ---
+  duration_ms: 4.1316
+  type: 'test'
+  ...
+# Subtest: kicked ice shatters on a solid wall
+ok 80 - kicked ice shatters on a solid wall
+  ---
+  duration_ms: 0.889634
+  type: 'test'
+  ...
+# Subtest: departed runner cannot be revived, obstruct completion or win ranking
+ok 81 - departed runner cannot be revived, obstruct completion or win ranking
+  ---
+  duration_ms: 9.865971
+  type: 'test'
+  ...
+# Subtest: single visible bomb, timed guard and late-pass reward are authoritative
+ok 82 - single visible bomb, timed guard and late-pass reward are authoritative
+  ---
+  duration_ms: 8.546578
+  type: 'test'
+  ...
+# Subtest: lava jumps immediately, cannot retarget in flight, reveals warnings and rewards safe landing
+ok 83 - lava jumps immediately, cannot retarget in flight, reveals warnings and rewards safe landing
+  ---
+  duration_ms: 2.577443
+  type: 'test'
+  ...
+# Subtest: all chairs including gold open at STOP, first server arrival wins and early input fouls
+ok 84 - all chairs including gold open at STOP, first server arrival wins and early input fouls
+  ---
+  duration_ms: 2.934252
+  type: 'test'
+  ...
+# Subtest: bomb completes entire match with AI replacements and finite scores
+ok 85 - bomb completes entire match with AI replacements and finite scores
+  ---
+  duration_ms: 86.000535
+  type: 'test'
+  ...
+# Subtest: lava completes entire match with AI replacements and finite scores
+ok 86 - lava completes entire match with AI replacements and finite scores
+  ---
+  duration_ms: 13.098462
+  type: 'test'
+  ...
+# Subtest: chairs completes entire match with AI replacements and finite scores
+ok 87 - chairs completes entire match with AI replacements and finite scores
+  ---
+  duration_ms: 21.569095
+  type: 'test'
+  ...
+# Subtest: walls completes entire match with AI replacements and finite scores
+ok 88 - walls completes entire match with AI replacements and finite scores
+  ---
+  duration_ms: 222.784377
+  type: 'test'
+  ...
+# Subtest: hockey AI claims attack from an idle human instead of waiting forever
+ok 89 - hockey AI claims attack from an idle human instead of waiting forever
+  ---
+  duration_ms: 20.874707
+  type: 'test'
+  ...
+# Subtest: hockey full match continues and produces finite results for six seeds
+ok 90 - hockey full match continues and produces finite results for six seeds
+  ---
+  duration_ms: 405.535258
+  type: 'test'
+  ...
+# Subtest: guard can reflect a visibly arriving bomb without resetting its fuse
+ok 91 - guard can reflect a visibly arriving bomb without resetting its fuse
+  ---
+  duration_ms: 0.703352
+  type: 'test'
+  ...
+# Subtest: solo background pause preserves ice, burst timing and position
+ok 92 - solo background pause preserves ice, burst timing and position
+  ---
+  duration_ms: 1.813108
+  type: 'test'
+  ...
+# Subtest: jitter, packet acknowledgments and repeated air steering keep visible motion continuous
+ok 93 - jitter, packet acknowledgments and repeated air steering keep visible motion continuous
+  ---
+  duration_ms: 55.371136
+  type: 'test'
+  ...
+# Subtest: sky new climb and descent can be crossed with ordinary jump physics
+ok 94 - sky new climb and descent can be crossed with ordinary jump physics
+  ---
+  duration_ms: 30.388736
+  type: 'test'
+  ...
+# Subtest: clock new climb and descent can be crossed with ordinary jump physics
+ok 95 - clock new climb and descent can be crossed with ordinary jump physics
+  ---
+  duration_ms: 31.215404
+  type: 'test'
+  ...
+# Subtest: foreground resume sent before reconnection is retried after connection and keeps position and form
+ok 96 - foreground resume sent before reconnection is retried after connection and keeps position and form
+  ---
+  duration_ms: 45.52772
+  type: 'test'
+  ...
+# Subtest: an accepted but lost resume request is retried after 250ms, then acknowledged once applied
+ok 97 - an accepted but lost resume request is retried after 250ms, then acknowledged once applied
+  ---
+  duration_ms: 23.819124
+  type: 'test'
+  ...
+# Subtest: pause is acknowledged even when every player is suspended
+ok 98 - pause is acknowledged even when every player is suspended
+  ---
+  duration_ms: 17.397846
+  type: 'test'
+  ...
+# Subtest: healthy OPEN socket is probed once and reused without reconnecting
+ok 99 - healthy OPEN socket is probed once and reused without reconnecting
+  ---
+  duration_ms: 1.327576
+  type: 'test'
+  ...
+# Subtest: dead OPEN socket reconnects after 1.2s instead of waiting for the old heartbeat/backoff
+ok 100 - dead OPEN socket reconnects after 1.2s instead of waiting for the old heartbeat/backoff
+  ---
+  duration_ms: 0.366784
+  type: 'test'
+  ...
+# Subtest: closed socket reconnects immediately and a stalled handshake has a bounded retry
+ok 101 - closed socket reconnects immediately and a stalled handshake has a bounded retry
+  ---
+  duration_ms: 0.275326
+  type: 'test'
+  ...
+# Subtest: manual exit or a superseded session never reconnects automatically
+ok 102 - manual exit or a superseded session never reconnects automatically
+  ---
+  duration_ms: 0.353965
+  type: 'test'
+  ...
+# Subtest: fire crosses the spike side and hits the overlapping enemy
+ok 103 - fire crosses the spike side and hits the overlapping enemy
+  ---
+  duration_ms: 8.277682
+  type: 'test'
+  ...
+# Subtest: wind crosses the spike side and hits the overlapping enemy
+ok 104 - wind crosses the spike side and hits the overlapping enemy
+  ---
+  duration_ms: 2.427226
+  type: 'test'
+  ...
+# Subtest: ice crosses the spike side and hits the overlapping enemy
+ok 105 - ice crosses the spike side and hits the overlapping enemy
+  ---
+  duration_ms: 13.601402
+  type: 'test'
+  ...
+# Subtest: thunder crosses the spike side and hits the overlapping enemy
+ok 106 - thunder crosses the spike side and hits the overlapping enemy
+  ---
+  duration_ms: 1.747919
+  type: 'test'
+  ...
+# Subtest: stone crosses the spike side and hits the overlapping enemy
+ok 107 - stone crosses the spike side and hits the overlapping enemy
+  ---
+  duration_ms: 1.581739
+  type: 'test'
+  ...
+# Subtest: water crosses the spike side and hits the overlapping enemy
+ok 108 - water crosses the spike side and hits the overlapping enemy
+  ---
+  duration_ms: 1.637723
+  type: 'test'
+  ...
+# Subtest: a solid wall still stops a projectile
+ok 109 - a solid wall still stops a projectile
+  ---
+  duration_ms: 0.598654
+  type: 'test'
+  ...
+# Subtest: spring side blocks -1 without launching while the direction is held
+ok 110 - spring side blocks -1 without launching while the direction is held
+  ---
+  duration_ms: 1.836504
+  type: 'test'
+  ...
+# Subtest: spring side blocks 1 without launching while the direction is held
+ok 111 - spring side blocks 1 without launching while the direction is held
+  ---
+  duration_ms: 1.222947
+  type: 'test'
+  ...
+# Subtest: landing on a spring launches from its visible top, preserves right hold, and does not relaunch in flight
+ok 112 - landing on a spring launches from its visible top, preserves right hold, and does not relaunch in flight
+  ---
+  duration_ms: 2.467466
+  type: 'test'
+  ...
+# Subtest: stomp gives a small bounce, a fresh normal jump and resets wind air jumps
+ok 113 - stomp gives a small bounce, a fresh normal jump and resets wind air jumps
+  ---
+  duration_ms: 1.680899
+  type: 'test'
+  ...
+# Subtest: even without an element a stomp jump reaches above an ordinary jump
+ok 114 - even without an element a stomp jump reaches above an ordinary jump
+  ---
+  duration_ms: 3.4762
+  type: 'test'
+  ...
+# Subtest: pause-induced startAt shifts do not discard input replay or reset the monotonic clock
+ok 115 - pause-induced startAt shifts do not discard input replay or reset the monotonic clock
+  ---
+  duration_ms: 1.342147
+  type: 'test'
+  ...
+# Subtest: self prediction does not stomp an enemy already inactive on the server
+ok 116 - self prediction does not stomp an enemy already inactive on the server
+  ---
+  duration_ms: 1.086711
+  type: 'test'
+  ...
+# Subtest: spring prediction matches the authoritative trajectory under a held direction
+ok 117 - spring prediction matches the authoritative trajectory under a held direction
+  ---
+  duration_ms: 2.46973
+  type: 'test'
+  ...
+# Subtest: jittered 50ms snapshots keep a held spring launch continuous at 60Hz render times
+ok 118 - jittered 50ms snapshots keep a held spring launch continuous at 60Hz render times
+  ---
+  duration_ms: 9.106964
+  type: 'test'
+  ...
+# Subtest: four real WebSocket clients share course, movement, projectiles, friendly hit, reconnection and same-course replay
+ok 119 - four real WebSocket clients share course, movement, projectiles, friendly hit, reconnection and same-course replay
+  ---
+  duration_ms: 303.184644
+  type: 'test'
+  ...
+# Subtest: roster retains protocol 11 and rejects an old ready request
+ok 120 - roster retains protocol 11 and rejects an old ready request
+  ---
+  duration_ms: 2.23766
+  type: 'test'
+  ...
+# Subtest: host may leave in play; only the remaining humans count toward runner clear
+ok 121 - host may leave in play; only the remaining humans count toward runner clear
+  ---
+  duration_ms: 13.709465
+  type: 'test'
+  ...
+# Subtest: last player exit cleans up both saved room and running simulation
+ok 122 - last player exit cleans up both saved room and running simulation
+  ---
+  duration_ms: 8.16365
+  type: 'test'
+  ...
+# Subtest: actual socket close/reopen retries foreground resume and retains the mid-air scene
+ok 123 - actual socket close/reopen retries foreground resume and retains the mid-air scene
+  ---
+  duration_ms: 34.286262
+  type: 'test'
+  ...
+# Subtest: shared star and seal progress is saved on its event, without a one-second wait
+ok 124 - shared star and seal progress is saved on its event, without a one-second wait
+  ---
+  duration_ms: 15.656085
+  type: 'test'
+  ...
+1..124
+# tests 124
+# suites 0
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1088.556468

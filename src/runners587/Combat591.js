@@ -57,7 +57,7 @@ export function combat591(g,emit){
   if(b.kind==='water')for(const h of course.hazards){if(h.kind!=='spikes'&&b.x+12>h.x&&b.x-12<h.x+h.w&&b.y>h.y-h.h&&b.y<h.y+8)g.ventsOff[h.id]=now+1800;}
   for(const h of course.rollers600??[]){const q=roller600(h,g.elapsed);if(q.active&&g.rollerBroken600[h.id]!==q.cycle&&crossed(oldX,b.x,q.x,27)&&Math.abs(b.y-q.y)<27){g.rollerBroken600[h.id]=q.cycle;emit(g,'shatter',{seat:b.owner,x:q.x,y:q.y});return false;}}
   const boss=g.boss600;
-  if(boss?.hp>0&&crossed(oldX,b.x,boss.x,38)&&b.y>boss.y-66&&b.y<boss.y+4){hitBoss600(g,b.owner,b.kind==='stone'?2:1,emit);return false;}
+  if(boss?.hp>0&&crossed(oldX,b.x,boss.x,38)&&b.y>boss.y-66&&b.y<boss.y+4){hitBoss600(g,b.owner,b.kind==='stone'?2:1,emit,{kind:'shot',x:oldX});return false;}
   for(const e of g.enemies){
    if(e.defeated||e.downUntil>now)continue;const q=enemyAt587(e,g.elapsed);
    if(!crossed(oldX,b.x,q.x,23)||Math.abs(b.y-(q.y-13))>21)continue;
