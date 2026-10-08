@@ -1,4 +1,4 @@
-import {RUN587,control587,stepRunner587,enemyContact588} from './Physics587.js';
+import {RUN587,control587,stepRunner587,enemyContact588,stomp599} from './Physics587.js';
 import {course589} from './Courses589.js';
 import {enemyAt587,surfaces587} from './Level587.js';
 function ground596(q,g,at,sourceAt=at){
@@ -13,13 +13,13 @@ function ground596(q,g,at,sourceAt=at){
 }
 export function remember591(c){
  const g=c.state?.runners,u=c.runnersUI587;if(!g||!u)return;
- if(u.motionId!==g.id||u.motionStart591!==g.startAt){u.motionStart591=g.startAt;u.motionId=g.id;u.frames591=[];u.corrections591=new Map();u.inputs591=[];}
+ if(u.motionId!==g.id||u.motionRound599!==g.round){u.motionRound599=g.round;u.motionId=g.id;u.frames591=[];u.corrections591=new Map();u.inputs591=[];}
  const frames=u.frames591;
  if(frames.at(-1)?.serverAt!==g.serverAt){frames.push(g);if(frames.length>6)frames.shift();}
 }
 function extrapolate(c,p,g,at){
  const q={...p},u=c.runnersUI587,self=p.playerId===c.transport.selfId&&!p.auto;
- if(p.waiting||!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
+ if(p.waiting||p.paused||!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
  const ms=Math.min(200,Math.max(0,at-g.serverAt)),course=course589(g);
  const pending=self?(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq)):[];let input=0;
  const defeated=new Set();
@@ -28,12 +28,10 @@ function extrapolate(c,p,g,at){
   while(input<pending.length&&pending[input].at<=g.serverAt+dt){const i=pending[input++];control587(q,i.target,Math.max(g.serverAt,i.at));}
   const {before}=stepRunner587(q,g.serverAt+dt,g.elapsed+dt,step/1000,g);
   for(const e of g.enemies){
-   if(e.defeated||defeated.has(e.id))continue;
+   if(e.defeated||e.ice||e.downUntil>g.serverAt+dt||defeated.has(e.id))continue;
    const enemy=enemyAt587(e,g.elapsed+dt);
-   if(enemyContact588(q,enemy,before)==='stomp'){q.y=enemy.y-24;q.vy=q.jumpHeld?-365:-285;q.grounded=false;q.lastGroundAt=-1e9;q.springFlight=true;defeated.add(e.id);break;}
+   if(enemyContact588(q,enemy,before)==='stomp'){stomp599(q,enemy);defeated.add(e.id);break;}
   }
-  const spring=course.springs.find(s=>q.grounded&&Math.abs(s.x-q.x)<21&&Math.abs(s.y-q.y)<5);
-  if(spring){q.vy=-(spring.power??RUN587.spring);q.grounded=false;q.lastGroundAt=-1e9;q.springFlight=true;}
   if(dt>ms){const f=(ms-(dt-step))/step;q.x=prior.x+(q.x-prior.x)*f;q.y=prior.y+(q.y-prior.y)*f;}
  }
  return q;

@@ -12,15 +12,20 @@ export function enemyContact588(p,e,before){
  if(p.vy<0&&p.y<e.y-9)return null;
  return 'hurt';
 }
+// Shared by authority and prediction: every stomp grants a fresh normal jump.
+export function stomp599(p,e){
+ Object.assign(p,{y:e.y-24,vy:-285,grounded:false,platformId:null,lastGroundAt:-1e9,springFlight:true,jumpBufferUntil:0,reboundJump599:true,airJumpUsed:false,airJumps598:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});
+}
 // y is the character's feet. Server and prediction share all course physics.
 export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  const C=RUN587,course=course589(world),surfaces=surfaces587(elapsed,course,world),previous=surfaces587(elapsed-dt*1000,course,world);
- let jumped=false,wallJumped=false,windJumped=false,landed=false,impact=0;
+ let jumped=false,wallJumped=false,windJumped=false,landed=false,spring=null,impact=0;
  if(at-p.controlAt>C.inputTTL){p.axis=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;}
  if(p.grounded&&p.platformId){const old=previous.find(s=>s.id===p.platformId),now=surfaces.find(s=>s.id===p.platformId);if(old&&now){p.x+=now.x-old.x;p.y+=now.y-old.y;}}
- if(p.grounded){p.lastGroundAt=at;p.airJumpUsed=false;p.airJumps598=0;}
+ if(p.grounded){p.lastGroundAt=at;p.airJumpUsed=false;p.airJumps598=0;p.reboundJump599=false;}
  if(p.jumpBufferUntil>=at){
   if(at-p.lastGroundAt<=C.coyote){p.vy=-C.jump;jumped=true;p.springFlight=false;}
+  else if(p.reboundJump599){p.vy=-C.jump;p.reboundJump599=false;jumped=true;p.springFlight=false;}
   else if(p.wallSide&&at-(p.wallAt??-1e9)<=100&&at>=(p.wallLockUntil??0)){
    p.vy=-C.wallJump;p.wallKickVx=-p.wallSide*C.wallPush;p.vx=p.wallKickVx;p.facing=-p.wallSide;p.wallLockUntil=at+140;p.wallSide=0;p.wallAt=-1e9;p.springFlight=true;wallJumped=true;
   }
@@ -57,7 +62,9 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  }else{
   let hit=null;
   for(const s of surfaces){const old=s.move?(previous.find(q=>q.id===s.id)??s):s;if(p.x+C.radius>s.x&&p.x-C.radius<s.x+s.w&&before.y<=old.y+1&&p.y>=s.y&&(!hit||s.y<hit.y))hit=s;}
-  if(hit){impact=p.vy;p.y=hit.y;p.vy=0;p.grounded=true;p.platformId=hit.id;p.lastGroundAt=at;p.springFlight=false;landed=true;p.wallSide=0;p.wallLockUntil=0;}
+  if(hit){impact=p.vy;p.y=hit.y;p.vy=0;p.grounded=true;p.platformId=hit.id;p.lastGroundAt=at;p.springFlight=false;landed=true;p.wallSide=0;p.wallLockUntil=0;p.reboundJump599=false;p.airJumps598=0;p.airJumpUsed=false;
+   if(hit.spring){spring=hit;Object.assign(p,{vy:-(hit.power??C.spring),grounded:false,platformId:null,lastGroundAt:-1e9,springFlight:true,jumpBufferUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
+  }
  }
- return {before,jumped,wallJumped,windJumped,landed,impact,surfaces};
+ return {before,jumped,wallJumped,windJumped,landed,spring,impact,surfaces};
 }

@@ -28,7 +28,8 @@ export function combat591(g,emit){
   const oldX=b.x,oldY=b.y;b.x+=b.vx*.025;
   if(['fire','stone'].includes(b.kind)){b.vy+=520*.025;b.y+=b.vy*.025;}
   for(const s of surfaces){
-   if(s.ice)continue;
+   // Spikes stop bodies at the sides, never projectiles or their bounce path.
+   if(s.ice||s.spike)continue;
    if(s.breakable&&g.broken?.includes(s.id))continue;
    if(b.x+6<s.x||b.x-6>s.x+s.w)continue;
    if(['fire','stone'].includes(b.kind)&&b.vy>0&&oldY<=s.y-5&&b.y>=s.y-5){b.y=s.y-6;b.vy=-150;break;}

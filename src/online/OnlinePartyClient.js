@@ -1,3 +1,4 @@
+import {ensureResume599,cancelResume599} from './Resume599.js';
 import{playBattleEffect441}from"../ui/BattleEffects441.js";
 import {mountBattleBossLayout} from '../ui/BattleBossLayout.js?v=3.1.85-build405';
 import {
@@ -1401,7 +1402,7 @@ export class OnlinePartyController {
       this.backgroundBound.push([target, type, handler]);
     };
     const resume = () => { this._ensureConnectionAfterResume(); this._startPowerRankingPresenceLoop(); };
-    const suspend = () => this._stopPowerRankingPresenceLoop();
+    const suspend = () => { cancelResume599(this); this._stopPowerRankingPresenceLoop(); };
     bind(globalThis.document, "visibilitychange", () => { if (globalThis.document?.visibilityState === "visible") resume(); else suspend(); });
     bind(globalThis.window, "pagehide", suspend);
     bind(globalThis.window, "pageshow", resume);
@@ -4649,16 +4650,11 @@ export class OnlinePartyController {
     this.lastMoveAt = now; self.position = position; this._send("move", { position }); this._updateHallPlayerDom(this.selfId); const nearby = this._hallNearby(position); if (nearby !== this.hallNearbyRoute) { this.hallNearbyRoute = nearby; this._render(); }
   }
 
-  _ensureConnectionAfterResume() {
-    if ((!this.mounted && !this.backgroundActive) || this.manualClose) return;
-    this._refreshResumeTokenFromStorage();
-    if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
-    clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
-    this.connect({ reconnect: true });
-  }
+  _ensureConnectionAfterResume() { ensureResume599(this); }
 
   _handleClose(closedSocket = null, closeEvent = null) {
-    if (closedSocket && this.ws && this.ws !== closedSocket) return;
+    if (closedSocket && this.ws !== closedSocket) return;
+    cancelResume599(this);
     this._stopPowerRankingPresenceLoop(); this.lastPowerRankingPresenceAt = 0;
     this.ws = null; this.connectionReady = false; this.connectionModePending = false; this.personalHubPending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
     if (Number(closeEvent?.code) === 4001) {
@@ -4683,6 +4679,7 @@ export class OnlinePartyController {
   }
 
   disconnect({ leave = true, quiet = false } = {}) {
+    cancelResume599(this);
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null; this.manualClose = true;
     this._stopPowerRankingPresenceLoop(); this.lastPowerRankingPresenceAt = 0;
     this.connectionReady = false; this.helloAckPending = false; this.connectionModePending = false; this.foregroundProfileSyncPending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearMoveInputs();
