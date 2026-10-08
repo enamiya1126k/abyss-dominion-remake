@@ -1,3 +1,4 @@
+import {crumble600} from './Terrain600.js';
 // Original forest course; every course uses the same geometry resolver below.
 export const COURSE587=Object.freeze({length:4920,goal:4820,height:400,ground:300,
  sections:[{x:0,name:'こもれびの森',sub:'走って、跳んで、踏んで！'},{x:1650,name:'浮遊遺跡',sub:'動く足場とバネを乗り継ごう'},{x:3250,name:'魔王城への道',sub:'あと少し！ 最後の連続ジャンプ'}],
@@ -33,9 +34,9 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
  const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
  if(cache.has(key))return cache.get(key);
 
- const fallen=p=>{const t=world?.crumbles?.[p.id];return t!=null&&elapsed>=t+900&&elapsed<t+4000;};
+ const fallen=p=>p.crumble&&crumble600(world?.crumbles?.[p.id],elapsed).absent;
  const result=[...fixed.ground,...fixed.still,
-  ...fixed.moving.filter(p=>!fallen(p)).map(p=>({...p,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{})})),
+  ...fixed.moving.filter(p=>!fallen(p)).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{}),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
   ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
   ...fixed.bridges.filter(p=>world?.switches?.includes(p.id)),
   ...(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>{const q=enemyAt587(e,elapsed);return {id:'ice:'+e.id,x:q.x-22,y:q.y-39,w:44,h:39,oneWay:true,ice:true,move:{axis:'x'}};})];

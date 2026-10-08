@@ -1,4 +1,5 @@
 import {RUN587,control587,stepRunner587,enemyContact588,stomp599} from './Physics587.js';
+import {bossPosition600,bossStomp600} from './Encounters600.js';
 import {course589} from './Courses589.js';
 import {enemyAt587,surfaces587} from './Level587.js';
 function ground596(q,g,at,sourceAt=at){
@@ -14,6 +15,10 @@ function ground596(q,g,at,sourceAt=at){
 export function remember591(c){
  const g=c.state?.runners,u=c.runnersUI587;if(!g||!u)return;
  if(u.motionId!==g.id||u.motionRound599!==g.round){u.motionRound599=g.round;u.motionId=g.id;u.frames591=[];u.corrections591=new Map();u.inputs591=[];}
+ const self=g.players.find(p=>p.playerId===c.transport?.selfId);
+ if(self){const epoch=[g.id,g.round,self.motionEpoch600??0,!!self.respawnAt,!!self.waiting,!!self.paused].join(':');
+  if(u.life600!==epoch){if(u.life600&&u.renderer&&!self.respawnAt)u.renderer.snap=true;u.life600=epoch;u.inputs591=[];u.corrections591.delete(self.seat);u.pendingJump=null;u.sentJump=false;}
+ }
  const frames=u.frames591;
  if(frames.at(-1)?.serverAt!==g.serverAt){frames.push(g);if(frames.length>6)frames.shift();}
 }
@@ -24,7 +29,7 @@ function extrapolate(c,p,g,at){
  const pending=self?(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq)):[];let input=0;
  const defeated=new Set();
  for(let dt=0;dt<ms;){
-  const step=RUN587.step;const prior={x:q.x,y:q.y};dt+=step;
+  const step=RUN587.step;const prior={...q};dt+=step;
   while(input<pending.length&&pending[input].at<=g.serverAt+dt){const i=pending[input++];control587(q,i.target,Math.max(g.serverAt,i.at));}
   const {before}=stepRunner587(q,g.serverAt+dt,g.elapsed+dt,step/1000,g);
   for(const e of g.enemies){
@@ -32,7 +37,10 @@ function extrapolate(c,p,g,at){
    const enemy=enemyAt587(e,g.elapsed+dt);
    if(enemyContact588(q,enemy,before)==='stomp'){stomp599(q,enemy);defeated.add(e.id);break;}
   }
-  if(dt>ms){const f=(ms-(dt-step))/step;q.x=prior.x+(q.x-prior.x)*f;q.y=prior.y+(q.y-prior.y)*f;}
+  if(g.boss600&&!defeated.has('boss600')){const b={...g.boss600,x:bossPosition600(g.boss600,g.elapsed+dt)};if(bossStomp600(q,b,before)){stomp599(q,{y:b.y-38});defeated.add('boss600');}}
+  if(dt>ms){const f=(ms-(dt-step))/step;q.x=prior.x+(q.x-prior.x)*f;q.y=prior.y+(q.y-prior.y)*f;
+   q.grounded=prior.grounded&&q.grounded&&prior.platformId===q.platformId;if(!q.grounded)q.platformId=null;
+  }
  }
  return q;
 }
@@ -42,23 +50,24 @@ export function predict591(c,p,at){
   const t=at-75;
   for(let i=frames.length-1;i>0;i--){const a=frames[i-1],b=frames[i];if(t<a.serverAt||t>b.serverAt)continue;
    const pa=a.players[p.seat],pb=b.players[p.seat];
-   if(!pa||!pb||pa.respawnAt||pb.respawnAt||Math.abs(pa.x-pb.x)>100)break;
+   if(!pa||!pb||pa.respawnAt||pb.respawnAt||pa.motionEpoch600!==pb.motionEpoch600||Math.abs(pa.x-pb.x)>100)break;
    const f=(t-a.serverAt)/Math.max(1,b.serverAt-a.serverAt);
    return ground596({...p,x:pa.x+(pb.x-pa.x)*f,y:pa.y+(pb.y-pa.y)*f},g,at,t);
   }
  }
  // Remote players use snapshots, never run a second physics simulation locally.
- if(!self){const ms=g.phase==='play'&&g.stage==='run'&&p.alive&&!p.respawnAt&&p.finishTime==null?Math.min(50,Math.max(0,at-75-g.serverAt)):0;return ground596({...p,x:p.x+p.vx*ms/1000,y:p.y+(p.grounded?0:p.vy*ms/1000)},g,at,g.serverAt+ms);}
+ if(!self){const ms=g.phase==='play'&&g.stage==='run'&&p.alive&&!p.waiting&&!p.paused&&!p.respawnAt&&p.finishTime==null?Math.min(50,Math.max(0,at-75-g.serverAt)):0;return ground596({...p,x:p.x+p.vx*ms/1000,y:p.y+(p.grounded?0:p.vy*ms/1000)},g,at,g.serverAt+ms);}
  const q=extrapolate(c,p,g,at);
  const records=u.corrections591??=new Map();let r=records.get(p.seat);
  if(!r){r={source:g,at,dx:0,dy:0};records.set(p.seat,r);}
  if(r.source.serverAt!==g.serverAt){
   const old=r.source.players[p.seat];
-  if(old&&old.alive&&p.alive&&!old.respawnAt&&!p.respawnAt&&Math.abs(old.x-p.x)<85&&old.checkpoint===p.checkpoint){
+  if(old&&old.alive&&p.alive&&!old.respawnAt&&!p.respawnAt&&!p.waiting&&!p.paused&&old.motionEpoch600===p.motionEpoch600&&Math.abs(old.x-p.x)<85&&old.checkpoint===p.checkpoint){
    const before=extrapolate(c,old,r.source,at);r.dx=Math.max(-26,Math.min(26,r.dx+before.x-q.x));r.dy=Math.max(-22,Math.min(22,r.dy+before.y-q.y));
   }else{r.dx=0;r.dy=0;}
   r.source=g;
  }
  const decay=Math.exp(-Math.max(0,at-r.at)/65);r.dx*=decay;r.dy*=decay;r.at=at;
+ if(q.grounded||p.respawnAt||p.waiting||p.paused)r.dy=0;
  q.x+=r.dx;q.y+=r.dy;return ground596(q,g,at);
 }

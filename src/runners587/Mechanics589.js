@@ -1,4 +1,5 @@
 import {crusherAt597} from './Gimmicks597.js';
+import {CRUMBLE600} from './Terrain600.js';
 import {course589,inHazard589} from './Courses589.js';
 import {RUN587 as C} from './Physics587.js';
 
@@ -35,5 +36,5 @@ export function mechanics589(g,previous,emit,hurt){
    }
   }
  }
- for(const [id,start]of Object.entries(g.crumbles))if(g.elapsed>=start+4000)delete g.crumbles[id];
+ for(const [id,start]of Object.entries(g.crumbles))if(g.elapsed>=start+CRUMBLE600.reset)delete g.crumbles[id];
 }

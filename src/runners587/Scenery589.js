@@ -42,7 +42,7 @@ export function scenery589(c,g,course,left,right,at){
   c.save();c.translate(s.x,y-41);c.rotate(Math.PI/4);c.shadowColor=on?'#86ffd2':'#f9ca79';c.shadowBlur=on?16:8;c.fillStyle=on?'#b5ffdc':'#f0cc82';c.fillRect(-8,-8,16,16);c.restore();c.fillStyle='#183f42';c.font='bold 10px "Noto Sans JP",sans-serif';c.textAlign='center';c.fillText(on?'✓':s.label,s.x,y-37);label(c,on?'橋がつながった！':'ここを踏むと橋が開く',s.x,y-71,on?'#c1ffdd':'#ffe0a0');
  }
  for(const p of course.platforms.filter(p=>p.crumble&&visible(p))){
-  const start=g.crumbles[p.id],age=start==null?-1:g.elapsed-start;if(age>=900)continue;
+  const start=g.crumbles[p.id],age=start==null?-1:g.elapsed-start;if(age>=1100)continue;
   const shake=age<0?0:Math.sin(at/24)*Math.min(5,age/160);c.save();c.translate(shake,age<0?0:Math.sin(at/31)*2);
   c.strokeStyle=age>=0?'#ffca83':'#9a754e';c.lineWidth=age>=0?2:1;for(let x=p.x+17;x<p.x+p.w-12;x+=29){c.beginPath();c.moveTo(x,p.y+1);c.lineTo(x+5,p.y+8);c.lineTo(x-2,p.y+14);c.lineTo(x+4,p.y+22);c.stroke();}
   if(age>=0)for(let i=0;i<4;i++){c.fillStyle='#d8b77c';c.fillRect(p.x+13+i*21,p.y+30+(at/8+i*9)%23,3,3);}c.restore();

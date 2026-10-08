@@ -1,6 +1,6 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'runners',name:'とびだせ！魔界ランナーズ',tag:'６属性 × 協力と裏切り × ミス数勝負',players:'人間だけの１〜４人 · AI参加なし',image:'./assets/runners587/cover.webp',description:'火の３連弾、風の３段ジャンプ、雷の常時ダッシュ！ 凍らせた敵は乗っても蹴ってもOK。人間だけ１〜４人、弾数と復活は無制限。落下・押し潰しは旗へ戻ろう。'},
+ {id:'runners',name:'とびだせ！魔界ランナーズ',tag:'６属性 × 協力と裏切り × ミス数勝負',players:'人間だけの１〜４人 · AI参加なし',image:'./assets/runners587/cover.webp',description:'８つの世界を冒険！ 回転火柱、虫の大群、登山、地下の隠し部屋、そしてボス戦。６属性を使い分けて突破しよう。人間だけ１〜４人、弾数と復活は無制限。'},
  {id:'walls',name:'魔王のせまりくる壁',tag:'３本勝負 × ギリギリ回避 × 全員復帰',players:'４人対戦・３本勝負・空席はAI',image:'./assets/walls585/cover.webp',description:'壁のすき間へ走れ！ １戦最大32秒、３本の合計点で勝負。生存１秒10点・壁突破25点・生き残り100点。突破するとダッシュも素早く回復！'},
  {id:'chairs',name:'早押し！魔王のイス取り',tag:'音楽が止まったら × 金席争奪 × 連続ボーナス',players:'４人対戦 · 全８回 · 空席はAI',image:'./assets/chairs583/cover.webp',description:'音楽が止まった瞬間、空席をタップ！ 普通100点・金200点。待ち時間なしの早い者勝ち。連続着席ボーナス、最後の２回は得点２倍！'},
  {id:'sushi',name:'まわせ！魔王の回転寿司',tag:'注文３皿で＋180点 × フィーバー × 金皿争奪',players:'４人対戦 · 75秒 · 空席はAI',image:'./assets/sushi581/cover.webp',description:'光る帯の中の皿をタップ！ 注文３皿をそろえて＋180点、注文５皿連続でフィーバー！ 激辛わさびに気をつけて。逆回転と最後の金皿ラッシュで大逆転！'},

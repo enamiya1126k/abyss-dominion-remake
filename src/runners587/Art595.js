@@ -77,7 +77,7 @@ export function gate595(c,course,open,at=0,arrivalAge=-1){
   const p=arrivalAge/1000;c.save();c.translate(x,y+17);c.globalAlpha=Math.sin(Math.PI*p)*.85;c.strokeStyle='#e6ffcc';c.lineWidth=3*(1-p)+.5;c.beginPath();c.ellipse(0,0,28+p*57,40+p*50,0,0,7);c.stroke();
   c.fillStyle='#fff0b2';for(let i=0;i<10;i++){const a=i/10*Math.PI*2,d=16+p*67;c.beginPath();c.arc(Math.cos(a)*d,Math.sin(a)*d*.85,2.5*(1-p)+.5,0,7);c.fill();}c.restore();
  }
- c.textAlign='center';c.font='bold 12px "Noto Sans JP",sans-serif';c.fillStyle='#fff1bc';c.fillText(open?'GOAL':'橋をすべて開こう',course.goal,120);return true;
+ c.textAlign='center';c.font='bold 12px "Noto Sans JP",sans-serif';c.fillStyle='#fff1bc';c.fillText(open?'GOAL':course.boss600?'':'橋をすべて開こう',course.goal,120);return true;
 }
 export function spikes595(c,h){
  const a=load('spikes');if(a.ready)c.drawImage(a.image,h.x-2,h.y-h.h-2,h.w+4,h.h+5);
