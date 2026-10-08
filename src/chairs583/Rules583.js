@@ -1,16 +1,12 @@
 import {STEP580,random580 as random,event580 as emit,make580,players580,finish580,publicBase580,resume580} from '../arcade580/Common580.js';
 
-export const CHAIRS583=Object.freeze({step:STEP580,countdown:3000,rounds:8,musicMin:3600,musicRange:3400,grabMs:4800,revealMs:2400,retryMs:100,normal:100,gold:150,goldMax:300,goldDelay:800,growMs:1800,counts:[3,3,2,3,2,3,2,1]});
+export const CHAIRS583=Object.freeze({step:STEP580,countdown:3000,rounds:8,musicMin:2500,musicRange:3000,grabMs:2200,revealMs:1500,retryMs:100,normal:100,gold:200,goldMax:200,goldDelay:0,growMs:1800,counts:[3,2,3,1,3,2,3,1]});
 const C=CHAIRS583;
-export const makeChairs583=args=>({...make580('chairs',args),rules583:3,chairs:[],history:[]});
+export const makeChairs583=args=>({...make580('chairs',args),rules583:4,chairs:[],history:[]});
 export function chairPoint583(index,count){return count===1?{x:.5,y:.56}:count===2?{x:index===0?.3:.7,y:.56}:[{x:.5,y:.46},{x:.27,y:.70},{x:.73,y:.70}][index];}
 export function orbit583(seat,g,at,reduced=false){const angle=Math.PI/2+seat*Math.PI/2+(reduced?0:Math.max(0,at-(g.roundAt??g.startAt))/1250);return {x:.5+Math.cos(angle)*.37,y:.58+Math.sin(angle)*.30};}
 export function chairLocation584(g,id){const ch=g.chairs.find(ch=>ch.id===id);return chairPoint583(ch?.slot??id,g.chairs.length);}
-export function chairValue584(g,ch,at=g.lastAt??g.serverAt){
- if(ch.owner!=null)return ch.points;
- const growing=ch.gold&&ch.openAt>0&&['grab','reveal'].includes(g.stage),charge=growing?Math.max(0,Math.min(1,(at-ch.openAt)/C.growMs)):0;
- return (ch.gold?C.gold+Math.floor(charge*15+1e-8)*10:C.normal)*g.multiplier;
-}
+export function chairValue584(g,ch,at=g.lastAt??g.serverAt){return ch.owner!=null?ch.points:(ch.gold?200:100)*g.multiplier;}
 export function chairOpen584(g,ch,at=g.lastAt??g.serverAt){return g.stage==='grab'&&(!ch.gold||ch.openAt>0&&at>=ch.openAt);}
 function nextRound(g){
  const count=C.counts[g.round-1],gold=Math.floor(random(g)*count);
@@ -40,13 +36,13 @@ export function inputChairs583(g,p,m){
  if(at<g.stopAt){p.out=true;p.fault=true;p.faults++;emit(g,'fault',{seat:p.seat});return true;}
  const chair=g.chairs.find(ch=>ch.id===m.target);
  if(chair.owner!=null){p.nextAt=g.lastAt+C.retryMs;p.bumpAt=g.lastAt;emit(g,'miss',{seat:p.seat,chair:chair.id,winner:chair.owner,margin:Math.max(0,at-chair.receivedAt)});return true;}
- chair.points=chairValue584(g,chair,at);chair.receivedAt=at;chair.owner=p.seat;chair.claimedAt=g.lastAt;p.chair=chair.id;p.gain=chair.points;p.score+=p.gain;p.sits++;if(chair.gold)p.golds++;
+ chair.points=chairValue584(g,chair,at);chair.receivedAt=at;chair.owner=p.seat;chair.claimedAt=g.lastAt;p.chair=chair.id;p.streak598=(p.streak598??0)+1;p.gain=chair.points+Math.min(3,p.streak598-1)*25*g.multiplier;p.score+=p.gain;p.sits++;if(chair.gold)p.golds++;
  p.reaction=Math.max(0,at-g.stopAt);p.bestReaction=Math.min(p.bestReaction??Infinity,p.reaction);
  emit(g,'sit',{seat:p.seat,chair:chair.id,value:p.gain,gold:chair.gold});return true;
 }
 function resolve(g){
  g.stage='reveal';g.phaseAt=g.lastAt;g.deadline=g.lastAt+C.revealMs;
- for(const p of g.players)if(p.chair==null)p.out=true;
+ for(const p of g.players)if(p.chair==null){p.out=true;p.streak598=0;}
  g.history.push({round:g.round,gains:g.players.map(p=>p.gain),chairs:g.chairs.map(ch=>({...ch}))});
  emit(g,'roundEnd',{round:g.round});
 }
@@ -80,8 +76,8 @@ export function advanceChairs583(g,now,inputs=new Map(),auto=new Set()){
   }
   if(g.stage==='dance'&&g.lastAt>=g.stopAt){
    g.stage='grab';g.phaseAt=g.stopAt;g.deadline=g.stopAt+C.grabMs;
-   for(const ch of g.chairs)ch.openAt=g.stopAt+(ch.gold?C.goldDelay+(g.mode==='goldrush'?ch.id*220:0):0);
-   for(const p of g.players){const golds=g.chairs.filter(ch=>ch.gold);p.botGreedy=g.mode==='final'||g.mode==='goldrush'||random(g)<.55;p.botTarget=golds[Math.floor(random(g)*golds.length)].id;p.botAt=p.botGreedy?g.chairs[p.botTarget].openAt+425+Math.floor(random(g)*1400):g.stopAt+500+Math.floor(random(g)*850);}
+   for(const ch of g.chairs)ch.openAt=g.stopAt+(ch.gold?C.goldDelay+(0):0);
+   for(const p of g.players){const golds=g.chairs.filter(ch=>ch.gold);p.botGreedy=g.mode==='final'||g.mode==='goldrush'||random(g)<.55;p.botTarget=golds[Math.floor(random(g)*golds.length)].id;p.botAt=g.stopAt+380+Math.floor(random(g)*750);}
    emit(g,'stop');
   }
   const actions=[];

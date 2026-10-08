@@ -18,18 +18,18 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  let jumped=false,wallJumped=false,windJumped=false,landed=false,impact=0;
  if(at-p.controlAt>C.inputTTL){p.axis=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;}
  if(p.grounded&&p.platformId){const old=previous.find(s=>s.id===p.platformId),now=surfaces.find(s=>s.id===p.platformId);if(old&&now){p.x+=now.x-old.x;p.y+=now.y-old.y;}}
- if(p.grounded){p.lastGroundAt=at;p.airJumpUsed=false;}
+ if(p.grounded){p.lastGroundAt=at;p.airJumpUsed=false;p.airJumps598=0;}
  if(p.jumpBufferUntil>=at){
   if(at-p.lastGroundAt<=C.coyote){p.vy=-C.jump;jumped=true;p.springFlight=false;}
   else if(p.wallSide&&at-(p.wallAt??-1e9)<=100&&at>=(p.wallLockUntil??0)){
    p.vy=-C.wallJump;p.wallKickVx=-p.wallSide*C.wallPush;p.vx=p.wallKickVx;p.facing=-p.wallSide;p.wallLockUntil=at+140;p.wallSide=0;p.wallAt=-1e9;p.springFlight=true;wallJumped=true;
   }
-  else if(!p.grounded&&p.weapon==='wind'&&!p.airJumpUsed){p.vy=-C.jump;p.airJumpUsed=true;p.springFlight=true;windJumped=true;}
+  else if(!p.grounded&&p.weapon==='wind'&&(p.airJumps598??0)<2){p.vy=-C.jump;p.airJumps598=(p.airJumps598??0)+1;p.airJumpUsed=p.airJumps598>=2;p.springFlight=true;windJumped=true;}
   if(jumped||wallJumped||windJumped){p.grounded=false;p.platformId=null;p.lastGroundAt=-1e9;p.jumpBufferUntil=0;}
  }
  if(!p.jumpHeld&&!p.springFlight&&p.vy<-C.shortJump)p.vy=-C.shortJump;
  const wind=!p.grounded?course.winds.find(w=>p.x>=w.x&&p.x<w.x+w.w&&p.y>w.y&&p.y<w.y+w.h):null;
- const speed=p.boostUntil>at?C.boostSpeed:C.speed,wanted=p.axis*speed+(wind?.speed??0);
+ const speed=p.weapon==='thunder'?315:p.boostUntil>at?C.boostSpeed:C.speed,wanted=p.axis*speed+(wind?.speed??0);
  if(at<(p.bumpUntil??0))p.vx=p.bumpVx;
  else if(at<(p.wallLockUntil??0))p.vx=p.wallKickVx;
  else{p.vx=approach(p.vx,wanted,(p.axis?(p.grounded?C.accel:C.airAccel):(p.grounded&&course.theme==='frost'?750:C.brake))*dt);if(p.axis)p.facing=p.axis;}

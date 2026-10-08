@@ -31,3 +31,6 @@
 .ru-vivid593 .ru-pawn587[data-form]:not([data-form=""]):after{content:"";position:absolute;bottom:1px;left:8%;width:84%;height:15%;border:2px solid var(--form);border-radius:50%;box-shadow:0 -3px 8px var(--form);pointer-events:none}
 .ru-vivid593 .ru-pawn587.is-entering596:after{display:none}
 .ru-team-avatars589 span{font-size:12px;line-height:1.6}
+
+.ru-attack591 .ru-element598{display:block;width:36px;height:36px;margin:0 auto;background-size:400% 300%}
+.ru-pawn587.is-recoil598 .ru-sprite587{rotate:calc(var(--recoil)*-18deg)}

@@ -1,3 +1,4 @@
+import {freeze598} from './Ice598.js';
 import {ELEMENTS597} from './Gimmicks597.js';
 import {course589} from './Courses589.js';
 import {enemyAt587,surfaces587} from './Level587.js';
@@ -12,8 +13,11 @@ export function combat591(g,emit){
    if(p.powers.includes(item.id)||Math.abs(p.x-item.x)>24||Math.abs(p.y-14-item.y)>30)continue;
    p.powers.push(item.id);const power=POWERS591[item.kind];p.weapon=item.kind;p.ammo=0;emit(g,'power',{seat:p.seat,kind:item.kind,x:item.x,y:item.y});
   }
-  if(!p.attackHeld||!p.weapon||now<p.shotAt||g.projectiles.length>=24)continue;
-  const power=POWERS591[p.weapon];p.shots++;p.shotAt=now+power.cooldown;
+  if(p.burst598&&p.weapon!=='fire')p.burst598=0;
+  const burst=p.burst598>0&&now>=p.burstAt598;
+  if((!burst&&(!p.attackHeld||!p.weapon||now<p.shotAt))||g.projectiles.length>=24)continue;
+  const power=POWERS591[p.weapon];p.shots++;
+  if(burst){p.burst598--;p.burstAt598=now+90;}else {p.shotAt=now+power.cooldown;if(p.weapon==='fire'){p.burst598=2;p.burstAt598=now+90;}}
   g.projectiles.push({id:++g.projectileId,owner:p.seat,kind:p.weapon,x:p.x+p.facing*25,y:p.y-16,vx:p.facing*(p.weapon==='stone'?300:p.weapon==='thunder'?600:440),vy:0,hitsLeft:ELEMENTS597[p.weapon].hits,born:now,until:now+1600});
   emit(g,'shoot',{seat:p.seat,kind:p.weapon,x:p.x,y:p.y-16});
  }
@@ -24,6 +28,7 @@ export function combat591(g,emit){
   const oldX=b.x,oldY=b.y;b.x+=b.vx*.025;
   if(['fire','stone'].includes(b.kind)){b.vy+=520*.025;b.y+=b.vy*.025;}
   for(const s of surfaces){
+   if(s.ice)continue;
    if(s.breakable&&g.broken?.includes(s.id))continue;
    if(b.x+6<s.x||b.x-6>s.x+s.w)continue;
    if(['fire','stone'].includes(b.kind)&&b.vy>0&&oldY<=s.y-5&&b.y>=s.y-5){b.y=s.y-6;b.vy=-150;break;}
@@ -40,7 +45,7 @@ export function combat591(g,emit){
   for(const e of g.enemies){
    if(e.defeated||e.downUntil>now)continue;const q=enemyAt587(e,g.elapsed);
    if(!crossed(oldX,b.x,q.x,23)||Math.abs(b.y-(q.y-13))>21)continue;
-   if(b.kind==='ice'){e.frozenAt=g.elapsed;e.frozenUntil=g.elapsed+2300;b.hitsLeft=0;emit(g,'freeze',{seat:b.owner,x:q.x,y:q.y});return false;}e.defeated=true;e.downUntil=0;const owner=g.players[b.owner];owner.kills++;if(b.kind==='thunder'){let links=0;for(const next of g.enemies){if(next.defeated||next===e)continue;const n=enemyAt587(next,g.elapsed);if(Math.hypot(n.x-q.x,n.y-q.y)<140&&links++<2){next.defeated=true;owner.kills++;emit(g,'zap',{seat:b.owner,x:n.x,y:n.y,fromX:q.x,fromY:q.y});}}}
+   if(b.kind==='ice'){freeze598(g,e);b.hitsLeft=0;emit(g,'freeze',{seat:b.owner,x:q.x,y:q.y});return false;}e.defeated=true;e.downUntil=0;const owner=g.players[b.owner];owner.kills++;if(b.kind==='thunder'){let links=0;for(const next of g.enemies){if(next.defeated||next===e)continue;const n=enemyAt587(next,g.elapsed);if(Math.hypot(n.x-q.x,n.y-q.y)<140&&links++<2){next.defeated=true;owner.kills++;emit(g,'zap',{seat:b.owner,x:n.x,y:n.y,fromX:q.x,fromY:q.y});}}}
    emit(g,'defeat',{seat:b.owner,x:q.x,y:q.y,kind:b.kind});b.hitsLeft=(b.hitsLeft??1)-1;if(b.hitsLeft<=0)return false;
   }
   for(const p of g.players){

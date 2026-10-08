@@ -1,14 +1,7 @@
 import {chairLocation584,chairValue584,chairOpen584} from './Rules583.js';
 import {esc563 as esc,color563 as color} from '../party/Arcade563.js';
-export const mode584=g=>g.mode==='goldrush'?'黄金祭 · ３つとも金のイス':g.mode==='shuffle'?'シャッフル · 金のイスを見失うな！':g.mode==='final'?'最終決戦 · １席だけ、最大600点！':g.chairs?.length===2?'２席争奪 · 安全か、欲ばりか':'普通席を確保？ 金で大勝負？';
-export function decision584(g,at){
- if(g.stage==='dance'||g.stage==='ready')return g.mode==='goldrush'?'音楽が止まると、金が順番に解禁！':'普通はすぐ確保。金は遅れて解禁！';
- const golds=g.chairs.filter(ch=>ch.gold&&ch.owner==null),open=golds.filter(ch=>chairOpen584(g,ch,at));
- if(!golds.length)return '金は取られた！ 残った空席へ！';
- if(!open.length)return `金の解禁まで ${Math.max(0,(Math.min(...golds.map(ch=>ch.openAt))-at)/1000).toFixed(1)}秒`;
- const highest=Math.max(...open.map(ch=>chairValue584(g,ch,at))),max=300*g.multiplier;
- return highest>=max?`金はMAX ${max}点！ 今だ！`:`金 ${highest} → ${max}点！ 待つほど育つ！`;
-}
+export const mode584=g=>g.round===8?'最後の１席・得点２倍':g.chairs?.length===1?'１席争奪！':'金のイスは200点・連続着席ボーナス';
+export function decision584(g,at){return g.stage==='dance'?'♪':g.stage==='grab'?'空席をタップ！':'';}
 export function motion584(u,p,target,g,at){
  u.motion??={};const state=p.chair!=null?'seat'+p.chair:p.out?'out':g.stage==='dance'?'dance':'wait',key=g.round+':'+state;
  let m=u.motion[p.seat];if(!m||m.key!==key){m=u.motion[p.seat]={key,from:m?.current??target,current:target,at,duration:state.startsWith('seat')?460:state==='out'?620:260,state};}
@@ -17,10 +10,10 @@ export function motion584(u,p,target,g,at){
  m.current=pos;return {...pos,landing:state.startsWith('seat')&&t<1,flying:state==='out'&&t<1};
 }
 export function score584(u,seat,value,at){u.scoreTweens??={};let t=u.scoreTweens[seat];if(!t||t.target!==value)t=u.scoreTweens[seat]={from:t?.value??value,target:value,at,value};const f=u.reduced?1:Math.min(1,Math.max(0,(at-t.at)/550));t.value=Math.round(t.from+(t.target-t.from)*(1-(1-f)**3));return t.value;}
-export function recap584(c,g){return `<div class="ch-recap584"><small>ROUND RECORD</small><h2>８回の勝負を振り返ろう</h2><div class="ch-record584"><div class="ch-record-head584"><b>相棒</b>${Array.from({length:8},(_,i)=>`<span>${i+1}</span>`).join('')}</div>${g.players.map(p=>`<div style="--player:${color(p)}"><b>${p.playerId===c.transport.selfId?'あなた':esc(p.name)}</b>${Array.from({length:8},(_,i)=>{const n=g.history[i]?.gains[p.seat]??0;return `<span class="${n?'is-win':'is-miss'}">${n||'—'}</span>`;}).join('')}</div>`).join('')}</div><p>金を育てて大逆転？ 次は誰が玉座をつかむ？</p></div>`;}
+export function recap584(c,g){return `<div class="ch-recap584"><small>ROUND RECORD</small><h2>８回の勝負を振り返ろう</h2><div class="ch-record584"><div class="ch-record-head584"><b>相棒</b>${Array.from({length:8},(_,i)=>`<span>${i+1}</span>`).join('')}</div>${g.players.map(p=>`<div style="--player:${color(p)}"><b>${p.playerId===c.transport.selfId?'あなた':esc(p.name)}</b>${Array.from({length:8},(_,i)=>{const n=g.history[i]?.gains[p.seat]??0;return `<span class="${n?'is-win':'is-miss'}">${n||'—'}</span>`;}).join('')}</div>`).join('')}</div><p>止まった瞬間、金席をつかめ！ 次は誰が玉座をつかむ？</p></div>`;}
 export function bursts584(r,g,u,at){
  const x=r.ctx,w=r.w,h=r.h;
- for(const ch of g.chairs){if(!ch.gold)continue;const p=chairLocation584(g,ch.id),cx=p.x*w,cy=(p.y+.115)*h,charge=Math.max(0,Math.min(1,((ch.owner!=null?ch.claimedAt:at)-ch.openAt)/1800));
+ for(const ch of g.chairs){if(!ch.gold)continue;const p=chairLocation584(g,ch.id),cx=p.x*w,cy=(p.y+.115)*h,charge=1;
   const glow=x.createRadialGradient(cx,cy,0,cx,cy,w*.22);glow.addColorStop(0,ch.owner!=null?'#ffdc9233':'#ffdc921c');glow.addColorStop(1,'#ffd89100');x.fillStyle=glow;x.fillRect(cx-w*.22,cy-w*.22,w*.44,w*.44);
   if(g.stage==='grab'&&ch.owner==null){x.save();x.strokeStyle='#fce1a333';x.lineWidth=3;x.beginPath();x.ellipse(cx,cy,w*.12,h*.025,0,0,Math.PI*2);x.stroke();if(chairOpen584(g,ch,at)){x.strokeStyle='#ffe4a6';x.shadowColor='#f7c259';x.shadowBlur=10;x.beginPath();x.ellipse(cx,cy,w*.12,h*.025,0,-Math.PI/2,-Math.PI/2+Math.PI*2*charge);x.stroke();}x.restore();}
  }

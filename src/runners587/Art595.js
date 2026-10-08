@@ -59,10 +59,8 @@ export function enemy595(c,p,at){
  c.save();c.translate(p.x,p.y);c.scale(p.dir,p.flying?.94+Math.sin(at/100)*.06:1);
  c.drawImage(a.image,-w/2,-h,w,h);c.restore();
 }
-export function pickup595(c,item,at){if(!['fire','wind'].includes(item.kind)){rune597(c,item.kind,item.x,item.y+Math.sin(at/320+item.x)*3);return;}
- const a=load(item.kind);if(!a.ready)return pickup593(c,item,at);
- const bob=Math.sin(at/320+item.x)*3;c.drawImage(a.image,item.x-19,item.y-19+bob,38,38);
-}
+export function pickup595(c,item,at){rune597(c,item.kind,item.x,item.y+Math.sin(at/320+item.x)*3);}
+
 export function gate595(c,course,open,at=0,arrivalAge=-1){
  const a=load('gate');if(!a.ready)return false;
  const x=course.goal,y=214;c.drawImage(a.image,x-62,126,124,174);

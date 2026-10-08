@@ -28,11 +28,14 @@ export function paint580(r,g,self,u,at){
   if(!fallen)for(const d of g.drops){const old=u.previous?.drops?.find(v=>v.id===d.id),blend=Math.min(1,(performance.now()-(u.receivedAt??0))/50),y=old?old.y+(d.y-old.y)*blend:d.y;treasure(ctx,d.kind,d.x*w,y*h,Math.max(9,w*.032),animation);}
   for(const e of g.events){const age=at-e.at;if(age<0||age>1000)continue;if(e.type==='catch'||e.type==='blast'){const p=g.players[e.seat];label(ctx,(e.value>0?'+':'')+e.value,e.x*w,h*.70-age*.035,Math.max(14,w*.04),e.value>0?color(p):'#ff966b');}}
  }else{
-  const reveal=g.stage==='reveal',t=Math.min(1,Math.max(0,(at-g.phaseAt)/550)),ease=1-(1-t)**3;
-  for(const p of g.players){let x=(.18+.21*p.seat)*w,y=h*.93;if(reveal&&p.pad!=null){const pad=PADS580[p.pad],crowd=g.players.filter(q=>q.pad===p.pad),j=crowd.findIndex(q=>q.seat===p.seat),tx=pad[0]*w+(j-(crowd.length-1)/2)*Math.min(26,w*.06),ty=pad[1]*h-12;x+=(tx-x)*(reduced?1:ease);y+=(ty-y)*(reduced?1:ease);if(!reduced)y-=Math.sin(t*Math.PI)*h*.20;if(p.out&&at-g.phaseAt>750)y+=Math.min(h,(at-g.phaseAt-750)*.35);}
+  const reveal=g.stage==='reveal';
+  const point=(pad,seat)=>pad==null?{x:(.18+.21*seat)*w,y:h*.93}:{x:PADS580[pad][0]*w,y:PADS580[pad][1]*h-12};
+  for(const p of g.players){const from=point(p.fromPad598,p.seat),to=point(p.target,p.seat),t=p.jumpAt598?Math.max(0,Math.min(1,(at-p.jumpAt598)/420)):1;let x=from.x+(to.x-from.x)*t,y=from.y+(to.y-from.y)*t-(reduced?0:Math.sin(t*Math.PI)*h*.17);const crowd=g.players.filter(q=>q.target===p.target),j=crowd.findIndex(q=>q.seat===p.seat);if(p.target!=null)x+=(j-(crowd.length-1)/2)*w*.045*t;
+   if(reveal&&p.out)y+=Math.min(h,Math.max(0,at-g.phaseAt)*.35);
    r.points.push({seat:p.seat,x,y,status:p.out&&reveal?'fallen':'riding'});ellipse(ctx,x,y+3,Math.max(12,w*.046),4,color(p)+'66',color(p));
   }
-  if(reveal&&g.eruption!=null){const [px,py]=PADS580[g.eruption],x=px*w,y=py*h;for(let i=0;i<15;i++){const a=i*2.399,life=(at-g.phaseAt)/1600,rad=Math.max(0,Math.sin(Math.min(1,life)*Math.PI))*(32+i*3);ellipse(ctx,x+Math.cos(a)*rad,y-Math.abs(Math.sin(a))*rad*2,2+i%4,4+i%5,i%2?'#ff8b27':'#fff0a0');}if(at-g.phaseAt>300)label(ctx,'ドッカーン！',x,Math.max(30,y-70),Math.max(13,w*.04),'#ffd9a2');}
+  for(const pad of reveal?(g.eruptions598??[]):g.danger){const [px,py]=PADS580[pad],x=px*w,y=py*h,age=at-g.phaseAt;ctx.save();ctx.strokeStyle='#ffe0a1';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-18,y);ctx.lineTo(x-6,y-7);ctx.lineTo(x+1,y+6);ctx.lineTo(x+13,y-5);ctx.stroke();if(reveal)for(let i=0;i<12;i++){const a=i*2.399,rad=Math.max(0,Math.sin(Math.min(1,age/1500)*Math.PI))*(32+i*3);ellipse(ctx,x+Math.cos(a)*rad,y-Math.abs(Math.sin(a))*rad*2,2+i%4,4+i%5,i%2?'#ff8b27':'#fff0a0');}ctx.restore();}
+
  }
  // Sparse deterministic sparks are decorative; game state never depends on rendering.
  if(!reduced)for(let i=0;i<12;i++){const x=((i*83.73)%w),y=(h+((i*41.7-animation*.017)%(h+20)))%(h+20);ellipse(ctx,x,y,1,2,'#fbe0a366');}

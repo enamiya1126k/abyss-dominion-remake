@@ -30,14 +30,19 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
   moving:course.platforms.filter(p=>p.move||p.crumble).map(p=>({...p,oneWay:true})),
   walls:[...(course.walls??[]).map(p=>({...p,wall:true})),...(course.hazards??[]).filter(h=>h.kind==='spikes').map(h=>({id:h.id,x:h.x,y:h.y-h.h,w:h.w,h:h.h,wall:true,spike:true}))],bridges:(course.bridges??[]).map(p=>({...p,bridge:true}))};geometry591.set(course,fixed);}
  let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
- const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',');
+ const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
  if(cache.has(key))return cache.get(key);
 
  const fallen=p=>{const t=world?.crumbles?.[p.id];return t!=null&&elapsed>=t+900&&elapsed<t+4000;};
  const result=[...fixed.ground,...fixed.still,
   ...fixed.moving.filter(p=>!fallen(p)).map(p=>({...p,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{})})),
   ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
-  ...fixed.bridges.filter(p=>world?.switches?.includes(p.id))];
+  ...fixed.bridges.filter(p=>world?.switches?.includes(p.id)),
+  ...(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>{const q=enemyAt587(e,elapsed);return {id:'ice:'+e.id,x:q.x-22,y:q.y-39,w:44,h:39,oneWay:true,ice:true,move:{axis:'x'}};})];
  if(cache.size>24)cache.clear();cache.set(key,result);return result;
 }
-export function enemyAt587(spec,elapsed){if(spec.frozenUntil>elapsed)elapsed=spec.frozenAt??elapsed;elapsed-=spec.motionOffset??0;if(spec.advance){const width=Math.max(1,spec.max-spec.min),travel=((spec.max-spec.x)+elapsed/1000*spec.speed)%width;return {...spec,x:spec.max-travel,y:spec.y,dir:-1};}const width=Math.max(1,spec.max-spec.min),offset=spec.x-spec.min,travel=(offset+elapsed/1000*spec.speed)%(width*2);return{...spec,y:spec.y+(spec.flying?Math.sin(elapsed/(spec.period??1800)*Math.PI*2)*(spec.bob??12):0),x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};}
+export function enemyAt587(spec,elapsed){
+ if(spec.ice){const q=spec.ice,dt=Math.max(-.025,Math.min(.15,(elapsed-q.at)/1000));return {...spec,x:q.x+q.vx*dt,y:q.y+q.vy*dt,dir:Math.sign(q.vx)||q.dir||1};}
+ elapsed-=spec.motionOffset??0;const width=Math.max(1,spec.max-spec.min),offset=Math.max(0,Math.min(width,spec.x-spec.min)),travel=((spec.advance?width*2-offset:offset)+elapsed/1000*spec.speed)%(width*2);
+ return {...spec,y:spec.y+(spec.flying?Math.sin(elapsed/(spec.period??1800)*Math.PI*2)*(spec.bob??12):0),x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};
+}

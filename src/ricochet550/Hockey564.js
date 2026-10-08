@@ -6,7 +6,7 @@ import {
 import {HANDLING568, launchVelocity568} from './Control568.js';
 
 // Keep the slingshot, full-power impulse and reload; make small corrections controllable.
-export const HOCKEY564 = Object.freeze({ ...PINBALL563, version: 10,
+export const HOCKEY564 = Object.freeze({ ...PINBALL563, version: 11,
   radius: .8, gemRadius: .42, goalHalfWidth: 3.2, goalDepth: .9,
   postRadius: .14, respawn: 2000, passBoost: .05 });
 const C = HOCKEY564, clamp = (n, a, b) => Math.max(a, Math.min(b, n));
@@ -30,7 +30,7 @@ export function input564(g, p, message) {
   if (message.action !== 'shoot') return inputGoal563(g, p, message);
   if (!Number.isSafeInteger(message.seq) || message.seq <= p.lastSeq || message.round !== 1 ||
     message.shot !== p.shots555 || !launch564(g, p, message.power, message.angle)) return false;
-  p.lastSeq = message.seq;
+  p.lastSeq = message.seq; p.activeAt598 = g.simAt;
   return true;
 }
 export const power565 = gem => 1 + Math.max(0, gem?.charge565 ?? 0) * C.passBoost;
@@ -273,7 +273,8 @@ export function botHockey564(g, p) {
   const behind = { x: clamp(gem.x - dx / d * 1.55, -7, 7),
     y: home(gem.y - dy / d * 1.55) };
   const distance = q => Math.hypot(behind.x - q.x, behind.y - q.y);
-  const striker = [...allies].sort((a, b) => distance(a) - distance(b) || a.seat - b.seat)[0];
+  const available=allies.filter(q=>q.ai||q.auto598||g.simAt-(q.activeAt598??-1e9)<2500);
+  const striker = (available.length?available:[p]).sort((a, b) => distance(a) - distance(b) || a.seat - b.seat)[0];
   const danger = p.team564 === 0 ? gem.y < 5.5 : gem.y > C.height - 5.5;
   const striking = striker?.seat === p.seat;
   let target, shoot = false;
@@ -291,10 +292,11 @@ export function botHockey564(g, p) {
     target = { x: clamp(gem.x * (striking ? .7 : .42), -5.4, 5.4),
       y: p.team564 === 0 ? (striking ? 6.6 : danger ? 2 : 3.3) : C.height - (striking ? 6.6 : danger ? 2 : 3.3) };
   }
+  if(striking&&onOurSide){const stalled=p.puck598&&Math.hypot(gem.x-p.puck598.x,gem.y-p.puck598.y)<.45;if(!stalled)p.puck598={x:gem.x,y:gem.y,at:g.simAt};if(stalled&&g.simAt-p.puck598.at>1800){target={x:gem.x,y:home(gem.y)};shoot=true;}}
   target.y = home(target.y);
   p.role564 = striking ? 'attack' : 'defend';
   const tx = target.x - p.x, ty = target.y - p.y, dist = Math.hypot(tx, ty);
-  if (!shoot && dist < 1.5 && Math.hypot(p.vx, p.vy) < 3) return;
+  if (!shoot && dist < .35 && Math.hypot(p.vx, p.vy) < 1 && !onOurSide) return;
   const desiredSpeed = shoot ? 19 + random563(g) * 6 : clamp(dist * 1.35, 5, 15);
   const vx = tx / (dist || 1) * desiredSpeed - p.vx * HANDLING568.carry;
   const vy = ty / (dist || 1) * desiredSpeed - p.vy * HANDLING568.carry;
@@ -347,6 +349,7 @@ export function advanceHockey564(g, now, inputs = [], auto = new Set()) {
       const m = inputs.shift(), p = g.players.find(q => q.playerId === m.playerId);
       if (!auto.has(p?.playerId) && !p?.ai) input564(g, p, m);
     }
+    for(const p of g.players)p.auto598=p.ai||auto.has(p.playerId);
     for (const p of g.players) if ((p.ai || auto.has(p.playerId)) && g.simAt >= p.botAt && canShoot564(g, p)) {
       const aim = botHockey564(g, p);
       if (aim) launch564(g, p, aim.power, aim.angle);
