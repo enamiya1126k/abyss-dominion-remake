@@ -1,0 +1,7 @@
+relay 0 90 frames avg native Canvas ms 0.44 terrain cache 34
+relay 1 90 frames avg native Canvas ms 0.50 terrain cache 36
+clock 2 90 frames avg native Canvas ms 0.16 terrain cache 25
+forest 3 90 frames avg native Canvas ms 0.18 terrain cache 29
+relay 4 90 frames avg native Canvas ms 0.21 terrain cache 35
+crystal 5 90 frames avg native Canvas ms 0.19 terrain cache 39
+All 17 generated WebP assets decoded; real game drawing paths rendered. This is NOT a browser/Safari screenshot.

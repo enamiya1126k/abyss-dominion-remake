@@ -25,7 +25,7 @@ export function mechanics589(g,previous,emit,hurt){
   if(!usable(p))continue;
   if(inHazard589(p,course,g.elapsed,g)){hurt(g,p,course.hazards.some(h=>h.kind==='spikes'&&p.x+10>h.x&&p.x-10<h.x+h.w&&p.y>h.y-h.h)?'spikes':'steam');continue;}
   if(p.grounded&&course.platforms.some(s=>s.id===p.platformId&&s.crumble)&&g.crumbles[p.platformId]==null){g.crumbles[p.platformId]=g.elapsed;emit(g,'crumble',{seat:p.seat,x:p.x,y:p.y,platform:p.platformId});}
-  for(const s of course.switches){
+  for(const s of [...course.switches,...(course.switchAccess602??[])]){
    if(g.switches.includes(s.id)||!p.grounded||Math.abs(p.x-s.x)>24||Math.abs(p.y-s.y)>4)continue;
    g.switches.push(s.id);g.switchBy[s.id]=p.seat;emit(g,'switch',{seat:p.seat,switchId:s.id,x:s.x,y:s.y});
    if(course.mode==='coop')for(const friend of g.players){

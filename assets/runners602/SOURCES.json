@@ -1,0 +1,278 @@
+{
+  "build": 602,
+  "processing": "Alpha-bound trim, resize and WebP encode only; no drawn replacement assets.",
+  "assets": [
+    {
+      "id": "cave",
+      "file": "cave.webp",
+      "width": 1280,
+      "height": 853,
+      "bytes": 188654,
+      "transparentFraction": 0,
+      "crop": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Full-screen wide 3:2 background painting for a premium hand-painted 2D side-scrolling fantasy platformer. A vast secret underground ruin under a green ancient city: deep mossy limestone cavern, enormous ancient stone arches disappearing into cool teal darkness, shallow glowing jade underground river far below, warm amber lamps embedded far in the distant masonry, a few delicate vines and tiny gold mineral flecks. Rich dramatic cavern depth, old bronze architectural details. Cool gentle ambient light and isolated warm pools of light. At the top, a real dark stone cavern ceiling, absolutely NO sky, NO sun, NO clouds, NO outdoor skyline. The foreground must remain open empty negative space for independently rendered platforms and actors. No foreground walkable floor, no hero, no enemies, no treasure, no gates or words, no interface. Broad layered environment, refined brush-painted materials, harmonious with realistic painted moss-and-rock platform sprites, calm readable background contrast."
+    },
+    {
+      "id": "bridge",
+      "file": "bridge.webp",
+      "width": 768,
+      "height": 125,
+      "bytes": 57652,
+      "transparentFraction": 0.691,
+      "crop": [
+        22,
+        203,
+        2128,
+        347
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent PNG game sprite for a premium hand-painted 2D side scrolling fantasy platformer. Rich painterly stone, antique bronze, jade, moss, soft warm top-left lighting. Crisp readable silhouette at mobile scale. Orthographic side elevation with a very slight view of top surface. NO text, NO numbers, NO scene, NO ground beyond object, NO cast shadow outside object. Object fully in frame with generous transparent padding. One horizontal suspended bridge segment: twelve thick weathered wooden planks inside antique bronze side beams, moss clinging below, three jade circular rivets embedded into carved stone brackets. Upper WALKABLE edge perfectly horizontal and unbroken. Long narrow horizontal 4:1 silhouette, plain straight ends so it can be tiled side by side. Side face and hanging support cables only BELOW the upper edge; no rails above the walkable surface. Beautiful believable construction, no magical hovering rectangle."
+    },
+    {
+      "id": "switch",
+      "file": "switch.webp",
+      "width": 256,
+      "height": 71,
+      "bytes": 12430,
+      "transparentFraction": 0.438,
+      "crop": [
+        70,
+        101,
+        2032,
+        563
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent PNG game sprite for a premium hand-painted 2D side scrolling fantasy platformer. Rich painterly stone, antique bronze, jade, moss, soft warm top-left lighting. Crisp readable silhouette at mobile scale. Orthographic side elevation with a very slight view of top surface. NO text, NO numbers, NO scene, NO ground beyond object, NO cast shadow outside object. Object fully in frame with generous transparent padding. One compact floor pressure switch in its RAISED inactive position, wide low profile 3:1 silhouette. Heavy circular stone plinth with exquisite old bronze filigree, a large amber jade glass disk in the center, beveled edges and mechanical socket beneath disk. Seen mostly from side with disk top visible. This is a readable physical foot button to stand on, no lever or floating icon."
+    },
+    {
+      "id": "spring",
+      "file": "spring.webp",
+      "width": 256,
+      "height": 198,
+      "bytes": 27204,
+      "transparentFraction": 0.591,
+      "crop": [
+        223,
+        111,
+        1092,
+        843
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent PNG game sprite for a premium hand-painted 2D side scrolling fantasy platformer. Rich painterly stone, antique bronze, jade, moss, soft warm top-left lighting. Crisp readable silhouette at mobile scale. Orthographic side elevation with a very slight view of top surface. NO text, NO numbers, NO scene, NO ground beyond object, NO cast shadow outside object. Object fully in frame with generous transparent padding. One powerful mechanical jump spring for a game, compact wide 1.5:1 silhouette. A sturdy carved dark stone foot, genuine bright bronze helical compression coil with three visible loops, broad round padded amber leather and brass top plate perfectly horizontal, side profile. Solid substantial construction, clean shape. No arrow or floating sign."
+    },
+    {
+      "id": "boost",
+      "file": "boost.webp",
+      "width": 95,
+      "height": 192,
+      "bytes": 15214,
+      "transparentFraction": 0.64,
+      "crop": [
+        217,
+        57,
+        653,
+        1321
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent PNG game sprite for a premium hand-painted 2D side scrolling fantasy platformer. Rich painterly stone, antique bronze, jade, moss, soft warm top-left lighting. Crisp readable silhouette at mobile scale. Orthographic side elevation with a very slight view of top surface. NO text, NO numbers, NO scene, NO ground beyond object, NO cast shadow outside object. Object fully in frame with generous transparent padding. One luminous emerald speed crystal collectible, elongated faceted clear green gemstone enclosed by two small ornate weathered gold wing-shaped brackets, swirling wisps tightly hugging the gemstone. Refined magical artifact with sharp facets, not a flat geometric diamond. Compact vertical 3:4 silhouette, readable bright center and dark outline."
+    },
+    {
+      "id": "wall",
+      "file": "wall.webp",
+      "width": 117,
+      "height": 640,
+      "bytes": 47788,
+      "transparentFraction": 0.751,
+      "crop": [
+        375,
+        12,
+        276,
+        1511
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent game sprite, premium hand-painted side-scrolling fantasy game. Cohesive weathered bronze, mossy stone and magical gems, rich readable silhouette at mobile size. Orthographic side/front elevation. NO text, NO typography, NO scenery, NO ground or external cast shadow. Entire isolated object fully visible with transparent padding. One tall narrow climbable ancient stone pillar segment, height four times its width, straight vertical left and right boundaries for wall kicking. Chiseled gray-green masonry, bronze bands, tiny flecks of moss, stone grip notches. Flat horizontal ends for vertical tiling, no capital or pedestal protruding at edges. Subtle soft light from top left. Front of the pillar is textured masonry, not a blank stripe."
+    },
+    {
+      "id": "flag",
+      "file": "flag.webp",
+      "width": 213,
+      "height": 384,
+      "bytes": 16268,
+      "transparentFraction": 0.858,
+      "crop": [
+        171,
+        8,
+        838,
+        1510
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent game sprite, premium hand-painted side-scrolling fantasy game. Cohesive weathered bronze, mossy stone and magical gems, rich readable silhouette at mobile size. Orthographic side/front elevation. NO text, NO typography, NO scenery, NO ground or external cast shadow. Entire isolated object fully visible with transparent padding. One slender checkpoint flag on a tall bronze pole with a solid small stone base, height three times width. Small lush emerald silk pennant waving to the right near pole tip with an elegant gold sun emblem (pictogram only), tassels, bright gold spear finial, refined dark bronze pole. Windblown fabric, side view, no text."
+    },
+    {
+      "id": "star",
+      "file": "star.webp",
+      "width": 128,
+      "height": 121,
+      "bytes": 7360,
+      "transparentFraction": 0.622,
+      "crop": [
+        30,
+        8,
+        1234,
+        1165
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent game sprite, premium hand-painted side-scrolling fantasy game. Cohesive weathered bronze, mossy stone and magical gems, rich readable silhouette at mobile size. Orthographic side/front elevation. NO text, NO typography, NO scenery, NO ground or external cast shadow. Entire isolated object fully visible with transparent padding. One exquisite five-point gold star collectible, strong simple five-point silhouette, luminous golden glass and gilt beveled edges, small warm pearl at center, ornate subtle engraved details without letters, polished glints confined to object. Face on, readable at 32 pixels. Five points, no surrounding wreath or extraneous icon."
+    },
+    {
+      "id": "ice-shell",
+      "file": "ice-shell.webp",
+      "width": 256,
+      "height": 181,
+      "bytes": 38438,
+      "transparentFraction": 0.302,
+      "crop": [
+        64,
+        110,
+        1313,
+        930
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent game sprite, premium hand-painted side-scrolling fantasy game. Cohesive weathered bronze, mossy stone and magical gems, rich readable silhouette at mobile size. Orthographic side/front elevation. NO text, NO typography, NO scenery, NO ground or external cast shadow. Entire isolated object fully visible with transparent padding. One EMPTY translucent frozen ice shell overlay for enclosing a small enemy, nearly square shape slightly wider than tall. Angled irregular chamfered blue crystal edges with snowy rim, realistic cracks and trapped bubbles near edges, thin pale-blue transparent center MUST clearly show the character underneath when composited. Center is nearly transparent. No object inside. Flat bottom and flat TOP safe to stand on. Front elevation, not isometric."
+    },
+    {
+      "id": "spark",
+      "file": "spark.webp",
+      "width": 123,
+      "height": 128,
+      "bytes": 7982,
+      "transparentFraction": 0.878,
+      "crop": [
+        132,
+        46,
+        1052,
+        1091
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent game sprite, premium hand-painted side-scrolling fantasy game. Cohesive weathered bronze, mossy stone and magical gems, rich readable silhouette at mobile size. Orthographic side/front elevation. NO text, NO typography, NO scenery, NO ground or external cast shadow. Entire isolated object fully visible with transparent padding. One tiny magical golden impact glint particle sprite, a warm ivory core and six elegant tapered gold light streaks with one short arc and a few fine sparkling flecks, radial, crisp luminous painterly effect, no huge halo. Must be usable as a single small impact particle rotated, scaled and faded in animation."
+    },
+    {
+      "id": "chain",
+      "file": "chain.webp",
+      "width": 46,
+      "height": 384,
+      "bytes": 13450,
+      "transparentFraction": 0.862,
+      "crop": [
+        419,
+        1,
+        185,
+        1531
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Production-ready transparent game sprite, premium hand-painted side-scrolling fantasy game. Cohesive weathered bronze, mossy stone and magical gems, rich readable silhouette at mobile size. Orthographic side/front elevation. NO text, NO typography, NO scenery, NO ground or external cast shadow. Entire isolated object fully visible with transparent padding. One vertical straight length of eight heavy interlocking bronze chain links, no hooks, end caps, pendant, background or horizontal supports. Perfect straight vertical 1:6 silhouette. Detailed highlights and dark cavities, repeatable vertically for a descending stone crusher suspension. Antique bronze texture in a side-scrolling fantasy game."
+    },
+    {
+      "id": "switch-active",
+      "file": "switch-active.webp",
+      "width": 256,
+      "height": 71,
+      "bytes": 11016,
+      "transparentFraction": 0.436,
+      "crop": [
+        70,
+        99,
+        2032,
+        566
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Edit this exact game pressure switch only: preserve shape, stone plinth, bronze filigree, lighting and full framing. The central amber disk is now pressed down visibly into the mechanical socket and glows luminous emerald jade green. This is its activated state. Fully transparent outside the object, no lettering."
+    },
+    {
+      "id": "wind-streak",
+      "file": "wind-streak.webp",
+      "width": 256,
+      "height": 56,
+      "bytes": 11142,
+      "transparentFraction": 0.716,
+      "crop": [
+        8,
+        116,
+        2159,
+        472
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "Transparent PNG, one elongated pale turquoise gust of magical wind, several flowing brushstroke ribbons sweeping from left to right with graceful curling ends. Side-view 4:1 narrow horizontal action-effect sprite for hand-painted fantasy platformer. Luminous white center of ribbons and subtle mint edges, transparent negative space. No object or character, no arrow, no lettering, no solid colored background, no rectangular panel."
+    },
+    {
+      "id": "ui-panel",
+      "file": "ui-panel.webp",
+      "width": 640,
+      "height": 187,
+      "bytes": 38374,
+      "transparentFraction": 0.204,
+      "crop": [
+        21,
+        45,
+        2131,
+        623
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "One empty premium fantasy game HUD panel, wide horizontal 3:1 rectangle with smoothly rounded corners, thin elegant antique bronze carved border, four small jade inset corner gems, deep dark forest green leather interior of even color for highly readable white text later. Straight orthographic front view, symmetrical, subtle bevel and realistic texture, extremely restrained ornament. Transparent outside the shape. NO text, no digits, no pictograms. Texture designed for nine-slice scaling."
+    },
+    {
+      "id": "ui-button",
+      "file": "ui-button.webp",
+      "width": 256,
+      "height": 249,
+      "bytes": 27982,
+      "transparentFraction": 0.295,
+      "crop": [
+        5,
+        8,
+        1246,
+        1212
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "One circular premium fantasy mobile game control button. Straight front orthographic view, perfectly circular silhouette, dark teal leather padded interior, double antique gold bevel rim with four very small jade gems at cardinal points, raised tactile center, soft inner highlights. Middle is completely blank for a separately composited icon. No text, no pictograms, no scenery, no exterior halo. Transparent outside the circle."
+    },
+    {
+      "id": "arrow",
+      "file": "arrow.webp",
+      "width": 77,
+      "height": 96,
+      "bytes": 3968,
+      "transparentFraction": 0.606,
+      "crop": [
+        109,
+        18,
+        1002,
+        1248
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "One elegant chunky upward pointing arrow game icon carved from warm ivory-gold stone, slight metallic gold beveled edge and dark bronze outline, premium hand-painted fantasy UI sprite. Simple extremely readable upward arrow with stem, straight orthographic face on, no disc or button behind it. Perfectly transparent outside the arrow. No text or other elements."
+    },
+    {
+      "id": "water",
+      "file": "water.webp",
+      "width": 768,
+      "height": 229,
+      "bytes": 70192,
+      "transparentFraction": 0.201,
+      "crop": [
+        0,
+        75,
+        2172,
+        649
+      ],
+      "source": "Built-in imagegen",
+      "prompt": "A seamless horizontal strip of luminous turquoise water, isolated side elevation for a 2D fantasy platformer rising tide. Painterly detailed foam and small wave crests along an almost level top edge, deep blue turquoise water body below with dappled refracted light. Wide 4:1 strip, vertical sides and flat opaque bottom, transparent only ABOVE the wavy surface. No landscape, no props, no lettering. Seamlessly tileable left and right."
+    }
+  ]
+}

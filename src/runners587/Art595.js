@@ -1,5 +1,5 @@
 import {rune597} from './Elements597.js';
-import {platform593,pickup593,enemy593,barrier594} from './World593.js';
+import {centered602} from './Art602.js';
 const assets=new Map();
 export const artURL595=id=>new URL('../../assets/runners'+(['ice','steam'].includes(id)?596:595)+'/'+id+'.webp',import.meta.url).href;
 const terrain=theme=>['forest','sky','relay'].includes(theme)?'grass':['frost','crystal'].includes(theme)?'ice':theme==='ember'?'lava':'ruin';
@@ -29,14 +29,13 @@ export function preload595(course,r){
 }
 // Assemble each ledge once. Runtime rendering is a single cached image blit.
 export function platform595(r,s,course){
- const id=terrain(course.theme),a=load(id);if(!a.ready)return platform593(r,s,course);
+ const id=terrain(course.theme),a=load(id);if(!a.ready)return;
  const tile=terrainTile595(r,s,id,a);r.ctx.drawImage(tile.canvas,s.x,s.y-tile.top);
- if(s.move){const c=r.ctx;c.fillStyle='#d7fff7';c.fillRect(s.x+s.w/2-7,s.y+6,14,2);}
 }
 function terrainTile595(r,s,id,a){
  const view=r.width>650?900:r.width<350?440:480;
  const depth=r.width&&r.height?Math.max(174,Math.ceil(r.height*.3/(r.width/view)/32)*32+16):174;
- const h=s.wall?s.h:s.ground?depth:Math.max(30,(s.h??18)+14),w=Math.ceil(s.w),key=id+':'+w+':'+h+':'+(s.wall?'wall':s.ground?'ground':'ledge');
+ const h=s.depth602??(s.wall?s.h:s.ground?depth:Math.max(30,(s.h??18)+14)),w=Math.ceil(s.w),key=id+':'+w+':'+h+':'+(s.wall?'wall':s.ground?'ground':'ledge');
  const cache=r.terrain595??=new Map();let tile=cache.get(key);
  if(!tile){
   const im=a.image,ih=im.naturalHeight,iw=im.naturalWidth,{edge,walk}=surfaces596[id];
@@ -54,7 +53,7 @@ function terrainTile595(r,s,id,a){
  return tile;
 }
 export function enemy595(c,p,at){
- const a=load(p.flying?'bat':'beetle');if(!a.ready)return enemy593(c,p,at);
+ const a=load(p.flying?'bat':'beetle');if(!a.ready)return;
  const w=p.flying?49:43,h=p.flying?39:30;
  c.save();c.translate(p.x,p.y);c.scale(p.dir,p.flying?.94+Math.sin(at/100)*.06:1);
  c.drawImage(a.image,-w/2,-h,w,h);c.restore();
@@ -63,26 +62,13 @@ export function pickup595(c,item,at){rune597(c,item.kind,item.x,item.y+Math.sin(
 
 export function gate595(c,course,open,at=0,arrivalAge=-1){
  const a=load('gate');if(!a.ready)return false;
- const x=course.goal,y=214;c.drawImage(a.image,x-62,126,124,174);
- c.save();c.beginPath();c.ellipse(x,y,35,52,0,0,Math.PI*2);c.clip();
- if(!open){c.fillStyle='#0b203dcc';c.fillRect(x-38,y-55,76,110);}
- else if(a.effect){
-  c.translate(x,y);c.scale(1,1.48);c.rotate(at/2100);c.globalAlpha=.67;c.drawImage(a.effect,-47,-47,94,94);c.rotate(-at/3400);c.globalAlpha=.3;c.drawImage(a.effect,-33,-33,66,66);
- }
- c.restore();
- if(open&&at){
-  c.fillStyle='#daffda';for(let i=0;i<6;i++){const t=(at/1800+i/6)%1,angle=t*Math.PI*2+i;c.globalAlpha=Math.sin(t*Math.PI)*.75;c.beginPath();c.arc(x+Math.cos(angle)*(29-t*15),267-t*98,1.2+(i%2)*.5,0,7);c.fill();}c.globalAlpha=1;
- }
- if(open&&arrivalAge>=0&&arrivalAge<1000){
-  const p=arrivalAge/1000;c.save();c.translate(x,y+17);c.globalAlpha=Math.sin(Math.PI*p)*.85;c.strokeStyle='#e6ffcc';c.lineWidth=3*(1-p)+.5;c.beginPath();c.ellipse(0,0,28+p*57,40+p*50,0,0,7);c.stroke();
-  c.fillStyle='#fff0b2';for(let i=0;i<10;i++){const a=i/10*Math.PI*2,d=16+p*67;c.beginPath();c.arc(Math.cos(a)*d,Math.sin(a)*d*.85,2.5*(1-p)+.5,0,7);c.fill();}c.restore();
- }
- c.textAlign='center';c.font='bold 12px "Noto Sans JP",sans-serif';c.fillStyle='#fff1bc';c.fillText(open?'GOAL':course.boss600?'':'橋をすべて開こう',course.goal,120);return true;
+ const x=course.goal,y=214;c.save();c.globalAlpha=open?1:.5;c.drawImage(a.image,x-62,126,124,174);c.restore();
+ if(open&&a.effect){c.save();c.beginPath();c.ellipse(x,y,35,52,0,0,Math.PI*2);c.clip();c.translate(x,y);c.scale(1,1.48);c.rotate(at/2100);c.globalAlpha=.67;c.drawImage(a.effect,-47,-47,94,94);c.rotate(-at/3400);c.globalAlpha=.3;c.drawImage(a.effect,-33,-33,66,66);c.restore();}
+ if(open&&at)for(let i=0;i<5;i++){const t=(at/1800+i/5)%1,a=t*Math.PI*2+i;c.save();c.globalAlpha=Math.sin(t*Math.PI)*.75;centered602(c,'spark',x+Math.cos(a)*(29-t*15),267-t*98,7);c.restore();}
+ if(open&&arrivalAge>=0&&arrivalAge<1000){const p=arrivalAge/1000;c.save();c.globalAlpha=Math.sin(Math.PI*p)*.85;centered602(c,'spark',x,y+17,60+p*100);c.restore();}
+ return true;
 }
-export function spikes595(c,h){
- const a=load('spikes');if(a.ready)c.drawImage(a.image,h.x-2,h.y-h.h-2,h.w+4,h.h+5);
- else{c.fillStyle='#a6b9c9';c.beginPath();for(let x=h.x;x<h.x+h.w;x+=12){c.moveTo(x,h.y);c.lineTo(x+6,h.y-h.h);c.lineTo(x+12,h.y);}c.fill();}
-}
+export function spikes595(c,h){const a=load('spikes');if(a.ready)c.drawImage(a.image,h.x-2,h.y-h.h-2,h.w+4,h.h+5);}
 export function steam596(c,h,state,at){
  const a=load('steam');if(!a.ready)return false;
  const im=a.image,iw=im.naturalWidth,ih=im.naturalHeight,base=Math.round(ih*.85),tail=state.phase-h.on;
@@ -102,9 +88,8 @@ export function steam596(c,h,state,at){
 }
 
 export function barrier595(c,wall,hits=0){
- const a=load('crate');if(!a.ready)return barrier594(c,wall,hits);
+ const a=load('crate');if(!a.ready)return;
  const count=Math.ceil(wall.h/wall.w),h=wall.h/count;
  for(let i=0;i<count;i++)c.drawImage(a.image,wall.x,wall.y+i*h,wall.w,h);
- if(hits){c.strokeStyle='#301c27';c.lineWidth=2;c.beginPath();c.moveTo(wall.x+23,wall.y);c.lineTo(wall.x+13,wall.y+wall.h*.3);c.lineTo(wall.x+28,wall.y+wall.h*.6);c.lineTo(wall.x+15,wall.y+wall.h);c.stroke();}
-
+ if(hits){c.save();c.globalAlpha=.6;centered602(c,'spark',wall.x+wall.w*.6,wall.y+wall.h*.5,14);c.restore();}
 }

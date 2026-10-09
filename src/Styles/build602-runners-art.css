@@ -1,0 +1,38 @@
+/* Generated artwork skins; hit areas, readable text and counts remain real UI. */
+.ru-art602{--panel602:url('../../assets/runners602/ui-panel.webp');--button602:url('../../assets/runners602/ui-button.webp')}
+.ru-art602 .arc-head563,.ru-art602 .ru-footer587,.ru-art602 .ru-players587{background:#102e2d var(--panel602) center/100% 100% no-repeat}
+.ru-art602 .ru-players587>button,.ru-art602 .ru-brief587>div,.ru-art602 .ru-stars601,.ru-art602 .ru-mission589,.ru-art602 .ru-boost588,.ru-art602 .ru-message587,.ru-art602 .ru-toast587,.ru-art602 .ru-watch587,.ru-art602 .ru-network587,.ru-art602 .arc-head563 button,.ru-art602 .ru-count587>span{background:var(--panel602) center/100% 100% no-repeat;border:0;box-shadow:none}
+.ru-art602 .ru-players587>button{padding:5px 8px}
+.ru-art602 .ru-brief587>div:first-child{padding:9px 13px;max-width:calc(100% - 82px)}
+.ru-art602 .ru-timer587{padding:7px 12px;min-width:64px}
+.ru-art602 .ru-stars601{top:77px;left:10px;gap:7px;padding:7px 9px;max-width:45%;box-sizing:border-box}
+.ru-art602 .ru-stars601>span{display:flex;gap:3px;min-width:0}
+.ru-star602{display:block;width:23px;height:23px;object-fit:contain;flex:none}
+.ru-star602.is-empty{filter:grayscale(1);opacity:.38}
+.ru-art602 .ru-stars601 small{display:flex;align-items:center;gap:2px;border:0;padding:0;font-size:10px}
+.ru-art602 .ru-stars601 small img{width:13px;height:22px;object-fit:contain}
+.ru-art602 .ru-mission589{top:77px;left:auto;right:10px;transform:none;min-width:0;max-width:45%;padding:7px 9px;white-space:normal;box-sizing:border-box;overflow:hidden}
+.ru-art602 .ru-mission589>b{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px 5px;font-size:10px;line-height:23px;font-variant-numeric:tabular-nums}
+.ru-art602 .ru-mission589 .ru-art-icon602{width:20px;height:23px;object-fit:contain}
+.ru-art602 .ru-mission589 .ru-art-icon602:first-child{width:25px}
+.ru-art602 .ru-directions587{background:none;border:0;box-shadow:none;overflow:visible;gap:0}
+.ru-art602 .ru-directions587 [data-ru-control],.ru-art602 [data-ru-control=jump],.ru-art602 [data-ru-control=attack]{background:var(--button602) center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;color:#fff2c9!important;padding:8px 0;filter:none;transition:transform 60ms}
+.ru-art602 .ru-directions587 [data-ru-control]{border-radius:0}
+.ru-art602 [data-ru-control].is-held,.ru-art602 .ru-directions587 [data-ru-control].is-held{transform:translateY(3px) scale(.97);filter:brightness(1.3)}
+.ru-art602 [data-ru-control]:disabled{opacity:.5}
+.ru-art-icon602{display:inline-block;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.ru-art602 .ru-icon593{width:27px;height:32px}
+.ru-art602 .ru-left602{transform:rotate(-90deg)}.ru-art602 .ru-right602{transform:rotate(90deg)}.ru-art602 .ru-down602{transform:rotate(180deg)}
+.ru-art602 .ru-pawn587>b,.ru-art602 .ru-pawn587.is-self>b{background:var(--panel602) center/100% 100% no-repeat;border:0;box-shadow:none;color:#fff5d1;padding:4px 7px}
+.ru-art602 .ru-pawn587>mark{background:none;text-shadow:none}.ru-art602 .ru-pawn587>mark img{width:11px;height:14px}
+.ru-art602 .ru-pawn587>i,.ru-art602 .ru-pawn587[data-form]>i{background:url('../../assets/runners602/wind-streak.webp') center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;height:5px;width:66%;opacity:.7}
+.ru-art602 .ru-boost588>span img{width:15px;height:30px}.ru-art602 .ru-boost588>i{background:var(--panel602);border:0}.ru-art602 .ru-boost588 u{background:url('../../assets/runners602/wind-streak.webp') center/100% 100% no-repeat}
+.ru-art-loading602{position:absolute;inset:0;z-index:20;display:grid;place-content:center;padding:30px;background:#102e2dee;color:#fff2ca;text-align:center;font-size:13px;pointer-events:auto}
+.ru-art-loading602[hidden]{display:none}
+.ru-result-stars601 .ru-star602{width:42px;height:42px}
+@media(max-width:350px){.ru-art602 .ru-stars601{left:8px;gap:4px;padding:6px 8px}.ru-art602 .ru-star602{width:19px;height:23px}.ru-art602 .ru-mission589{right:8px;max-width:45%;padding:6px 8px}.ru-art602 .ru-mission589>b{font-size:9px;gap:3px}.ru-art602 .ru-brief587>div:first-child{max-width:calc(100% - 76px)}}
+@media(orientation:landscape) and (max-height:550px){.ru-art602 .ru-stars601{top:88px;left:10px}.ru-art602 .ru-mission589{top:88px;right:10px;left:auto}.ru-art602 .ru-footer587{background:none}.ru-art602 .ru-controls587{pointer-events:none}.ru-art602 [data-ru-control],.ru-art602 .ru-directions587{pointer-events:auto}}
+@media(prefers-reduced-motion:reduce){.ru-art602 [data-ru-control]{transition:none}}
+
+.ru-art602 .ru-pawn587[data-form]:not([data-form=""]):after{border:0;box-shadow:none;background:url('../../assets/runners602/wind-streak.webp') center/100% 100% no-repeat;height:9%;opacity:.7}
+.ru-art602 .ru-field587:after{background:url('../../assets/runners602/bridge.webp') center/100% 100% no-repeat;box-shadow:none}
