@@ -1,3 +1,4 @@
+import {lift603} from './Hazards603.js';
 import {surfaces587} from './Level587.js';
 import {course589} from './Courses589.js';
 export const RUN587=Object.freeze({step:25,countdown:3000,duration:75000,grace:16000,lives:3,radius:11,height:28,speed:235,boostSpeed:280,accel:1900,brake:2600,airAccel:1800,gravity:1080,fallGravity:1350,jump:470,shortJump:275,spring:610,coyote:125,buffer:150,inputTTL:350,respawn:700,invincible:1200,wallJump:465,wallPush:260,wallSlide:92,buddyJump:620});
@@ -52,6 +53,7 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
   if(Math.abs(p.x-C.radius-s.x-s.w)<1.5)wallSide=-1;
  }
  p.wallSide=wallSide;if(wallSide)p.wallAt=at;
+ lift603(p,course,elapsed,dt);
  p.vy=Math.min(750,p.vy+(p.vy>0?C.fallGravity:C.gravity)*dt);
  if(wallSide&&p.axis===wallSide&&!p.grounded&&p.vy>C.wallSlide)p.vy=C.wallSlide;
  p.y+=p.vy*dt;p.grounded=false;p.platformId=null;

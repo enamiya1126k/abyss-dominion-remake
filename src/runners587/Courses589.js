@@ -1,3 +1,4 @@
+import {nightmareCourses603} from './Courses603.js';
 import {expedition602} from './Courses602.js';
 import {cooperativeCourse601} from './Courses601.js';
 import {signatureCourse600} from './Courses600.js';
@@ -11,7 +12,7 @@ const platform=(id,x,y,w=105,more={})=>({id,x,y,w,h:18,...more});
 const bug=(id,x,min,max,speed=38)=>({id,x,min,max,speed,y:300});
 const flags=xs=>xs.map(x=>({x,y:300}));
 const base={height:400,ground:300,walls:[],bridges:[],switches:[],belts:[],winds:[],hazards:[],mode:'race',duration:75000};
-export const COURSES589=Object.freeze([
+const CLASSIC603=[
  {...base,...COURSE587,id:'forest',name:'こもれびアドベンチャー',en:'FOREST ADVENTURE',tag:'基本のレース',color:'#a7cf86',icon:'leaf',level:'はじめて',theme:'forest',description:'森から魔王城へ。仲間ジャンプで上段ルートをつなごう。',features:['仲間ジャンプ','宝石で加速','浮遊足場']},
  {...base,id:'sky',name:'風車の空中庭園',en:'WIND GARDEN',tag:'風に乗るレース',color:'#80dceb',icon:'wind',level:'ふつう',theme:'sky',length:3300,goal:3220,
   description:'追い風と向かい風、動くベルト。風向きを読んで空を渡ろう。',features:['風のトンネル','コンベア','大ジャンプ'],
@@ -41,7 +42,8 @@ export const COURSES589=Object.freeze([
   platforms:[platform('c0',305,244,85),platform('c1',540,231,90),platform('c2',740,250,80,{crumble:true}),platform('c3',1200,235,100),platform('c4',1490,250,95,{crumble:true}),platform('c5',1930,236,95),platform('c6',2160,249,100,{crumble:true}),platform('c7',2700,230,100)],
   springs:[],gems:[{id:'c-gem0',x:450,y:143},{id:'c-gem1',x:1100,y:123},{id:'c-gem2',x:1830,y:133},{id:'c-gem3',x:2610,y:128}],enemies:[],
   hazards:[{id:'vent0',x:950,y:300,w:56,h:59,period:3100,on:950,offset:800},{id:'vent1',x:1990,y:300,w:62,h:59,period:3300,on:950,offset:1600},{id:'vent2',x:2785,y:300,w:55,h:59,period:2900,on:850,offset:400}]}
-,...EXTRA591].map(adventure591).map(expedition594).map(challenge595).map(adventure597).map(signatureCourse600).map(cooperativeCourse601).map(expedition602));
+,...EXTRA591].map(adventure591).map(expedition594).map(challenge595).map(adventure597).map(signatureCourse600).map(cooperativeCourse601).map(expedition602);
+export const COURSES589=Object.freeze([...CLASSIC603,...nightmareCourses603(CLASSIC603.at(-1))]);
 export const course589=value=>COURSES589.find(c=>c.id===(typeof value==='string'?value:value?.courseId))??COURSES589[0];
 export const readyGate589=g=>course589(g).switches.every(s=>g.switches?.includes(s.id))&&(!course589(g).boss600||g.boss600?.hp===0);
 export const hazard589=(h,elapsed)=>{const phase=((elapsed+h.offset)%h.period+h.period)%h.period;return{active:phase<h.on,warning:phase>h.period-650,phase};};

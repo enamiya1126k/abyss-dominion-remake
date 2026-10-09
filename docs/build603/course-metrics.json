@@ -1,0 +1,46 @@
+[
+  {
+    "id": "ember",
+    "name": "灰燼の魔王城",
+    "length": 7080,
+    "goal": 6980,
+    "areas": 6,
+    "pickups": 6,
+    "flags": 7,
+    "danger": 8,
+    "boss": 16
+  },
+  {
+    "id": "stormforge",
+    "name": "雷鳴の機関城",
+    "length": 14160,
+    "goal": 13960,
+    "areas": 12,
+    "pickups": 12,
+    "flags": 15,
+    "danger": 45,
+    "boss": 26
+  },
+  {
+    "id": "abyssice",
+    "name": "深海の氷獄",
+    "length": 14160,
+    "goal": 13960,
+    "areas": 12,
+    "pickups": 12,
+    "flags": 16,
+    "danger": 47,
+    "boss": 28
+  },
+  {
+    "id": "eclipse",
+    "name": "終焉の星喰い城",
+    "length": 14160,
+    "goal": 13960,
+    "areas": 12,
+    "pickups": 12,
+    "flags": 15,
+    "danger": 43,
+    "boss": 34
+  }
+]

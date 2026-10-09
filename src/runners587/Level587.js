@@ -1,3 +1,4 @@
+import {phase603,platform603} from './Hazards603.js';
 import {crusherSurface601} from './Gimmicks597.js';
 import {crumble600} from './Terrain600.js';
 // Original forest course; every course uses the same geometry resolver below.
@@ -28,8 +29,8 @@ const frames591=new WeakMap();
 export function surfaces587(elapsed=0,course=COURSE587,world={}){
  let fixed=geometry591.get(course);
  if(!fixed){fixed={ground:course.grounds.map(([x,end,y=300],i)=>({id:'ground'+i,x,y,w:end-x,h:160,ground:true})),
-  still:course.platforms.filter(p=>!p.move&&!p.crumble).map(p=>({...p,oneWay:true})),
-  moving:course.platforms.filter(p=>p.move||p.crumble).map(p=>({...p,oneWay:true})),
+  still:course.platforms.filter(p=>!p.move&&!p.crumble&&!p.phase603).map(p=>({...p,oneWay:true})),
+  moving:course.platforms.filter(p=>p.move||p.crumble||p.phase603).map(p=>({...p,oneWay:true})),
   walls:[...(course.walls??[]).map(p=>({...p,wall:true})),...(course.hazards??[]).filter(h=>h.kind==='spikes').map(h=>({id:h.id,x:h.x,y:h.y-h.h,w:h.w,h:h.h,wall:true,spike:true})),...(course.springs??[]).map(s=>({id:s.id,x:s.x-23,y:s.y-28,w:46,h:28,wall:true,spring:true,power:s.power}))],bridges:(course.bridges??[]).map(p=>({...p,bridge:true}))};geometry591.set(course,fixed);}
  let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
  const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+Object.entries(world.coop601??{}).filter(([,q])=>q.open).map(([id])=>id).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
@@ -37,7 +38,7 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
 
  const fallen=p=>p.crumble&&crumble600(world?.crumbles?.[p.id],elapsed).absent;
  const result=[...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
-  ...fixed.moving.filter(p=>!fallen(p)).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...(p.move?{[p.move.axis]:p[p.move.axis]+Math.sin(elapsed/p.move.period*Math.PI*2)*p.move.range}:{}),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
+  ...fixed.moving.filter(p=>!fallen(p)&&phase603(p,elapsed).solid).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...platform603(p,elapsed),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
   ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
   ...(course.crushers??[]).map(h=>crusherSurface601(h,elapsed)),
   ...fixed.bridges.filter(p=>world?.switches?.includes(p.id)),

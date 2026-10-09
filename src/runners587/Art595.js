@@ -23,9 +23,30 @@ function prepareEffects596(a,id){
  a.effect=canvas;
 }
 export function preload595(course,r){
- for(const id of [terrain(course.theme),'beetle','bat','fire','wind','gate','spikes','crate','steam'])load(id);
- if(!r)return;const a=load(terrain(course.theme));
- a.promise.then(()=>{if(!a.ready)return;for(const s of [...course.grounds.map(([x,end])=>({x,w:end-x,ground:true})),...course.platforms,...course.walls.filter(w=>!w.breakable).map(w=>({...w,wall:true}))])terrainTile595(r,s,terrain(course.theme),a);});
+ const ids=[terrain(course.theme),'beetle','bat','crate','spikes'];
+ if(course.hazards.some(h=>h.kind!=='spikes'&&h.x<1000))ids.push('steam');
+ const ready=Promise.all(ids.map(id=>load(id).promise));
+ if(!r)return ready;
+ r.assetsReady595=false;
+ return ready.then(async()=>{
+  const id=terrain(course.theme),a=load(id);if(ids.some(id=>!load(id).ready)){r.assetError595=true;return;}
+  // Only the first viewport, AFTER resize, yielding between cached tiles.
+  for(const s of terrainSources603(course).filter(s=>s.x<620&&s.x+s.w>0)){
+   if(r.disposed603)return;terrainTile595(r,s,id,a);await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  r.assetsReady595=true;
+ });
+}
+const sourceCache603=new WeakMap();
+function terrainSources603(course){let list=sourceCache603.get(course);if(!list){list=[...course.grounds.map(([x,end,y=300])=>({x,y,w:end-x,ground:true,...(course.secrets600.some(room=>end>room.left&&x<room.right)?{depth602:160}:{})})),...course.platforms.filter(p=>!p.phase603)];sourceCache603.set(course,list);}return list;}
+export function warmAhead595(r,course){
+ if(!r.assetsReady595||r.disposed603)return;
+ const bucket=Math.floor(r.camera/240)+':'+r.width+':'+r.height;if(r.warmBucket603===bucket)return;r.warmBucket603=bucket;
+ const token=r.warmToken603=(r.warmToken603??0)+1,id=terrain(course.theme),a=load(id),left=r.camera,right=left+(r.width>650?900:480)+650;
+ const queue=terrainSources603(course).filter(s=>s.x+s.w>left&&s.x<right);
+ const schedule=fn=>typeof requestIdleCallback==='function'?requestIdleCallback(fn,{timeout:200}):setTimeout(fn,16);
+ const next=()=>{if(r.disposed603||token!==r.warmToken603||!queue.length)return;terrainTile595(r,queue.shift(),id,a);if(queue.length)schedule(next);};
+ if(a.ready&&queue.length)schedule(next);
 }
 // Assemble each ledge once. Runtime rendering is a single cached image blit.
 export function platform595(r,s,course){

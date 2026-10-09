@@ -41,8 +41,8 @@ export function combat591(g,emit){
   let box=null,time=Infinity,wallTime=Infinity;
   for(const s of surfaces){if(s.spike||s.ice||s.oneWay||s.ground||g.broken?.includes(s.id))continue;const t=boxTime600(oldX,oldY,b.x,b.y,s);if(t==null)continue;if(!s.breakable){wallTime=Math.min(wallTime,t);continue;}if(t<time){box=s;time=t;}}
   if(wallTime<time)return false;
-  if(box){g.barrierHits??={};g.broken??=[];const s=box;g.barrierHits[s.id]=(g.barrierHits[s.id]??0)+(b.kind==='stone'?4:b.kind==='fire'?2:1);
-   const broken=g.barrierHits[s.id]>=4;if(broken)g.broken.push(s.id);emit(g,broken?'break':'crack',{seat:b.owner,x:s.x+s.w/2,y:s.y+s.h/2,wall:s.id});return false;
+  if(box){g.barrierHits??={};g.broken??=[];const s=box;g.barrierHits[s.id]=4;
+   g.broken.push(s.id);emit(g,'break',{seat:b.owner,x:s.x+s.w/2,y:s.y+s.h/2,wall:s.id});return false;
   }
   for(const s of surfaces){
    // Spikes stop bodies at the sides, never projectiles or their bounce path.

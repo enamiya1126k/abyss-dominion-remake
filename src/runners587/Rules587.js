@@ -1,3 +1,4 @@
+import {hazards603} from './Hazards603.js';
 import {initCoop601,cooperation601,checkpoint601} from './Coop601.js';
 import {initEncounters600,encounters600} from './Encounters600.js';
 import {fallLimit600} from './Terrain600.js';
@@ -10,7 +11,7 @@ import {course589,readyGate589,inHazard589} from './Courses589.js';
 import {mechanics589} from './Mechanics589.js';
 import {RUN587 as C,control587,stepRunner587,enemyContact588,stomp599} from './Physics587.js';
 import {rank588} from './Feel588.js';
-export const makeRunners587=args=>({...make580('runners',{...args,members:args.members.filter(m=>!m.ai)}),rules587:12,courseId:'forest',switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},elapsed:0,stage:'ready',enemies:[],finishAt:null});
+export const makeRunners587=args=>({...make580('runners',{...args,members:args.members.filter(m=>!m.ai)}),rules587:13,courseId:'forest',switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},elapsed:0,stage:'ready',enemies:[],finishAt:null});
 export const signature587=g=>!g?null:['lobby','result'].includes(g.phase)?g:{id:g.id,phase:'play',players:g.players.map(p=>[p.playerId,p.speciesId,p.color499])};
 export function startRunners587(g,now,seed=587){if(g.phase!=='lobby')return false;const course=course589(g);g.courseId=course.id;g.players=g.members.filter(m=>!m.departed&&!m.ai).map((m,seat)=>({playerId:m.playerId,name:m.name,seat,ai:false,auto:false,waiting:false,color499:m.color499,speciesId:m.choice?.speciesId??'slime'}));if(!g.players.length)return false;assignColors499(g.players);g.seed=seed>>>0||587;
  for(const p of g.players){delete p.score;Object.assign(p,{x:90+p.seat*24,y:300,vx:0,vy:0,axis:0,facing:1,grounded:true,platformId:'ground0',lastGroundAt:now,controlAt:now,jumpHeld:false,jumpBufferUntil:0,airJumpUsed:false,airJumps598:0,reboundJump599:false,motionEpoch600:0,springFlight:false,lives:1,deaths:0,fatalDeaths601:0,falls:0,paused:false,alive:true,respawnAt:0,invincibleUntil:0,boostUntil:0,gems:[],checkpoint:0,furthest:90,finishTime:null,outAt:null,lastSeq:0,powers:[],weapon:null,ammo:0,attackHeld:false,shotAt:0,shots:0,kills:0,pranks:0,bumpUntil:0,bumpSafeUntil:0,stomps:0,jumps:0,wallJumps:0,buddyBounces:0,buddyUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
@@ -73,6 +74,7 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
   iceContact598(g,previous,emit,hurtRunners587);
   mechanics589(g,previous,emit,hurtRunners587);
   encounters600(g,course,previous,emit,hurtRunners587,stomp599);
+  hazards603(g,course,hurtRunners587);
   combat591(g,emit);
   cooperation601(g,course,emit);
   for(const p of g.players)if(p.alive&&!p.waiting&&!p.respawnAt&&p.finishTime==null&&p.x>=course.goal&&p.y<=320){

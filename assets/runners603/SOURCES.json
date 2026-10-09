@@ -1,0 +1,321 @@
+{
+  "generated": [
+    {
+      "id": "stormforge",
+      "file": "stormforge.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: wide parallax background painting. A gigantic gothic clockwork fortress suspended above storm clouds, brass clock faces, copper pipes and violet lightning beyond distant towers, cool indigo sky and warm amber windows. Side view, panoramic landscape, spacious empty center, buildings primarily distant and at the edges. No characters and no foreground platforms, no solid floor in the foreground.",
+      "tool": "built-in imagegen",
+      "source": "exec-8ccb2a4b-db25-4eb2-9ed1-ef4330b70c92.png",
+      "crop": [
+        0,
+        0,
+        2048,
+        768
+      ],
+      "width": 1280,
+      "height": 480,
+      "bytes": 112148,
+      "transparent": false,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "abyssice",
+      "file": "abyssice.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: wide parallax background painting. Vast submerged glacial cathedral, towering turquoise ice arches, deep midnight-blue water, ancient bronze ruins encased in ice, floating luminous plankton and distant broken pillars. Majestic enormous depth, dramatic cyan rim lighting. Side view, panoramic landscape, quiet spacious center. No characters and no foreground platforms, no UI.",
+      "tool": "built-in imagegen",
+      "source": "exec-4782eb3f-a712-432f-abcb-3f308713f5dd.png",
+      "crop": [
+        0,
+        0,
+        2048,
+        768
+      ],
+      "width": 1280,
+      "height": 480,
+      "bytes": 156402,
+      "transparent": false,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "eclipse",
+      "file": "eclipse.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: wide parallax background painting. The final impossible fortress at the edge of space, an eclipsed crimson sun above a magnificent shattered gothic castle, stars and purple nebula through broken arches, distant suspended islands, glints of antique gold and molten amber. Beautiful menacing painterly game art, wide side view with a spacious quiet center. No characters and no foreground platforms or UI.",
+      "tool": "built-in imagegen",
+      "source": "exec-599224b4-29f1-4841-9cf7-3c40a0b6e907.png",
+      "crop": [
+        0,
+        0,
+        1983,
+        793
+      ],
+      "width": 1280,
+      "height": 512,
+      "bytes": 137248,
+      "transparent": false,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "saw",
+      "file": "saw.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: one circular rotating trap blade sprite, front orthographic view. Heavy bronze and dark iron cogwheel with eight wicked curved silver cutting teeth, emerald central bearing, old rivets, high-quality metallic highlights, clear sharp outline. Entire centered circular object, generous transparent padding. No scene, no support, no shadow backdrop. Genuinely transparent background.",
+      "tool": "built-in imagegen",
+      "source": "exec-f21e0cba-c475-459a-a457-58ebf4ae385f.png",
+      "crop": [
+        9,
+        0,
+        1245,
+        1230
+      ],
+      "width": 256,
+      "height": 253,
+      "bytes": 36564,
+      "transparent": true,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "pendulum",
+      "file": "pendulum.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: one hanging pendulum axe head sprite, front orthographic view. Symmetric crescent blade of weathered silver steel with ornate antique bronze center, small emerald gemstone and a short attachment loop at its upper center. Readable heavy sharp double blade, full isolated object centered with transparent margins. No chain and no scenery. Genuinely transparent background.",
+      "tool": "built-in imagegen",
+      "source": "exec-fb094c66-9485-4f15-8a4f-30c3a949079d.png",
+      "crop": [
+        61,
+        6,
+        1413,
+        1000
+      ],
+      "width": 256,
+      "height": 181,
+      "bytes": 22070,
+      "transparent": true,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "tesla",
+      "file": "tesla.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: a single lightning trap emitter pedestal sprite. Side view, ancient bronze pylon standing on a heavy stone base, two short curved prongs holding a vivid electric violet crystal with small visible arcs inside the prongs. Wide low base and tall centered crystal; recognizable source of a vertical lightning column. Full isolated object on genuinely transparent background, flat bottom contact plane, no shadow backdrop.",
+      "tool": "built-in imagegen",
+      "source": "exec-d14a1dde-5e04-4288-908b-63ebc57b44df.png",
+      "crop": [
+        27,
+        5,
+        1225,
+        1212
+      ],
+      "width": 256,
+      "height": 253,
+      "bytes": 25352,
+      "transparent": true,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "cannon",
+      "file": "cannon.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: a single ancient fixed cannon trap sprite pointing LEFT, exact side view for a platform game. Heavy dark bronze barrel, dragon-head muzzle pointing left, emerald jewel on the mount, weathered mossy stone plinth with a perfectly flat bottom. Entire isolated silhouette, no fired bullet, no scenery. Genuinely transparent background.",
+      "tool": "built-in imagegen",
+      "source": "exec-4c95917a-cd75-4200-bb29-0b54c0cddaa0.png",
+      "crop": [
+        38,
+        63,
+        1484,
+        907
+      ],
+      "width": 256,
+      "height": 156,
+      "bytes": 21402,
+      "transparent": true,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "icicle",
+      "file": "icicle.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: one long pointed falling ice spear sprite, front side orthographic view. Jagged translucent blue crystal tapering to a sharp point at the bottom, three small side facets, icy white specular highlights, subtle turquoise interior. Entire object centered, dominant long vertical silhouette. Genuinely transparent background, no scene, no ground, no shadow backdrop.",
+      "tool": "built-in imagegen",
+      "source": "exec-5dfe2f4c-f2da-494c-a925-32da31ff707d.png",
+      "crop": [
+        370,
+        12,
+        299,
+        1512
+      ],
+      "width": 51,
+      "height": 256,
+      "bytes": 7428,
+      "transparent": true,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    },
+    {
+      "id": "phase",
+      "file": "phase.webp",
+      "prompt": "Use case: stylized-concept. Production bitmap asset for ABYSS DOMINION, a polished side-scrolling cooperative fantasy platform game. Match a richly painted fantasy world with antique bronze, mossy stone, emerald details and crisp readable silhouettes. No text, no UI, no letters, no watermark. Asset: a single horizontal magical floating platform sprite, exact side view. An ancient stone and bronze ledge with luminous violet crystal inset and ornate emerald-gold end caps. Perfectly flat horizontal walkable top, clearly visible 2D side face, rectangular long narrow silhouette, about 5:1 wide-to-high, highest details in side face. Full isolated platform on genuinely transparent background. No characters, no particles outside the platform, no scene, no perspective slant.",
+      "tool": "built-in imagegen",
+      "source": "exec-553beff2-011c-47f7-bc93-86ff310e7cd1.png",
+      "crop": [
+        6,
+        234,
+        1974,
+        330
+      ],
+      "width": 512,
+      "height": 86,
+      "bytes": 29658,
+      "transparent": true,
+      "preparation": "Trim transparent margins, resize, WebP encode; retain generated alpha."
+    }
+  ],
+  "existingBossArt": {
+    "source": "Main-game monster 64x64 frames; unchanged artwork packed into WebP atlases.",
+    "frames": {
+      "goblin_guard": {
+        "idle1": [
+          10,
+          5,
+          44,
+          52
+        ],
+        "idle2": [
+          73,
+          5,
+          45,
+          52
+        ],
+        "idle3": [
+          138,
+          6,
+          44,
+          51
+        ],
+        "walk1": [
+          202,
+          5,
+          44,
+          52
+        ],
+        "walk2": [
+          267,
+          5,
+          43,
+          52
+        ],
+        "attack": [
+          323,
+          10,
+          57,
+          47
+        ],
+        "damage": [
+          394,
+          14,
+          44,
+          43
+        ],
+        "down": [
+          453,
+          13,
+          54,
+          44
+        ]
+      },
+      "stone_golem": {
+        "idle1": [
+          10,
+          6,
+          45,
+          51
+        ],
+        "idle2": [
+          74,
+          5,
+          44,
+          52
+        ],
+        "idle3": [
+          138,
+          6,
+          44,
+          51
+        ],
+        "walk1": [
+          200,
+          5,
+          49,
+          52
+        ],
+        "walk2": [
+          264,
+          5,
+          48,
+          52
+        ],
+        "attack": [
+          324,
+          9,
+          55,
+          48
+        ],
+        "damage": [
+          394,
+          9,
+          44,
+          48
+        ],
+        "down": [
+          454,
+          35,
+          52,
+          22
+        ]
+      },
+      "demon_lord": {
+        "idle1": [
+          14,
+          8,
+          37,
+          49
+        ],
+        "idle2": [
+          78,
+          5,
+          37,
+          52
+        ],
+        "idle3": [
+          142,
+          7,
+          36,
+          50
+        ],
+        "walk1": [
+          206,
+          5,
+          36,
+          52
+        ],
+        "walk2": [
+          270,
+          6,
+          37,
+          51
+        ],
+        "attack": [
+          327,
+          14,
+          50,
+          43
+        ],
+        "damage": [
+          397,
+          12,
+          38,
+          45
+        ],
+        "down": [
+          456,
+          24,
+          47,
+          33
+        ]
+      }
+    }
+  }
+}

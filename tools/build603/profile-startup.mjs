@@ -1,0 +1,9 @@
+// Native Canvas instrumentation of the terrain/boss preparation path, not mobile FPS.
+import {createCanvas,Image as NativeImage} from '/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/@napi-rs/canvas/index.js';
+import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../../',import.meta.url)),base=root,pending=[],canvases=[];let pixelReads=0;
+class BrowserImage extends NativeImage{constructor(){super();this.style={};}set src(v){const loaded=this.onload;this.wait=new Promise((resolve,reject)=>{this.onload=()=>{loaded?.();resolve();};this.onerror=reject;});pending.push(this.wait);let p=new URL(v,'file://'+root+'/index.html').pathname;super.src=fs.readFileSync(p);}decode(){return this.wait??Promise.resolve();}setAttribute(){}remove(){}}
+globalThis.Image=BrowserImage;globalThis.document={createElement:()=>{const c=createCanvas(1,1);c.style={};canvases.push(c);const get=c.getContext.bind(c);c.getContext=(...args)=>{const x=get(...args);if(!x.__count603){const read=x.getImageData.bind(x);x.getImageData=(...args)=>{pixelReads++;return read(...args)};x.__count603=true;}return x;};return c;}};
+const [{preload595},{preload600},{course589}]=await Promise.all(['Art595','Scenery600','Courses589'].map(n=>import(base+'/src/runners587/'+n+'.js')));
+const r={width:390,height:480,camera:0},c=course589('forest'),started=performance.now(),p=preload595(c,r);preload600(c,0);await Promise.all(pending);await p;await Promise.resolve();
+console.log(JSON.stringify({version:'Build603',initialCanvases:canvases.length,initialCanvasBytes:canvases.reduce((n,c)=>n+c.width*c.height*4,0),bossPixelReads:pixelReads,initialAssetRequests:pending.length,preparationMs:+(performance.now()-started).toFixed(2)},null,2));

@@ -1,26 +1,16 @@
 import {image602,centered602,link602,strip602} from './Art602.js';
 import {rune597} from './Elements597.js';
-import {MONSTER_SPRITE_FOLDERS} from '../data/monsterCatalog.js';
+import {BOSS_ATLAS603} from './BossAtlas603.js';
 import {firebar600,tide600,roller600,bossPosition600} from './Encounters600.js';
 const portraits=new Map();
 export function bossAsset600(species,frame='idle1'){
- return new URL('../../assets/monsters/'+MONSTER_SPRITE_FOLDERS[species]+'/'+frame+'.png?v=3.0.3-build303',import.meta.url).href;
+ return new URL('../../assets/runners603/boss-'+species+'.webp',import.meta.url).href;
 }
-export function preload600(course){
- if(!course.boss600)return;
- for(const frame of ['idle1','idle2','idle3','walk1','walk2','attack','damage','down']){
-  const key=course.boss600.speciesId+':'+frame;if(portraits.has(key))continue;
-  const image=new Image(),asset={image,ready:false};portraits.set(key,asset);image.decoding='async';
-  image.onload=()=>{
-   const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;const c=canvas.getContext('2d');c.drawImage(image,0,0);
-   try{const data=c.getImageData(0,0,canvas.width,canvas.height).data;let left=canvas.width,right=0,top=canvas.height,bottom=0;
-    for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++)if(data[(y*canvas.width+x)*4+3]>20){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
-    asset.box=right>=left?[left,top,right-left+1,bottom-top+1]:[0,0,canvas.width,canvas.height];
-   }catch{asset.box=[0,0,canvas.width,canvas.height];}
-   asset.ready=true;
-  };
-  image.src=bossAsset600(course.boss600.speciesId,frame);
- }
+export function preload600(course,nearX=Infinity){
+ const b=course.boss600;if(!b||nearX+1800<b.left||portraits.has(b.speciesId+':idle1'))return;
+ const frames=BOSS_ATLAS603[b.speciesId];if(!frames)return;
+ const image=new Image(),records=Object.entries(frames).map(([frame,box])=>{const a={image,box,ready:false};portraits.set(b.speciesId+':'+frame,a);return a;});image.decoding='async';
+ image.src=bossAsset600(b.speciesId);image.decode().then(()=>records.forEach(a=>a.ready=true)).catch(()=>{});
 }
 export function scenery600(c,g,course,left,right,elapsed,reduced=false){
  const visible=(x,w=60)=>x+w>left&&x-w<right;c.save();
@@ -43,7 +33,7 @@ export function scenery600(c,g,course,left,right,elapsed,reduced=false){
   if(!down||age<650){c.save();c.translate(b.x,b.y);if(down)c.globalAlpha=Math.max(0,1-age/650);
    if(['wave','fire'].includes(b.pattern)&&['warn','dash'].includes(b.phase)){c.save();c.globalAlpha=.7;centered602(c,'ice-shell',b.dir*29,-32,17,53);c.restore();centered602(c,'spark',-b.dir*24,-35,14);}
    if(b.phase==='stunned')for(let i=0;i<3;i++){const a=elapsed/250+i*2.1;centered602(c,'star',Math.cos(a)*21,-76+Math.sin(a)*5,9);}
-   if(b.phase==='warn'){const p=Math.min(1,age/900);c.save();c.globalAlpha=.5+p*.5;centered602(c,'arrow',b.dir*(53+p*20),-12,24,33,b.dir*Math.PI/2);c.restore();}
+   if(b.phase==='warn'){const p=Math.min(1,age/(b.elite603?.warn??900));c.save();c.globalAlpha=.5+p*.5;centered602(c,'arrow',b.dir*(53+p*20),-12,24,33,b.dir*Math.PI/2);c.restore();}
    if(asset?.ready){const [sx,sy,sw,sh]=asset.box,h=down?48:70,w=Math.min(100,sw/sh*h);c.save();c.scale(-b.dir,1);c.drawImage(asset.image,sx,sy,sw,sh,-w/2,-h,w,h);c.restore();}
    if(!down){image602(c,'ui-panel',-43,-92,86,14);image602(c,'wind-streak',-36,-88,72*b.hp/b.maxHp,6);}
    c.restore();
