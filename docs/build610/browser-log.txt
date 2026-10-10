@@ -1,0 +1,1 @@
+Waiting ship and island checkpoint HUD rendered at mobile size. Host cancel/confirm and guest exit controls checked. Browser errors: 0

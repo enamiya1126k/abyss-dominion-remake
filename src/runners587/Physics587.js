@@ -73,7 +73,7 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  for(const s of surfaces){
   const old=s.move||s.crumble?(previous.find(q=>q.id===s.id)??s):s;
   const top=before.grounded&&carriedId===s.id?s.y:old.y;
-  if(p.x+C.radius>s.x&&p.x-C.radius<s.x+s.w&&before.y<=top+1&&p.y>=s.y&&(!hit||s.y<hit.y))hit=s;
+  if(p.x+C.radius>s.x&&p.x-C.radius<s.x+s.w&&before.y<=top+1&&p.y>=s.y&&(!hit||s.y<hit.y||s.y===hit.y&&s.id===carriedId))hit=s;
  }
  if(hit){impact=p.vy;p.y=hit.y;p.vy=0;p.grounded=true;p.platformId=hit.id;p.lastGroundAt=at;p.springFlight=false;landed=true;p.wallSide=0;p.wallLockUntil=0;p.reboundJump599=false;p.airJumps598=0;p.airJumpUsed=false;
   if(hit.spring){spring=hit;Object.assign(p,{vy:-(hit.power??C.spring),grounded:false,platformId:null,lastGroundAt:-1e9,springFlight:true,jumpBufferUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
