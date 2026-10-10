@@ -1,3 +1,4 @@
+import {pickupKind607} from './Mechanics607.js';
 import {counterShot604,thaw604,frozen604,sweep604} from './Threats604.js';
 import {hitTarget604} from './Trials604.js';
 import {hitBoss600,roller600} from './Encounters600.js';
@@ -22,8 +23,13 @@ export function combat591(g,emit){
  for(const p of g.players){
   if(!usable(p)||frozen604(p,g.elapsed))continue;
   for(const item of course.pickups){
+   if(item.trial601&&!g.coop601?.[item.trial601]?.open)continue;
    if(p.powers.includes(item.id)||Math.abs(p.x-item.x)>24||Math.abs(p.y-14-item.y)>30)continue;
-   p.powers.push(item.id);const power=POWERS591[item.kind];p.weapon=item.kind;p.ammo=0;emit(g,'power',{seat:p.seat,kind:item.kind,x:item.x,y:item.y});
+   p.powers.push(item.id);const kind=pickupKind607(item,g.elapsed);p.weapon=kind;p.ammo=0;emit(g,'power',{seat:p.seat,kind,x:item.x,y:item.y});
+  }
+  if(!p.weapon){
+   if(p.attackHeld&&now>=p.shotAt&&g.projectiles.length<24){p.shotAt=now+350;p.shots++;g.projectiles.push({id:++g.projectileId,owner:p.seat,kind:'punch',x:p.x+p.facing*10,y:p.y-16,vx:p.facing*480,vy:0,hitsLeft:1,born:now,until:now+25});emit(g,'punch',{seat:p.seat,x:p.x,y:p.y-16,dir:p.facing});}
+   continue;
   }
   if(p.burst598&&p.weapon!=='fire')p.burst598=0;
   const burst=p.burst598>0&&now>=p.burstAt598;
@@ -78,6 +84,6 @@ export function combat591(g,emit){
    p.vx=p.bumpVx;p.vy=-155;p.grounded=false;p.platformId=null;p.lastGroundAt=-1e9;p.springFlight=true;
    g.players[b.owner].pranks++;emit(g,'bump',{seat:p.seat,helper:b.owner,x:p.x,y:p.y,kind:b.kind});return false;
   }
-  return b.y<fallLimit600(course,b.x)&&b.x>0&&b.x<course.length;
+  return b.kind!=='punch'&&b.y<fallLimit600(course,b.x)&&b.x>0&&b.x<course.length;
  });
 }

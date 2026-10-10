@@ -2,8 +2,8 @@ import {cannonPose604,tideTop604,frozen604} from './Threats604.js';
 import {image603,sprite603} from './Art603.js';
 import {centered602,image602} from './Art602.js';
 import {BOSS_ATLAS603} from './BossAtlas603.js';
-const assets=new Map(),ids=['cannonball','electric-wall','axe','gun','goblin'];
-const url=id=>new URL(id==='gun'?'../../assets/runners603/cannon.webp':id==='goblin'?'../../assets/runners603/boss-goblin_guard.webp':'../../assets/runners604/'+id+'.webp',import.meta.url).href;
+const assets=new Map(),ids=['cannonball','electric-wall','axe','star-ring','gun','goblin'];
+const url=id=>new URL(id==='star-ring'?'../../assets/runners607/star-ring.webp':id==='gun'?'../../assets/runners603/cannon.webp':id==='goblin'?'../../assets/runners603/boss-goblin_guard.webp':'../../assets/runners604/'+id+'.webp',import.meta.url).href;
 function get(id){if(assets.has(id))return assets.get(id);const image=new Image(),a={image,ready:false,error:false};assets.set(id,a);image.decoding='async';image.src=url(id);a.promise=image.decode().then(()=>a.ready=true).catch(()=>a.error=true);return a;}
 export const preload604=()=>Promise.all(ids.map(id=>get(id).promise));
 export const status604=()=>({ready:ids.every(id=>assets.get(id)?.ready),error:ids.some(id=>assets.get(id)?.error)});

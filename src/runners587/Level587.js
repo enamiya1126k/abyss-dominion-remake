@@ -1,3 +1,4 @@
+import {hubSurface607} from './Mechanics607.js';
 import {phase603,platform603} from './Hazards603.js';
 import {crusherSurface601} from './Gimmicks597.js';
 import {crumble600} from './Terrain600.js';
@@ -37,8 +38,8 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
  if(cache.has(key))return cache.get(key);
 
  const fallen=p=>p.crumble&&crumble600(world?.crumbles?.[p.id],elapsed).absent;
- const result=[...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
-  ...fixed.moving.filter(p=>!fallen(p)&&phase603(p,elapsed).solid).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...platform603(p,elapsed),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
+ const result=[...(course.firebars600??[]).map(hubSurface607),...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
+  ...fixed.moving.filter(p=>(!p.trial601||world.coop601?.[p.trial601]?.open)&&!fallen(p)&&phase603(p,elapsed).solid).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...platform603(p,elapsed),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
   ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
   ...(course.crushers??[]).map(h=>crusherSurface601(h,elapsed)),
   ...fixed.bridges.filter(p=>world?.switches?.includes(p.id)),

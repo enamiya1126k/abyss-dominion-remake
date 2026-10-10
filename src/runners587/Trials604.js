@@ -11,10 +11,20 @@ export function trial604(g,trial,players,emit){
  if(mode==='sprint'){
   if(state.open&&g.elapsed>=state.until604&&!state.claimed604){state.open=false;state.charge=0;}
   const held=players.some(p=>p.grounded&&Math.abs(p.x-trial.pads[0].x)<23&&Math.abs(p.y-trial.pads[0].y)<5);
+  if(held&&state.open&&!state.claimed604)state.until604=g.elapsed+trial.limit604;
   if(held&&!state.open){state.open=true;state.until604=g.elapsed+trial.limit604;emit(g,'star-unlock',{x:trial.reward.x,y:trial.reward.y});}
   return true;
  }
  if(state.open)return true;
+ if(trial.window607){
+  const progress=mode==='targets'?(state.hit604?.length??0):mode==='combat'?trial.guards604.filter(id=>g.enemies.find(e=>e.id===id)?.defeated).length:0;
+  if(progress&&!state.deadline607)state.deadline607=g.elapsed+trial.window607;
+  if(state.deadline607&&g.elapsed>state.deadline607){
+   state.hit604=[];delete state.deadline607;
+   if(mode==='combat')for(const id of trial.guards604){const e=g.enemies.find(e=>e.id===id);if(e){e.defeated=false;e.downUntil=0;delete e.ice;delete e.throw604;}}
+   emit(g,'trial-reset',{x:trial.start607.x,y:trial.start607.y});
+  }
+ }
  let open=false;
  if(mode==='targets')open=trial.targets604.every(t=>state.hit604?.includes(t.id));
  if(mode==='combat')open=trial.guards604.every(id=>g.enemies.find(e=>e.id===id)?.defeated);

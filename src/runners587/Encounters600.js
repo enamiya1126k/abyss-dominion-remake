@@ -1,3 +1,4 @@
+import {onHub607} from './Mechanics607.js';
 // Pure geometry shared by authority and rendering. Timers use game elapsed time.
 export function firebar600(h,elapsed){const angle=elapsed/h.period*Math.PI*2+(h.offset??0);return Array.from({length:Math.ceil(h.length/15)},(_,i)=>({x:h.x+Math.cos(angle)*(i+1)*15,y:h.y+Math.sin(angle)*(i+1)*15,r:8}));}
 export const tide600=(h,elapsed)=>({y:h.y+20-(.5-.5*Math.cos((elapsed+(h.offset??0))/h.period*Math.PI*2))*83});
@@ -7,7 +8,12 @@ const active=p=>p.alive&&!p.waiting&&!p.paused&&!p.respawnAt&&p.finishTime==null
 const bossSpeed603=b=>b.elite603?(b.elite603.dash+(b.hp<=b.maxHp/2?25:0)):(b.hp<=b.maxHp/2?165:130);
 export function bossPosition600(b,elapsed){return b.phase==='dash'?Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*bossSpeed603(b)*Math.max(0,Math.min(.15,(elapsed-(b.at600??elapsed))/1000)))):b.x;}
 export const bossOpen604=(b,t)=>['rest','stunned'].includes(b.phase)&&t>=(b.crownUntil604??0);
-export function bossStomp600(p,b,old,t=Infinity){return b.hp>0&&bossOpen604(b,t)&&!(p.frozenUntil604>t)&&Math.abs(p.x-b.x)<=39&&p.vy>=0&&old.y<=b.y-50&&p.y>=b.y-64&&p.y-28<b.y;}
+export function bossHead606(p,b,old,t=Infinity){return b.hp>0&&!!old&&!(p.frozenUntil604>t)&&Math.abs(p.x-b.x)<=39&&p.vy>=0&&old.y<=b.y-50&&p.y>=b.y-64&&p.y-28<b.y;}
+export const bossStomp600=(p,b,old,t=Infinity)=>bossOpen604(b,t)&&bossHead606(p,b,old,t);
+export function bossGuardBounce606(p,b,at,stomp){
+ stomp(p,{y:b.y-38});const dir=Math.sign(p.x-b.x)||-b.dir||1;
+ Object.assign(p,{vy:-320,vx:dir*150,bumpVx:dir*150,bumpUntil:at+180,bossGuardUntil606:at+300});
+}
 export function initEncounters600(g,course){
  g.waves600={};g.rollerBroken600={};g.enemyShots600=[];g.boss600=course.boss600?{...course.boss600,phase:'sleep',phaseAt:0,turn:0,hitUntil:0,dir:-1}:null;
  if(g.boss600){const b=g.boss600,n=g.players.filter(p=>!p.departed).length;b.maxHp=b.hp=Math.round(b.maxHp*(1+.45*Math.max(0,n-1)));b.lastHitSeat601=null;b.lastHitAt601=-1e9;b.comboUntil601=0;}
@@ -36,7 +42,7 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
   }
  }
  for(const p of players){
-  for(const h of course.firebars600)if(Math.abs(p.x-h.x)<h.length+20&&firebar600(h,now).some(q=>overlap(p,q.x,q.y,q.r)))hurt(g,p,'firebar',h.x);
+  for(const h of course.firebars600)if(!onHub607(p,h)&&Math.abs(p.x-h.x)<h.length+20&&firebar600(h,now).some(q=>overlap(p,q.x,q.y,q.r)))hurt(g,p,'firebar',h.x);
  }
  const b=g.boss600;
  if(b?.hp>0){
@@ -58,7 +64,8 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
   for(const p of players){if(!active(p))continue;const old=previous.get(p.seat);if(!old||Math.abs(p.x-b.x)>39)continue;
    const top=b.y-62;
    if(bossStomp600(p,b,old,now)){const hit=hitBoss600(g,p.seat,2,emit,{kind:'stomp'});stomp(p,{y:top+24});if(hit&&b.hp>0){b.baseY604=b.y;b.crownUntil604=now+1800;b.phase='counter';b.phaseAt=now;b.dir=p.x<b.x?1:-1;p.bumpVx=-b.dir*190;p.bumpUntil=g.lastAt+220;p.vx=p.bumpVx;}emit(g,'stomp',{seat:p.seat,x:b.x,y:top});}
-   else if(p.y>top+3&&p.y-28<b.y)hurt(g,p,'boss',b.x);
+   else if(bossHead606(p,b,old,now)){bossGuardBounce606(p,b,g.lastAt,stomp);emit(g,'boss-block',{seat:p.seat,x:p.x,y:top,head606:true});}
+   else if(p.y>top+3&&p.y-28<b.y&&g.lastAt>=(p.bossGuardUntil606??0))hurt(g,p,'boss',b.x);
   }
   b.at600=now;
  }

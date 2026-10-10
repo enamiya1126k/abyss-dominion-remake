@@ -17,8 +17,9 @@ export function preload600(course,nearX=Infinity){
 export function scenery600(c,g,course,left,right,elapsed,reduced=false){
  const visible=(x,w=60)=>x+w>left&&x-w<right;c.save();
  for(const h of course.firebars600){if(!visible(h.x,h.length))continue;const points=firebar600(h,elapsed),tip=points.at(-1);
-  link602(c,'chain',h.x,h.y,tip.x,tip.y,5);centered602(c,'ui-button',h.x,h.y,23);
+  link602(c,'chain',h.x,h.y,tip.x,tip.y,5);
   for(const p of points){rune597(c,'fire',p.x,p.y,29);if(!reduced)centered602(c,'spark',p.x,p.y,15,15,elapsed/700);}
+  centered602(c,'ui-button',h.x,h.y,30,26);c.strokeStyle='#b7f2cc';c.lineWidth=2;c.beginPath();c.moveTo(h.x-12,h.y-12);c.lineTo(h.x+12,h.y-12);c.stroke();
  }
  for(const h of course.tides600)if(visible(h.x,h.w))water604(c,h,elapsed,reduced);
  for(const h of course.swarms600){if(!visible(h.max)||g.waves600?.[h.id]?.count>=h.count)continue;const t=(elapsed%800)/800;c.save();c.globalAlpha=(1-t)*.5;centered602(c,'wind-streak',h.max,h.y-4,30+t*30,8);c.restore();}

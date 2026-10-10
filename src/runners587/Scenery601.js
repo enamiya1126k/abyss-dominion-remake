@@ -17,6 +17,7 @@ export function scenery601(c,g,course,left,right,elapsed,reduced=false){
  }
  for(const s of course.stars601){
   if(!visible(s.x)||g.stars601?.includes(s.id))continue;
+  if(s.trial&&course.trials601.find(t=>t.id===s.trial)?.kind604==='sprint'&&!starOpen601(g,s))continue;
   const open=starOpen601(g,s),y=s.y+(reduced?0:Math.sin(elapsed/430+s.x)*2);
   c.save();c.globalAlpha=open?1:.5;centered602(c,'star',s.x,y,34,32);c.restore();
   if(!open){link602(c,'chain',s.x-17,y-16,s.x+17,y+16,5);link602(c,'chain',s.x+17,y-16,s.x-17,y+16,5);}

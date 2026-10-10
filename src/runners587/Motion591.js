@@ -2,7 +2,7 @@ import {cannonStomp605} from './CannonStomp605.js';
 import {sweep604} from './Threats604.js';
 import {buddyContact601,bounceBuddy601} from './Coop601.js';
 import {RUN587,control587,stepRunner587,enemyContact588,stomp599} from './Physics587.js';
-import {bossPosition600,bossStomp600} from './Encounters600.js';
+import {bossPosition600,bossStomp600,bossHead606,bossGuardBounce606} from './Encounters600.js';
 import {course589} from './Courses589.js';
 import {enemyAt587,surfaces587} from './Level587.js';
 function ground596(q,g,at,sourceAt=at){
@@ -44,7 +44,7 @@ function extrapolate(c,p,g,at){
    if(base.seat===q.seat)continue;const lead=dt/1000,oldBase={...base,x:base.x+base.vx*Math.max(0,lead-step/1000),y:base.y+(base.grounded?0:base.vy*Math.max(0,lead-step/1000))},nextBase={...base,x:base.x+base.vx*lead,y:base.y+(base.grounded?0:base.vy*lead)};
    if(buddyContact601(q,before,nextBase,oldBase,g.serverAt+dt)){bounceBuddy601(q,nextBase,g.serverAt+dt);break;}
   }
-  if(g.boss600&&!defeated.has('boss600')){const b={...g.boss600,x:bossPosition600(g.boss600,g.elapsed+dt)};if(bossStomp600(q,b,before,g.elapsed+dt)){stomp599(q,{y:b.y-38});defeated.add('boss600');}}
+  if(g.boss600&&!defeated.has('boss600')){const b={...g.boss600,x:bossPosition600(g.boss600,g.elapsed+dt)};if(bossStomp600(q,b,before,g.elapsed+dt)){stomp599(q,{y:b.y-38});defeated.add('boss600');}else if(bossHead606(q,b,before,g.elapsed+dt)){bossGuardBounce606(q,b,g.serverAt+dt,stomp599);defeated.add('boss600');}}
   for(const base of g.threats604?.shots??[]){
    if(base.kind!=='cannon'||brokenShots.has(base.id)||base.until<=g.elapsed+dt)continue;
    const from=(dt-step)/1000,to=dt/1000,s={...base,oldX:base.x+base.vx*from,oldY:base.y+base.vy*from,x:base.x+base.vx*to,y:base.y+base.vy*to},hit=cannonStomp605(q,before,s,g.elapsed+dt);

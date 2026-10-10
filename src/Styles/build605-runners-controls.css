@@ -12,3 +12,6 @@
 @media(orientation:landscape) and (max-height:550px){.ru-art602.ru-vivid593 .ru-controls587{grid-template-columns:180px minmax(76px,86px) minmax(86px,96px);justify-content:space-between;gap:10px}.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control],.ru-art602.ru-vivid593 .ru-directions587{height:76px;min-height:76px}}
 
 .ru-art602.ru-vivid593 .ru-help587:has(>button:disabled){display:none}
+
+/* Unarmed: no elemental symbol, center the action text in the same hit area. */
+.ru-art602.ru-vivid593:not(.has-power591) .ru-controls587 [data-ru-control="attack"]>b{display:none}

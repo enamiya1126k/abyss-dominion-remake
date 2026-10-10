@@ -1,0 +1,248 @@
+{
+  "build": 607,
+  "base_build": 606,
+  "app_version": "3.1.286",
+  "runners_rules": 17,
+  "files": [
+    {
+      "path": "README_BUILD607.md",
+      "bytes": 3778,
+      "sha256": "bef7dd0c12ca734cb09a998041d7c7d95216031ad129b9764d23fa3430be6f7c"
+    },
+    {
+      "path": "assets/runners607/SOURCES.json",
+      "bytes": 312,
+      "sha256": "7573c828a996789ed4e0165bc07149501722043b1a67be13c4a3f64d049bd2fc"
+    },
+    {
+      "path": "assets/runners607/star-ring.webp",
+      "bytes": 15862,
+      "sha256": "6fc547a03b23410a7bf8985f0f75925922733d7a54ee0cd1081dbe40348f01d5"
+    },
+    {
+      "path": "docs/build607/browser-log.txt",
+      "bytes": 89,
+      "sha256": "3df024db6a2cacd9c67c6737d37085e7f0cc1ee3655a5c1977f1dbef1ad2ea80"
+    },
+    {
+      "path": "docs/build607/clock-hub.png",
+      "bytes": 1586845,
+      "sha256": "61bae819604c398b7d092104089d6e922f36ab4cfe6a50ac657f15d443dca54b"
+    },
+    {
+      "path": "docs/build607/coast-open.png",
+      "bytes": 1695014,
+      "sha256": "18917b958b3e42d1e152244273a2775b6e9d1ac68e1464bb1df67ffce2cf7ccd"
+    },
+    {
+      "path": "docs/build607/sky-rings.png",
+      "bytes": 1546200,
+      "sha256": "538d5ca76e357eb5609d9559603f736dd5592d414392878f77ddc58e7a5325bb"
+    },
+    {
+      "path": "docs/build607/test-results.txt",
+      "bytes": 21281,
+      "sha256": "c6450e2a91612c4827c79fb97901fdce1bdf8a5a2bf2f2b6df2fa3357f207c1d"
+    },
+    {
+      "path": "index.html",
+      "bytes": 301845,
+      "sha256": "2a909238d84811679b071008f3088e8aeef987632eb1c2086524a88a6a2c7a89"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "bytes": 3184,
+      "sha256": "4f1b5cd60311c85d672f99e41edef2d06429f72005f37bbe1d2fffa2d1c0030e"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 27016,
+      "sha256": "d77c95a566c052470a68a34556782438d49aec146fc5b8b24345b59c5db53afc"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 29777,
+      "sha256": "eb4b3b86c6c3aa1d14c19f1d472c01e768409dc5daa42e163e94380549fa2cca"
+    },
+    {
+      "path": "src/Styles/build605-runners-controls.css",
+      "bytes": 2622,
+      "sha256": "d5726ae98e532c6f8604932333f84b7846fe23323f9e040d7366bd094c1d5fa1"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "befd23fb18bea634e87c071f7cffa179784a2afac2e8d64067bd94a5547cc1c0"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 15090,
+      "sha256": "690377e81caf63b351054e4b25325dcb13546c5818eaeca11e1f6f8bcc5ff230"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 33198,
+      "sha256": "d45666f14a6be8c5cc70dd9e09ff1c3dc8cff6d6690c3ac184ccefcf49c43121"
+    },
+    {
+      "path": "src/runners587/Art604.js",
+      "bytes": 6846,
+      "sha256": "9a9419ef57da1b87803beac0928cd47300eda4b795532cf79e56884b76a1036d"
+    },
+    {
+      "path": "src/runners587/Board587.js",
+      "bytes": 6861,
+      "sha256": "6d58d88f732b56e5944f9b47a48a5376d8b04eb588f1ddb0491a9570dbc6bc8b"
+    },
+    {
+      "path": "src/runners587/Challenge607.js",
+      "bytes": 2709,
+      "sha256": "d5c7326f14ff61b39ee321252f9d792f0ddc2937935d9c71fe1a8829076deda3"
+    },
+    {
+      "path": "src/runners587/Combat591.js",
+      "bytes": 6026,
+      "sha256": "2cfebf65d5374d3e3c0bb91bcf6e79719419f7fb32c96db13e36d0521117962b"
+    },
+    {
+      "path": "src/runners587/Courses589.js",
+      "bytes": 7261,
+      "sha256": "57b17b35566ce5a0c2f82bf543b973aac6c0e9559188500eb56cd9025db34c67"
+    },
+    {
+      "path": "src/runners587/Encounters600.js",
+      "bytes": 6437,
+      "sha256": "d16382554e1d3088349b02b7033f0847de9a10ffc0bf0fb81facbe6882aef074"
+    },
+    {
+      "path": "src/runners587/Level587.js",
+      "bytes": 5385,
+      "sha256": "fc4069f343aa1428415072008cd06d0c7f630fac19ff1a39fb7fa710df576ffc"
+    },
+    {
+      "path": "src/runners587/Mechanics607.js",
+      "bytes": 557,
+      "sha256": "a5d70fcc406414668f7fa7ac5fb2a92d1e249f337f0bc9f4266ddd3c1a7bc70e"
+    },
+    {
+      "path": "src/runners587/Rules587.js",
+      "bytes": 12898,
+      "sha256": "57a814b6c45363482de06ea4055ff7c42265b2fdaf6360d243e973d69723c1c0"
+    },
+    {
+      "path": "src/runners587/Scenery600.js",
+      "bytes": 3558,
+      "sha256": "cf18736086bd4c5871d3936c45defa0784ce321400d1f66f9ea43bcad12a17ed"
+    },
+    {
+      "path": "src/runners587/Scenery601.js",
+      "bytes": 2526,
+      "sha256": "95a9aa992cc8c9080c5f009d0928e29249b52a558a94534277bad0460f1a4453"
+    },
+    {
+      "path": "src/runners587/TrialArt604.js",
+      "bytes": 2485,
+      "sha256": "77fec2203e691af37121297e93f3732da9d08dc6dae188323049bcbaeaa84b52"
+    },
+    {
+      "path": "src/runners587/Trials604.js",
+      "bytes": 2887,
+      "sha256": "f6085e2dfc5de6730c62734c34833aeb9cf00501d0c993bfc9c9a28f286180ab"
+    },
+    {
+      "path": "src/runners587/View587.js",
+      "bytes": 22445,
+      "sha256": "ef309d9eb1b26af59a4796f1257b3ccbebcb5b158c5f4ef1d76d605f8fe21678"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "1398cfa349f47e811612de03e178727029f49fecbf7058a3bc554b46f1f42114"
+    },
+    {
+      "path": "tools/build607/boss-guard.test.mjs",
+      "bytes": 3296,
+      "sha256": "a5a69f2197828ec648875c53cd8b4257006e6dde88c077381a7eb5f448e62403"
+    },
+    {
+      "path": "tools/build607/challenge607.test.mjs",
+      "bytes": 3951,
+      "sha256": "5429195ea11d4788f2b9c7b3a958a754b884a04afade35dac6350536701940b7"
+    },
+    {
+      "path": "tools/build607/changes.test.mjs",
+      "bytes": 14212,
+      "sha256": "0e4794cd6693c182a181aaeab3b06b757ad8ba734150aac2f7a6ed705a0206bb"
+    },
+    {
+      "path": "tools/build607/coop.test.mjs",
+      "bytes": 8097,
+      "sha256": "081a6855067a6f865808273fbcf09f9809d3896af92eefeb968e2f0cfddf1189"
+    },
+    {
+      "path": "tools/build607/exit.test.mjs",
+      "bytes": 2644,
+      "sha256": "df6689e3eaa98550d2784a7ee86f341d2866374c8140470235570b1460b0a879"
+    },
+    {
+      "path": "tools/build607/expedition.test.mjs",
+      "bytes": 6729,
+      "sha256": "cd160c421761a0cbd866b234f8d2abb0b6658d7404e1d4caf47754dedcf60594"
+    },
+    {
+      "path": "tools/build607/features.test.mjs",
+      "bytes": 9265,
+      "sha256": "cf7d7377a59ddcbf4f46cf17b268efc477204e2705f8ba8561c01f90514d4529"
+    },
+    {
+      "path": "tools/build607/mechanics607.test.mjs",
+      "bytes": 5130,
+      "sha256": "2671db939e6da93d34989346821a40e34f4cded257cc8e9feb307df46eee2bb0"
+    },
+    {
+      "path": "tools/build607/motion.test.mjs",
+      "bytes": 3451,
+      "sha256": "89f8496bcada23744c82b8ea681a1f8aa0fe946a9fc0c4d7fdcf294992b2eeef"
+    },
+    {
+      "path": "tools/build607/nightmare.test.mjs",
+      "bytes": 8809,
+      "sha256": "4d40eec1b385f70163689f75b1fae154d05845ae56adfd859bb62f6bf7ee7a95"
+    },
+    {
+      "path": "tools/build607/resume.test.mjs",
+      "bytes": 4862,
+      "sha256": "58bc51c1ccf08bd911841fa61c70f93dc121a4d054802b170844cac0e1b961c0"
+    },
+    {
+      "path": "tools/build607/runners.test.mjs",
+      "bytes": 7647,
+      "sha256": "6ff06763c8c49572a15ee56e0b99d03cd1f7cc5ee0a1031fe8a710032214589c"
+    },
+    {
+      "path": "tools/build607/stomp-fall.test.mjs",
+      "bytes": 5646,
+      "sha256": "3aef8e87877f59f962ddd936ffa4c0d5bfd536464508861e81dd84539e4f5ec1"
+    },
+    {
+      "path": "tools/build607/wire-fixture.mjs",
+      "bytes": 1604,
+      "sha256": "f1238cc38ef239946c236bcb1b30d47292d5f971a1ff70d94106614cbaace80c"
+    },
+    {
+      "path": "tools/build607/wire.test.mjs",
+      "bytes": 11602,
+      "sha256": "f7e3d0d96c1d63c5d79e69eb63a982552c1621199be72f02f8b89a884953dfdc"
+    },
+    {
+      "path": "world-raid-offline607-assets.json",
+      "bytes": 60289,
+      "sha256": "5a9d820cbc5568f401f888d105794acd87ed1ecc1625a9f5e5b94fcf82f9c430"
+    },
+    {
+      "path": "world-raid-offline607-sw.js",
+      "bytes": 2502,
+      "sha256": "099470e13f47257277eb15359d1c411cfae853ddd831100163d1f87ce346e861"
+    }
+  ]
+}
