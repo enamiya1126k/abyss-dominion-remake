@@ -47,6 +47,7 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
 }
 export function enemyAt587(spec,elapsed){
  if(spec.ice){const q=spec.ice,dt=Math.max(-.025,Math.min(.15,(elapsed-q.at)/1000));return {...spec,x:q.x+q.vx*dt,y:q.y+q.vy*dt,dir:Math.sign(q.vx)||q.dir||1};}
+ if(spec.throw604&&elapsed<spec.throw604.until){const q=spec.throw604;return {...spec,x:q.x,y:q.y,dir:q.dir};}
  elapsed-=spec.motionOffset??0;const width=Math.max(1,spec.max-spec.min),offset=Math.max(0,Math.min(width,spec.x-spec.min)),travel=((spec.advance?width*2-offset:offset)+elapsed/1000*spec.speed)%(width*2);
  return {...spec,y:spec.y+(spec.flying?Math.sin(elapsed/(spec.period??1800)*Math.PI*2)*(spec.bob??12):0),x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};
 }

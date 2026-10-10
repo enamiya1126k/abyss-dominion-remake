@@ -1,3 +1,5 @@
+import {counterShot604,thaw604,frozen604,sweep604} from './Threats604.js';
+import {hitTarget604} from './Trials604.js';
 import {hitBoss600,roller600} from './Encounters600.js';
 import {fallLimit600} from './Terrain600.js';
 import {freeze598} from './Ice598.js';
@@ -18,7 +20,7 @@ function boxTime600(x0,y0,x1,y1,s){
 export function combat591(g,emit){
  const course=course589(g),now=g.lastAt;
  for(const p of g.players){
-  if(!usable(p))continue;
+  if(!usable(p)||frozen604(p,g.elapsed))continue;
   for(const item of course.pickups){
    if(p.powers.includes(item.id)||Math.abs(p.x-item.x)>24||Math.abs(p.y-14-item.y)>30)continue;
    p.powers.push(item.id);const power=POWERS591[item.kind];p.weapon=item.kind;p.ammo=0;emit(g,'power',{seat:p.seat,kind:item.kind,x:item.x,y:item.y});
@@ -40,6 +42,8 @@ export function combat591(g,emit){
   // Sweep the visible radius: fast shots, grazing edges and box seams all hit.
   let box=null,time=Infinity,wallTime=Infinity;
   for(const s of surfaces){if(s.spike||s.ice||s.oneWay||s.ground||g.broken?.includes(s.id))continue;const t=boxTime600(oldX,oldY,b.x,b.y,s);if(t==null)continue;if(!s.breakable){wallTime=Math.min(wallTime,t);continue;}if(t<time){box=s;time=t;}}
+  const limit=Math.min(wallTime,time);
+  if(counterShot604(g,b,oldX,oldY,emit,limit)||hitTarget604(g,course,b,oldX,oldY,emit,limit))return false;
   if(wallTime<time)return false;
   if(box){g.barrierHits??={};g.broken??=[];const s=box;g.barrierHits[s.id]=4;
    g.broken.push(s.id);emit(g,'break',{seat:b.owner,x:s.x+s.w/2,y:s.y+s.h/2,wall:s.id});return false;
@@ -55,17 +59,19 @@ export function combat591(g,emit){
    }
   }
   if(b.kind==='water')for(const h of course.hazards){if(h.kind!=='spikes'&&b.x+12>h.x&&b.x-12<h.x+h.w&&b.y>h.y-h.h&&b.y<h.y+8)g.ventsOff[h.id]=now+1800;}
-  for(const h of course.rollers600??[]){const q=roller600(h,g.elapsed);if(q.active&&g.rollerBroken600[h.id]!==q.cycle&&crossed(oldX,b.x,q.x,27)&&Math.abs(b.y-q.y)<27){g.rollerBroken600[h.id]=q.cycle;emit(g,'shatter',{seat:b.owner,x:q.x,y:q.y});return false;}}
   const boss=g.boss600;
   if(boss?.hp>0&&crossed(oldX,b.x,boss.x,38)&&b.y>boss.y-66&&b.y<boss.y+4){hitBoss600(g,b.owner,b.kind==='stone'?2:1,emit,{kind:'shot',x:oldX});return false;}
   for(const e of g.enemies){
    if(e.defeated||e.downUntil>now)continue;const q=enemyAt587(e,g.elapsed);
    if(!crossed(oldX,b.x,q.x,23)||Math.abs(b.y-(q.y-13))>21)continue;
+   if(e.ice){e.defeated=true;e.downUntil=0;delete e.ice;g.players[b.owner].kills++;emit(g,'shatter',{seat:b.owner,x:q.x,y:q.y});return false;}
    if(b.kind==='ice'){freeze598(g,e);b.hitsLeft=0;emit(g,'freeze',{seat:b.owner,x:q.x,y:q.y});return false;}e.defeated=true;e.downUntil=0;const owner=g.players[b.owner];owner.kills++;if(b.kind==='thunder'){let links=0;for(const next of g.enemies){if(next.defeated||next===e)continue;const n=enemyAt587(next,g.elapsed);if(Math.hypot(n.x-q.x,n.y-q.y)<140&&links++<2){next.defeated=true;owner.kills++;emit(g,'zap',{seat:b.owner,x:n.x,y:n.y,fromX:q.x,fromY:q.y});}}}
    emit(g,'defeat',{seat:b.owner,x:q.x,y:q.y,kind:b.kind});b.hitsLeft=(b.hitsLeft??1)-1;if(b.hitsLeft<=0)return false;
   }
   for(const p of g.players){
-   if(p.seat===b.owner||!usable(p)||p.invincibleUntil>now||p.bumpSafeUntil>now)continue;
+   if(p.seat===b.owner||!usable(p))continue;
+   if(frozen604(p,g.elapsed)&&sweep604(oldX,oldY,b.x,b.y,{x:p.x-16,y:p.y-32,w:32,h:34},6)!=null){thaw604(g,p,emit);return false;}
+   if(p.invincibleUntil>now||p.bumpSafeUntil>now)continue;
    if(!crossed(oldX,b.x,p.x,18)||Math.abs(b.y-(p.y-14))>20)continue;
    // Friendly shots never remove a heart. Brief immunity prevents juggling.
    p.bumpVx=Math.sign(b.vx)*(b.kind==='wind'?220:150);p.bumpUntil=now+160;p.bumpSafeUntil=now+1100;

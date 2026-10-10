@@ -1,0 +1,263 @@
+{
+  "build": 604,
+  "base_build": 603,
+  "app_version": "3.1.283",
+  "runners_rules": 14,
+  "files": [
+    {
+      "path": "README_BUILD604.md",
+      "bytes": 3981,
+      "sha256": "77449768dc0936db6721ccb49d83977b419fbc8cdac8271202ccc09cdf1330b2"
+    },
+    {
+      "path": "assets/runners604/SOURCES.json",
+      "bytes": 2951,
+      "sha256": "f578f239e314da0010496f2f642ed332edaaf5d10ceafeae9b66ba27f41d2583"
+    },
+    {
+      "path": "assets/runners604/axe.webp",
+      "bytes": 7938,
+      "sha256": "08f7aca20446467eaa7be998441ac28a7b7cda376055f9eb2841c1d1b028c784"
+    },
+    {
+      "path": "assets/runners604/cannonball.webp",
+      "bytes": 9870,
+      "sha256": "ff554008f4f0c73525bab88a68d010e0c44c248f245119dfeb561e149eddaceb"
+    },
+    {
+      "path": "assets/runners604/electric-wall.webp",
+      "bytes": 17044,
+      "sha256": "0cd335b44186b2c864d39ac0584300f08eb8a9c798dbefc9e30eeb94ba4135bc"
+    },
+    {
+      "path": "docs/build604/QA.md",
+      "bytes": 2570,
+      "sha256": "c6e01aae95a52b3274436e653259b99d50d2d8311c2174e0e753f00ccde2a296"
+    },
+    {
+      "path": "docs/build604/render-results.txt",
+      "bytes": 516,
+      "sha256": "86b1429214663ae9378ac3b5a19dcb3c912ea83cc1888bac8256b45a00839c2d"
+    },
+    {
+      "path": "docs/build604/scene-preview.png",
+      "bytes": 2507627,
+      "sha256": "785c48c9764bf1f8ae658f9eb16ebbebdf9726fd218fe7feb65812593c325106"
+    },
+    {
+      "path": "docs/build604/test-results.txt",
+      "bytes": 16164,
+      "sha256": "6e13504bb33b51b93b18198ecf12076e0f7ee86bb05a502dca0cfd45fe6735cc"
+    },
+    {
+      "path": "index.html",
+      "bytes": 301463,
+      "sha256": "baa74b75ba343503607cf2146924e748f23bf6ab0eaa7e3212948ca1f3954e8a"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "bytes": 3184,
+      "sha256": "efbfc3e03743481e74c7610e4317eada6e4413fbdda39f4e685b018817237dce"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 27016,
+      "sha256": "e58bf591203bef5f371c6c10b7372c670bca22405517c29fc216b574df4fc801"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 29777,
+      "sha256": "9d7886d33f42589464da84b26f851763563b4bec9cee2ab2986e6ef7d634c154"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "d1c1bd92f52cfa5aafe1cc854231df7f843c1376cc8f43a578b508dce4c9c98e"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 15090,
+      "sha256": "6ad9fccfd6afd6a09f09674336832556daaa3cbef061aad9710346c93132726d"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 33198,
+      "sha256": "6de41a64da5d9b35ec9531b14d0f1c185b9ed8216ef0922db97f47cc22afdf0f"
+    },
+    {
+      "path": "src/runners587/Art604.js",
+      "bytes": 6605,
+      "sha256": "cdc0c954845aa017686229fc26c422e2f3eab5925976f3b41637467808500c08"
+    },
+    {
+      "path": "src/runners587/Board587.js",
+      "bytes": 6404,
+      "sha256": "225ab6a0d350087fb755fa9fecc0581a0f5c48e88ca04a05b3a31923dff2749d"
+    },
+    {
+      "path": "src/runners587/Combat591.js",
+      "bytes": 5571,
+      "sha256": "c97b5a2e21f73db300e37e631defff10f1a884a17553784aa17c10e39a8e4541"
+    },
+    {
+      "path": "src/runners587/Coop601.js",
+      "bytes": 2563,
+      "sha256": "abc3c99b89ca36fdfc8097602788b765d56dfd72499d9da2140ccd943f1e8edf"
+    },
+    {
+      "path": "src/runners587/Courses589.js",
+      "bytes": 7195,
+      "sha256": "451c35577d60a7d5b67c16993fc32f3a0b4dd651e7e1342eb52a6f881c5d855b"
+    },
+    {
+      "path": "src/runners587/Encounters600.js",
+      "bytes": 5914,
+      "sha256": "7d1479d6d83969be7de652ee2ad3dff8cf2ca3e37f14b2fa5f62c6f1b0bccf08"
+    },
+    {
+      "path": "src/runners587/Hazards603.js",
+      "bytes": 2861,
+      "sha256": "bf19fb432e1d38dcd536be86b64f96fd36974c96b6af0ab1dfa7299f05260c3d"
+    },
+    {
+      "path": "src/runners587/Ice598.js",
+      "bytes": 2732,
+      "sha256": "84597142e4b65948fc845fcfc999669db41f728aa5b19b9e1c50245fb407c89e"
+    },
+    {
+      "path": "src/runners587/Level587.js",
+      "bytes": 5239,
+      "sha256": "4613d3151a7196a9692c3bf9e6f47d2f32d58c4e1a118dc4df243104298ce46c"
+    },
+    {
+      "path": "src/runners587/Motion591.js",
+      "bytes": 5378,
+      "sha256": "c95ffe3ae1eddf51d2b414a26fd3e81da373a2e114b6de5510fec0db186932fb"
+    },
+    {
+      "path": "src/runners587/Physics587.js",
+      "bytes": 6435,
+      "sha256": "609f66da51499f2adf61f50773cd4aa7d36ec9c01f1296ac42ca117c1ef0a90c"
+    },
+    {
+      "path": "src/runners587/Rules587.js",
+      "bytes": 12764,
+      "sha256": "1bd6272236f8481dc0557ced73d549e0a08795746c604bcc99a8b0f1704d0b79"
+    },
+    {
+      "path": "src/runners587/Scenery600.js",
+      "bytes": 3441,
+      "sha256": "932e85ad6b347adf94cfc7eee3a356bf44cf969917bf4ec654c9cdbff8e7cd96"
+    },
+    {
+      "path": "src/runners587/Scenery601.js",
+      "bytes": 2422,
+      "sha256": "72f35183aeff6e9ee351c06fde9868b958db935805e905b4809c10fe3a23ad34"
+    },
+    {
+      "path": "src/runners587/Scenery603.js",
+      "bytes": 1873,
+      "sha256": "e44686a36f34bc8c2bde6cd29ac1d3a19f687510c3a427069978b90175870b69"
+    },
+    {
+      "path": "src/runners587/Threats604.js",
+      "bytes": 7400,
+      "sha256": "7d29c866305de09dc63dcf9afcac6aaf42285334f37c8ceaa7a3603d0cdd57f0"
+    },
+    {
+      "path": "src/runners587/TrialArt604.js",
+      "bytes": 1957,
+      "sha256": "ec8bc3b4f148a5bb3dbc9febb9dfc0f8a21a39bc8de49b19219e79b7e57b39e7"
+    },
+    {
+      "path": "src/runners587/Trials604.js",
+      "bytes": 2216,
+      "sha256": "738c0c73bb4ebcdb0b611fb56598ef6ca231790dc89ed8ed20431c6127b4985e"
+    },
+    {
+      "path": "src/runners587/Variety604.js",
+      "bytes": 3010,
+      "sha256": "27c757b4f8957c460865f05469913517a5940f3dda59d5e52aa1a617a411ac59"
+    },
+    {
+      "path": "src/runners587/View587.js",
+      "bytes": 22143,
+      "sha256": "e1e42b4b669f5ca036dfb3c65f13fb9555e5210c1a449bbb73afb3a098aa4957"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "f95859a0ff44b4cbb17df70895d8f79c4b6f463879e70c691c89769fa1ecc708"
+    },
+    {
+      "path": "tools/build604/changes.test.mjs",
+      "bytes": 14185,
+      "sha256": "10a9069788e2260f2dd659cc870769a290da6e57f21842516b9fa7af6037d551"
+    },
+    {
+      "path": "tools/build604/coop.test.mjs",
+      "bytes": 8097,
+      "sha256": "081a6855067a6f865808273fbcf09f9809d3896af92eefeb968e2f0cfddf1189"
+    },
+    {
+      "path": "tools/build604/exit.test.mjs",
+      "bytes": 2644,
+      "sha256": "d62f63de4782283ec2d80e58ce20cc0a2ff23b10be0698a23e63a302cc144031"
+    },
+    {
+      "path": "tools/build604/expedition.test.mjs",
+      "bytes": 6729,
+      "sha256": "cd160c421761a0cbd866b234f8d2abb0b6658d7404e1d4caf47754dedcf60594"
+    },
+    {
+      "path": "tools/build604/features.test.mjs",
+      "bytes": 9177,
+      "sha256": "35cf6f532ad5f57c582520722903d68a5f6c71c876782bd02b9a8cf7a53d1c19"
+    },
+    {
+      "path": "tools/build604/motion.test.mjs",
+      "bytes": 3321,
+      "sha256": "34b4d36a2d272cc57d31ed1f9f2a4207b92bdda53738ff0b3e21ed507b5cd4e9"
+    },
+    {
+      "path": "tools/build604/nightmare.test.mjs",
+      "bytes": 8594,
+      "sha256": "415c69c7810e7ff677821bf12a986c78f12dd1a6d130d6383d4e18895dcc8f74"
+    },
+    {
+      "path": "tools/build604/render-preview.mjs",
+      "bytes": 5535,
+      "sha256": "6102bb341a7140ad701fd7a9a79d1f9d75c07e18e192989e9aa985e8dc0ffe24"
+    },
+    {
+      "path": "tools/build604/resume.test.mjs",
+      "bytes": 4862,
+      "sha256": "58bc51c1ccf08bd911841fa61c70f93dc121a4d054802b170844cac0e1b961c0"
+    },
+    {
+      "path": "tools/build604/runners.test.mjs",
+      "bytes": 7647,
+      "sha256": "6ff06763c8c49572a15ee56e0b99d03cd1f7cc5ee0a1031fe8a710032214589c"
+    },
+    {
+      "path": "tools/build604/wire-fixture.mjs",
+      "bytes": 1604,
+      "sha256": "ef983364185653894a8f33a780e5e4e143f87ed27a0390ef243105a114b204b4"
+    },
+    {
+      "path": "tools/build604/wire.test.mjs",
+      "bytes": 11602,
+      "sha256": "6be37a2f2fd04901d5ed4da7789fbff3f800bde36eb8a9809d1bc0ad331c9243"
+    },
+    {
+      "path": "world-raid-offline604-assets.json",
+      "bytes": 60161,
+      "sha256": "f3e90f6d8a68002a5cb018074e18c0b0e3478edea473f6e5e212a864ad4b3377"
+    },
+    {
+      "path": "world-raid-offline604-sw.js",
+      "bytes": 2502,
+      "sha256": "91cca2cfa18d017e219ae3bb26caf31c3877843dc0133ed91df3b8b885b3b8d5"
+    }
+  ]
+}

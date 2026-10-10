@@ -1,3 +1,4 @@
+import {threatsArt604,axeEnemy604} from './Art604.js';
 import {scenery603} from './Scenery603.js';
 import {image602,centered602,link602,strip602,wall602,spring602,flag602} from './Art602.js';
 import {rune597} from './Elements597.js';
@@ -31,6 +32,7 @@ export function paint587(r,g,u,positions,focus,at){const course=course589(g),c=r
  scenery589(c,g,{...course,walls:[]},left,right,u.reduced?0:at);
  scenery600(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
  scenery603(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
+ threatsArt604(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
  scenery601(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
  for(const cp of course.checkpoints.slice(1))if(visible(cp))flag602(c,cp,(g.teamCheckpoint??0)>=course.checkpoints.indexOf(cp),at,u.reduced);
  if(r.camera<300)centered602(c,'arrow',192,262,19,25,Math.PI/2);
@@ -39,9 +41,9 @@ export function paint587(r,g,u,positions,focus,at){const course=course589(g),c=r
  for(const gem of course.gems.filter(visible)){if(behindPress601(gem)||focus.gems?.includes(gem.id))continue;const y=gem.y+(u.reduced?0:Math.sin(at/260+gem.x)*3);centered602(c,'boost',gem.x,y,16,32);}
  for(const item of course.pickups)if(visible(item)&&!behindPress601(item)&&!focus.powers?.includes(item.id))pickup591(c,item,u.reduced?0:at);
  for(const b of g.projectiles??[]){if(!visible(b))continue;const lead=Math.min(65,Math.max(0,at-g.serverAt))/1000,x=b.x+b.vx*lead;rune597(c,b.kind,x,b.y,b.kind==='stone'?25:21);}
- for(const e of g.enemies){if(e.defeated)continue;const p=enemyAt587(e,g.elapsed+Math.max(0,Math.min(150,at-g.serverAt)));if(visible(p)){enemy595(c,p,e.ice?e.frozenAt:u.reduced?0:at);if(e.ice)iceArt598(c,p,at,u.reduced);}}
+ for(const e of g.enemies){if(e.defeated)continue;const p=enemyAt587(e,g.elapsed+Math.max(0,Math.min(150,at-g.serverAt)));if(visible(p)){if(e.axe604)axeEnemy604(c,p,e.ice?e.frozenAt:g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);else enemy595(c,p,e.ice?e.frozenAt:u.reduced?0:at);if(e.ice)iceArt598(c,p,at,u.reduced);}}
  for(const p of positions){if(p.waiting||!p.alive||p.respawnAt||p.finishTime!=null)continue;if(p.boostUntil>at&&!u.reduced){c.save();c.translate(p.x,p.y-12);c.scale(p.facing,1);c.globalAlpha=.65;image602(c,'wind-streak',-60,-5,45,10);c.restore();}}
  for(const e of g.events)if(e.type==='zap'&&at-e.at>=0&&at-e.at<180)link602(c,'wind-streak',e.fromX,e.fromY-15,e.x,e.y-15,12);
- if(!u.reduced)for(const e of g.events){const age=at-e.at;if(age<0||age>600||!Number.isFinite(e.x)||e.x<left||e.x>right)continue;if(!['star','star-unlock','boss-combo','boss-hit','boss-defeat','shatter','icekick','break','crack','windjump','defeat','power','bump','shoot','stomp','spring','boost','miss','jump','goal','land','buddy','wallkick','switch','rescue'].includes(e.type))continue;const count=['jump','land'].includes(e.type)?3:6;for(let i=0;i<count;i++){const a=i/count*Math.PI*2,dist=age/14;c.save();c.globalAlpha=1-age/600;centered602(c,e.type==='icekick'||e.type==='shatter'?'ice-shell':'spark',e.x+Math.cos(a)*dist,e.y-15+Math.sin(a)*dist+age*age/17000,7,7,a);c.restore();}}
+ if(!u.reduced)for(const e of g.events){const age=at-e.at;if(age<0||age>600||!Number.isFinite(e.x)||e.x<left||e.x>right)continue;if(!['shot-break','player-freeze','thaw','target-hit','ring','cannon-fire','star','star-unlock','boss-combo','boss-hit','boss-defeat','shatter','icekick','break','crack','windjump','defeat','power','bump','shoot','stomp','spring','boost','miss','jump','goal','land','buddy','wallkick','switch','rescue'].includes(e.type))continue;const count=['jump','land'].includes(e.type)?3:6;for(let i=0;i<count;i++){const a=i/count*Math.PI*2,dist=age/14;c.save();c.globalAlpha=1-age/600;centered602(c,['icekick','shatter','player-freeze','thaw'].includes(e.type)?'ice-shell':'spark',e.x+Math.cos(a)*dist,e.y-15+Math.sin(a)*dist+age*age/17000,7,7,a);c.restore();}}
  c.restore();r.positions=positions;
 }

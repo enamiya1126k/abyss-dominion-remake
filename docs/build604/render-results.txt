@@ -1,0 +1,7 @@
+stormforge 0 60 frames average native Canvas ms 7.59 terrain cache 4
+stormforge 1 60 frames average native Canvas ms 3.97 terrain cache 5
+abyssice 2 60 frames average native Canvas ms 1.61 terrain cache 2
+abyssice 3 60 frames average native Canvas ms 0.97 terrain cache 5
+eclipse 4 60 frames average native Canvas ms 1.16 terrain cache 6
+sky 5 60 frames average native Canvas ms 1.36 terrain cache 4
+All scenes use actual game renderer and decoded assets; avatar bitmaps composited. Not a browser/Safari screenshot.

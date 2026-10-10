@@ -20,7 +20,7 @@ export function stepIce598(g,emit,hurt){
 }
 export function iceContact598(g,previous,emit,hurt){
  for(const e of g.enemies){if(!e.ice||e.defeated)continue;const q=e.ice;if(q.vx)continue;
-  for(const p of g.players){if(!p.alive||p.waiting||p.respawnAt||p.finishTime!=null||p.platformId==='ice:'+e.id)continue;
+  for(const p of g.players){if(!p.alive||p.waiting||p.respawnAt||p.finishTime!=null||p.frozenUntil604>g.elapsed||p.platformId==='ice:'+e.id)continue;
    if(Math.abs(p.x-q.x)>33||p.y<=q.y-31||p.y-28>=q.y)continue;
    const dir=Math.sign(q.x-p.x)||p.facing;q.vx=dir*350;q.kicker=p.seat;q.grace=g.elapsed+350;q.until=g.elapsed+6500;e.frozenUntil=q.until;emit(g,'icekick',{seat:p.seat,x:q.x,y:q.y,dir});break;
   }

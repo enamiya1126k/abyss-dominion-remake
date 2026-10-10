@@ -1,3 +1,4 @@
+import {frozen604,inWater604} from './Threats604.js';
 import {lift603} from './Hazards603.js';
 import {surfaces587} from './Level587.js';
 import {course589} from './Courses589.js';
@@ -24,7 +25,8 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  if(at-p.controlAt>C.inputTTL){p.axis=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;}
  if(p.grounded&&p.platformId){const old=previous.find(s=>s.id===p.platformId),now=surfaces.find(s=>s.id===p.platformId);if(old&&now){p.x+=now.x-old.x;p.y+=now.y-old.y;carriedId=now.id;}else{p.grounded=false;p.platformId=null;}}
  if(p.grounded){p.lastGroundAt=at;p.airJumpUsed=false;p.airJumps598=0;p.reboundJump599=false;}
- if(p.jumpBufferUntil>=at){
+ const frozen=frozen604(p,elapsed);if(frozen){p.axis=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;p.vx=0;}
+ if(!frozen&&p.jumpBufferUntil>=at){
   if(at-p.lastGroundAt<=C.coyote){p.vy=-C.jump;jumped=true;p.springFlight=false;}
   else if(p.reboundJump599){p.vy=-C.jump;p.reboundJump599=false;jumped=true;p.springFlight=false;}
   else if(p.wallSide&&at-(p.wallAt??-1e9)<=100&&at>=(p.wallLockUntil??0)){
@@ -35,13 +37,14 @@ export function stepRunner587(p,at,elapsed,dt=RUN587.step/1000,world={}){
  }
  if(!p.jumpHeld&&!p.springFlight&&p.vy<-C.shortJump)p.vy=-C.shortJump;
  const wind=!p.grounded?course.winds.find(w=>p.x>=w.x&&p.x<w.x+w.w&&p.y>w.y&&p.y<w.y+w.h):null;
- const speed=p.weapon==='thunder'?315:p.boostUntil>at?C.boostSpeed:C.speed,wanted=p.axis*speed+(wind?.speed??0);
- if(at<(p.bumpUntil??0))p.vx=p.bumpVx;
+ const water=inWater604(p,course,elapsed),speed=(p.weapon==='thunder'?315:p.boostUntil>at?C.boostSpeed:C.speed)*(water?.5:1),wanted=frozen?0:p.axis*speed+(wind?.speed??0)*(water?.5:1);
+ p.inWater604=water;
+ if(frozen)p.vx=0;else if(at<(p.bumpUntil??0))p.vx=p.bumpVx;
  else if(at<(p.wallLockUntil??0))p.vx=p.wallKickVx;
  else{p.vx=approach(p.vx,wanted,(p.axis?(p.grounded?C.accel:C.airAccel):(p.grounded&&course.theme==='frost'?750:C.brake))*dt);if(p.axis)p.facing=p.axis;}
  const before={x:p.x,y:p.y,vy:p.vy,grounded:p.grounded};
  const belt=p.grounded?course.belts.find(b=>p.x>=b.x&&p.x<b.x+b.w&&Math.abs(p.y-b.y)<4):null;
- p.x=clamp587(p.x+(p.vx+(belt?.speed??0))*dt,C.radius,course.length-C.radius);
+ p.x=clamp587(p.x+(p.vx+(frozen?0:(belt?.speed??0)))*dt,C.radius,course.length-C.radius);
  let wallSide=0;
  for(const s of surfaces){
   if(s.oneWay||before.y<=s.y+.01||before.y-C.height>=s.y+s.h)continue;

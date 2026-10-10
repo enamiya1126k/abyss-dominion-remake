@@ -21,7 +21,7 @@ const circle=(p,q)=>{const x=Math.max(p.x-10,Math.min(q.x,p.x+10)),y=Math.max(p.
 export function hazards603(g,course,hurt){
  if(!course.expert603)return;
  for(const p of g.players){if(!active(p))continue;
-  for(const [list,locate,kind] of [[course.saws603,saw603,'saw'],[course.pendulums603,pendulum603,'pendulum'],[course.cannons603,cannon603,'cannon'],[course.meteors603,meteor603,'meteor']]){
+  for(const [list,locate,kind] of [[course.saws603,saw603,'saw'],[course.pendulums603,pendulum603,'pendulum']]){
    for(const h of list){const reach=h.range??h.length??40;if(p.x<h.x-reach-60||p.x>h.x+reach+60)continue;const q=locate(h,g.elapsed);if(q.active!==false&&circle(p,q))hurt(g,p,kind,q.x);}
   }
   for(const h of course.lightning603)if(Math.abs(p.x-h.x)<(h.w??28)/2+10&&p.y>h.y-h.h&&p.y-28<h.y&&lightning603(h,g.elapsed).active)hurt(g,p,'lightning',h.x);

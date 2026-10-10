@@ -6,7 +6,8 @@ const overlap=(p,x,y,r)=>p.x+10>x-r&&p.x-10<x+r&&p.y>y-r&&p.y-28<y+r;
 const active=p=>p.alive&&!p.waiting&&!p.paused&&!p.respawnAt&&p.finishTime==null;
 const bossSpeed603=b=>b.elite603?(b.elite603.dash+(b.hp<=b.maxHp/2?25:0)):(b.hp<=b.maxHp/2?165:130);
 export function bossPosition600(b,elapsed){return b.phase==='dash'?Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*bossSpeed603(b)*Math.max(0,Math.min(.15,(elapsed-(b.at600??elapsed))/1000)))):b.x;}
-export function bossStomp600(p,b,old){return b.hp>0&&b.phase!=='sleep'&&Math.abs(p.x-b.x)<=39&&p.vy>=0&&old.y<=b.y-50&&p.y>=b.y-64&&p.y-28<b.y;}
+export const bossOpen604=(b,t)=>['rest','stunned'].includes(b.phase)&&t>=(b.crownUntil604??0);
+export function bossStomp600(p,b,old,t=Infinity){return b.hp>0&&bossOpen604(b,t)&&!(p.frozenUntil604>t)&&Math.abs(p.x-b.x)<=39&&p.vy>=0&&old.y<=b.y-50&&p.y>=b.y-64&&p.y-28<b.y;}
 export function initEncounters600(g,course){
  g.waves600={};g.rollerBroken600={};g.enemyShots600=[];g.boss600=course.boss600?{...course.boss600,phase:'sleep',phaseAt:0,turn:0,hitUntil:0,dir:-1}:null;
  if(g.boss600){const b=g.boss600,n=g.players.filter(p=>!p.departed).length;b.maxHp=b.hp=Math.round(b.maxHp*(1+.45*Math.max(0,n-1)));b.lastHitSeat601=null;b.lastHitAt601=-1e9;b.comboUntil601=0;}
@@ -19,7 +20,7 @@ export function hitBoss600(g,seat,amount,emit,impact={}){
  const combo=seat!=null&&b.lastHitSeat601!=null&&seat!==b.lastHitSeat601&&g.elapsed-b.lastHitAt601<=1500&&g.elapsed>=(b.comboUntil601??0);
  if(combo){amount+=2;b.phase='stunned';b.phaseAt=g.elapsed;b.comboUntil601=g.elapsed+2600;emit(g,'boss-combo',{seat,helper:b.lastHitSeat601,x:b.x,y:b.y-36});}
  b.lastHitSeat601=seat;b.lastHitAt601=g.elapsed;
- b.hp=Math.max(0,b.hp-amount);b.hitUntil=g.elapsed+160;emit(g,'boss-hit',{seat,x:b.x,y:b.y-38});
+ b.hp=Math.max(0,b.hp-amount);b.hitUntil=g.elapsed+500;emit(g,'boss-hit',{seat,x:b.x,y:b.y-38});
  if(!b.hp){b.phase='down';b.phaseAt=g.elapsed;g.enemyShots600=[];if(g.players[seat])g.players[seat].kills++;emit(g,'boss-defeat',{seat,x:b.x,y:b.y});}
  return true;
 }
@@ -36,11 +37,10 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
  }
  for(const p of players){
   for(const h of course.firebars600)if(Math.abs(p.x-h.x)<h.length+20&&firebar600(h,now).some(q=>overlap(p,q.x,q.y,q.r)))hurt(g,p,'firebar',h.x);
-  for(const h of course.tides600)if(p.x+10>h.x&&p.x-10<h.x+h.w&&p.y>tide600(h,now).y&&p.y-28<h.y+25)hurt(g,p,'tide',h.x+h.w/2);
-  for(const h of course.rollers600){const q=roller600(h,now);if(q.active&&g.rollerBroken600[h.id]!==q.cycle&&overlap(p,q.x,q.y,q.r))hurt(g,p,'ice-roll',q.x);}
  }
  const b=g.boss600;
  if(b?.hp>0){
+  if(b.phase!=='counter'&&b.baseY604!=null)b.y=b.baseY604;
   const target=players.filter(p=>p.x>b.left-150).sort((a,c)=>Math.abs(a.x-b.x)-Math.abs(c.x-b.x))[0];
   if(b.phase==='sleep'&&target){b.phase='warn';b.phaseAt=now;b.dir=target.x<b.x?-1:1;}
   let age=now-b.phaseAt;
@@ -51,12 +51,13 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
     for(const vy of speeds)g.enemyShots600.push({x:b.x+b.dir*32,y:b.y-(b.pattern==='wave'?10:30),vx:b.dir*(b.elite603?.castSpeed??230),vy,r:b.pattern==='wave'?10:8,kind:b.pattern,born:now,until:now+2200});
    }
   }
+  if(b.phase==='counter'){const progress=Math.min(1,age/650);b.y=(b.baseY604??300)-Math.sin(progress*Math.PI)*54;b.x=Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*3));if(age>=650){b.y=b.baseY604??300;b.phase='warn';b.phaseAt=now;if(target)b.dir=target.x<b.x?-1:1;}}
   if(b.phase==='dash'){b.x=Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*bossSpeed603(b)*.025));if(age>=850){b.phase='rest';b.phaseAt=now;}}
   if(b.phase==='cast'&&age>=350){b.phase='rest';b.phaseAt=now;}
   if((b.phase==='rest'&&age>=(b.elite603?.rest??1000)||b.phase==='stunned'&&age>=1400)&&target){b.turn++;b.phase='warn';b.phaseAt=now;b.dir=target.x<b.x?-1:1;}
-  for(const p of players){const old=previous.get(p.seat);if(!old||Math.abs(p.x-b.x)>39)continue;
+  for(const p of players){if(!active(p))continue;const old=previous.get(p.seat);if(!old||Math.abs(p.x-b.x)>39)continue;
    const top=b.y-62;
-   if(bossStomp600(p,b,old)){hitBoss600(g,p.seat,2,emit);stomp(p,{y:top+24});emit(g,'stomp',{seat:p.seat,x:b.x,y:top});}
+   if(bossStomp600(p,b,old,now)){const hit=hitBoss600(g,p.seat,2,emit,{kind:'stomp'});stomp(p,{y:top+24});if(hit&&b.hp>0){b.baseY604=b.y;b.crownUntil604=now+1800;b.phase='counter';b.phaseAt=now;b.dir=p.x<b.x?1:-1;p.bumpVx=-b.dir*190;p.bumpUntil=g.lastAt+220;p.vx=p.bumpVx;}emit(g,'stomp',{seat:p.seat,x:b.x,y:top});}
    else if(p.y>top+3&&p.y-28<b.y)hurt(g,p,'boss',b.x);
   }
   b.at600=now;

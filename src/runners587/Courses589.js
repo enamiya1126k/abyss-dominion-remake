@@ -1,3 +1,4 @@
+import {variety604} from './Variety604.js';
 import {nightmareCourses603} from './Courses603.js';
 import {expedition602} from './Courses602.js';
 import {cooperativeCourse601} from './Courses601.js';
@@ -43,7 +44,7 @@ const CLASSIC603=[
   springs:[],gems:[{id:'c-gem0',x:450,y:143},{id:'c-gem1',x:1100,y:123},{id:'c-gem2',x:1830,y:133},{id:'c-gem3',x:2610,y:128}],enemies:[],
   hazards:[{id:'vent0',x:950,y:300,w:56,h:59,period:3100,on:950,offset:800},{id:'vent1',x:1990,y:300,w:62,h:59,period:3300,on:950,offset:1600},{id:'vent2',x:2785,y:300,w:55,h:59,period:2900,on:850,offset:400}]}
 ,...EXTRA591].map(adventure591).map(expedition594).map(challenge595).map(adventure597).map(signatureCourse600).map(cooperativeCourse601).map(expedition602);
-export const COURSES589=Object.freeze([...CLASSIC603,...nightmareCourses603(CLASSIC603.at(-1))]);
+export const COURSES589=Object.freeze([...CLASSIC603,...nightmareCourses603(CLASSIC603.at(-1))].map(variety604));
 export const course589=value=>COURSES589.find(c=>c.id===(typeof value==='string'?value:value?.courseId))??COURSES589[0];
 export const readyGate589=g=>course589(g).switches.every(s=>g.switches?.includes(s.id))&&(!course589(g).boss600||g.boss600?.hp===0);
 export const hazard589=(h,elapsed)=>{const phase=((elapsed+h.offset)%h.period+h.period)%h.period;return{active:phase<h.on,warning:phase>h.period-650,phase};};

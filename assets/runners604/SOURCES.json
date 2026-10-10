@@ -1,0 +1,21 @@
+{
+  "generator": "image_gen built-in tool",
+  "transparent_background": true,
+  "assets": [
+    {
+      "path": "cannonball.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production 2D game sprite for a dark fantasy side scrolling game with ornate antique bronze, emerald and stone. Create ONE large spherical iron CANNONBALL, dark charcoal steel with strongly legible bright silver crescent highlights, several small bronze armor bands/rivets, subtle orange hot seams. Clearly a dangerous physical heavy ammunition projectile, never a magical medallion, rune, element icon or item. Fine handcrafted pixel-art-like painterly texture suitable for scaling down to 36px, chunky readable silhouette, luminous thin pale rim that will stay visible against dark sky. Centered ball fills 75% of square canvas. No trail, no fire around it, no ground, no letters, no UI, no drop shadow. Genuine transparent background, fully isolated object.",
+      "processing": "Transparent bounds trim, size reduction and WebP encoding for game use; generated alpha preserved."
+    },
+    {
+      "path": "electric-wall.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production 2D environmental hazard sprite, tall vertical electric barrier for a dark fantasy side-scrolling game. One narrow DANGEROUS ELECTRIC WALL, an irregular continuous white-hot lightning core with jagged cyan and violet electrical branching down its entire height. Sparking tiny fragments. Ends in two small pointed blackened metal electrode caps top and bottom with antique bronze accents. It must read as an impassable lethal electric fence, not a collectible or jewel. Isolated on transparent background. Extremely narrow vertical composition: electricity occupies central 25 percent of a 2:3 portrait canvas and 90 percent of its height, branches within central 50 percent. Fine chunky pixel-painterly game texture, vivid white core and strong cyan rim. No letters, no runes, no icons, no floor, no scenery. Transparency in spaces between branches.",
+      "processing": "Transparent bounds trim, size reduction and WebP encoding for game use; generated alpha preserved."
+    },
+    {
+      "path": "axe.webp",
+      "prompt": "Use case: stylized-concept. Asset type: a thrown-weapon sprite for a dark fantasy 2D game. ONE isolated double-bladed throwing axe with very clear curved steel blade silhouette, polished pale cutting edges, dark bronze engraved socket, short dark wooden handle, small emerald fastener. Axe diagonally positioned, centered fills 75% of square canvas. Detailed handcrafted 64px pixel-painterly game aesthetic, readable when scaled to 30px. It is a physical dangerous weapon, no magic, no trail, no medallion, no border, no rune or element symbol, no text, no scenery or floor. Transparent background.",
+      "processing": "Transparent bounds trim, size reduction and WebP encoding for game use; generated alpha preserved."
+    }
+  ]
+}

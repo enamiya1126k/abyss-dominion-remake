@@ -36,13 +36,13 @@ function extrapolate(c,p,g,at){
   for(const e of g.enemies){
    if(e.defeated||e.ice||e.downUntil>g.serverAt+dt||defeated.has(e.id))continue;
    const enemy=enemyAt587(e,g.elapsed+dt);
-   if(enemyContact588(q,enemy,before)==='stomp'){stomp599(q,enemy);defeated.add(e.id);break;}
+   if(!(q.frozenUntil604>g.elapsed+dt)&&enemyContact588(q,enemy,before)==='stomp'){stomp599(q,enemy);defeated.add(e.id);break;}
   }
   for(const base of g.players){
    if(base.seat===q.seat)continue;const lead=dt/1000,oldBase={...base,x:base.x+base.vx*Math.max(0,lead-step/1000),y:base.y+(base.grounded?0:base.vy*Math.max(0,lead-step/1000))},nextBase={...base,x:base.x+base.vx*lead,y:base.y+(base.grounded?0:base.vy*lead)};
    if(buddyContact601(q,before,nextBase,oldBase,g.serverAt+dt)){bounceBuddy601(q,nextBase,g.serverAt+dt);break;}
   }
-  if(g.boss600&&!defeated.has('boss600')){const b={...g.boss600,x:bossPosition600(g.boss600,g.elapsed+dt)};if(bossStomp600(q,b,before)){stomp599(q,{y:b.y-38});defeated.add('boss600');}}
+  if(g.boss600&&!defeated.has('boss600')){const b={...g.boss600,x:bossPosition600(g.boss600,g.elapsed+dt)};if(bossStomp600(q,b,before,g.elapsed+dt)){stomp599(q,{y:b.y-38});defeated.add('boss600');}}
   if(dt>ms){const f=(ms-(dt-step))/step;q.x=prior.x+(q.x-prior.x)*f;q.y=prior.y+(q.y-prior.y)*f;
    q.grounded=prior.grounded&&q.grounded&&prior.platformId===q.platformId;if(!q.grounded)q.platformId=null;
   }

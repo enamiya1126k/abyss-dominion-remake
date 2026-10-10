@@ -1,11 +1,13 @@
+import {trialArt604} from './TrialArt604.js';
 import {active601,starOpen601} from './Coop601.js';
 import {artURL602,image602,centered602,link602,switch602} from './Art602.js';
 export const starIcon601=filled=>`<img class="ru-star602 ${filled?'is-filled':'is-empty'}" src="${artURL602('star')}" alt="" draggable="false">`;
-export function starHud601(course,g){return course.stars601.map(s=>starIcon601(g.stars601?.includes(s.id))).join('');}
+export function starHud601(course,g){return [...course.stars601].sort((a,b)=>a.x-b.x).map((s,i)=>starIcon601(g.stars601?.includes(s.id)).replace('alt=""','alt="'+(i+1)+'個目 '+(g.stars601?.includes(s.id)?'獲得':'未獲得')+'" data-star-slot604="'+(i+1)+'"')).join('');}
 export function scenery601(c,g,course,left,right,elapsed,reduced=false){
  const visible=(x,w=70)=>x+w>left&&x-w<right,players=g.players.filter(active601);c.save();
  for(const trial of course.trials601){
   if(!trial.pads.some(p=>visible(p.x,420)))continue;
+  if(trialArt604(c,g,trial,elapsed,reduced))continue;
   const state=g.coop601?.[trial.id],open=state?.open;
   for(const pad of trial.pads){
    const held=players.some(p=>p.grounded&&Math.abs(p.x-pad.x)<=23&&Math.abs(p.y-pad.y)<=5),lit=open||held;
