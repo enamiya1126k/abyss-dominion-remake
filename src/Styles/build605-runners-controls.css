@@ -1,0 +1,14 @@
+/* Four aligned, full rectangular touch zones; retain the existing painted skin. */
+.ru-art602.ru-vivid593 .ru-footer587{padding:8px max(8px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+.ru-art602.ru-vivid593 .ru-controls587{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:stretch;width:100%;margin:0;touch-action:none;-webkit-user-select:none;user-select:none}
+.ru-art602.ru-vivid593 .ru-directions587{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;width:100%;height:96px;min-height:0;margin:0;padding:0;align-self:stretch;touch-action:none}
+.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control]{box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:100%;min-width:0;max-width:none;height:96px;min-height:96px;margin:0;padding:10px 0;border-radius:0;align-self:stretch;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;line-height:1.1}
+.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control]>b{display:flex;align-items:center;justify-content:center;flex:0 0 34px;width:34px!important;height:34px!important;margin:0!important;line-height:1}
+.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control] strong{font-size:12px;line-height:1.2;margin:0;letter-spacing:0;white-space:nowrap}
+.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control] small{display:block!important;font-size:8px!important;line-height:1.2!important;margin:0;letter-spacing:0;white-space:nowrap}
+.ru-art602.ru-vivid593 .ru-directions587 [data-ru-control] small{font-size:11px!important}
+.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control].is-held{transform:translateY(1px);filter:brightness(1.35)}
+@media(max-width:350px){.ru-art602.ru-vivid593 .ru-controls587{gap:4px}.ru-art602.ru-vivid593 .ru-directions587{gap:2px}.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control],.ru-art602.ru-vivid593 .ru-directions587{height:88px;min-height:88px}}
+@media(orientation:landscape) and (max-height:550px){.ru-art602.ru-vivid593 .ru-controls587{grid-template-columns:180px minmax(76px,86px) minmax(86px,96px);justify-content:space-between;gap:10px}.ru-art602.ru-vivid593 .ru-controls587 [data-ru-control],.ru-art602.ru-vivid593 .ru-directions587{height:76px;min-height:76px}}
+
+.ru-art602.ru-vivid593 .ru-help587:has(>button:disabled){display:none}

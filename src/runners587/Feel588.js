@@ -1,3 +1,4 @@
+import {cameraFloor605} from './Terrain600.js';
 import {course589} from './Courses589.js';
 // The renderer and thumb pad share these small, testable layout decisions.
 export function keyCode588(e){if(['ArrowLeft','ArrowRight','ArrowUp','KeyA','KeyD','KeyW','KeyX','KeyK','Space'].includes(e.code))return e.code;return{a:'KeyA',d:'KeyD',w:'KeyW',x:'KeyX',k:'KeyK',' ':'Space',ArrowLeft:'ArrowLeft',ArrowRight:'ArrowRight',ArrowUp:'ArrowUp'}[e.key?.toLowerCase?.()]??({ArrowLeft:'ArrowLeft',ArrowRight:'ArrowRight',ArrowUp:'ArrowUp'}[e.key]);}
@@ -8,6 +9,6 @@ export function look588(width,height,p,world){const course=course589(world);cons
  // Turning in midair must not shift the camera target by a sixth of a screen.
  const camera=Math.max(0,Math.min(course.length-view,p.x-view*.36+Math.max(-24,Math.min(24,(p.vx??0)*.08))));
  // Keep spring jumps and the upper route below the HUD, including short screens.
- const top=landscape?80:78,base=anchor-300*scale,offsetY=p.y>340?Math.min(base,anchor-(p.y-40)*scale):Math.max(base,top-(p.y-60)*scale);
+ const cameraY=Math.min(p.y,cameraFloor605(course,p.x)+40),top=landscape?80:78,base=anchor-300*scale,offsetY=cameraY>340?Math.min(base,anchor-(cameraY-40)*scale):Math.max(base,top-(cameraY-60)*scale);
  return{view,scale,camera,offsetY,anchor};
 }

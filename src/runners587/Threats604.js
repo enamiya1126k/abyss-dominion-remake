@@ -1,3 +1,5 @@
+import {cannonStomp605} from './CannonStomp605.js';
+import {stomp599} from './Physics587.js';
 import {cycle603} from './Hazards603.js';
 import {enemyAt587,surfaces587} from './Level587.js';
 import {freeze598} from './Ice598.js';
@@ -92,16 +94,21 @@ export function counterShot604(g,b,oldX,oldY,emit,limit=2){
  }
  if(!best)return false;best.dead=true;emit(g,'shot-break',{seat:b.owner,x:best.x,y:best.y,kind:best.kind});return true;
 }
-export function resolveThreats604(g,course,emit,hurt){
+export function resolveThreats604(g,course,emit,hurt,previous=new Map()){
  if(!g.threats604)return;
  g.threats604.shots=g.threats604.shots.filter(s=>{
   if(s.dead||g.elapsed>=s.until)return false;
   let contact=null,time=s.wallTime604??2;
-  for(const p of g.players){if(!live604(p)||p.invincibleUntil>g.lastAt)continue;
-   const hit=sweep604(s.oldX,s.oldY,s.x,s.y,{x:p.x-9,y:p.y-27,w:18,h:27},s.r);
+  for(const p of g.players){if(!live604(p))continue;
+   const before=previous.get(p.seat),stomp=cannonStomp605(p,before,s,g.elapsed);
+   if(stomp&&stomp.time<time){time=stomp.time;contact={p,stomp};continue;}
+   if(p.invincibleUntil>g.lastAt)continue;
+   const old=before??p,hit=sweep604(s.oldX-old.x,s.oldY-old.y,s.x-p.x,s.y-p.y,{x:-9,y:-27,w:18,h:27},s.r);
    if(hit!=null&&hit<time){time=hit;contact={p};}
   }
   if(s.ice)for(const e of g.enemies){if(e.defeated||e.ice||e.downUntil>g.lastAt)continue;const q=enemyAt587(e,g.elapsed),hit=sweep604(s.oldX,s.oldY,s.x,s.y,{x:q.x-12,y:q.y-26,w:24,h:26},s.r);if(hit!=null&&hit<time){time=hit;contact={e,q};}}
+  if(contact?.stomp){const {p,stomp}=contact;stomp599(p,{y:stomp.y+24});p.stomps=(p.stomps??0)+1;
+   emit(g,'shot-break',{seat:p.seat,x:stomp.x,y:stomp.y+s.r,kind:s.kind});emit(g,'stomp',{seat:p.seat,x:stomp.x,y:stomp.y,kind:'cannon'});return false;}
   if(contact){if(contact.p){if(s.ice)freezePlayer604(g,contact.p,emit);else hurt(g,contact.p,s.kind,s.oldX);}else{freeze598(g,contact.e);emit(g,'freeze',{x:contact.q.x,y:contact.q.y});}return false;}
   if(time<=1){emit(g,'shot-break',{x:s.oldX+(s.x-s.oldX)*time,y:s.oldY+(s.y-s.oldY)*time,kind:s.kind});return false;}
   return s.x>-80&&s.x<course.length+80&&s.y<1100;

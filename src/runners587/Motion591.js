@@ -1,3 +1,5 @@
+import {cannonStomp605} from './CannonStomp605.js';
+import {sweep604} from './Threats604.js';
 import {buddyContact601,bounceBuddy601} from './Coop601.js';
 import {RUN587,control587,stepRunner587,enemyContact588,stomp599} from './Physics587.js';
 import {bossPosition600,bossStomp600} from './Encounters600.js';
@@ -28,7 +30,7 @@ function extrapolate(c,p,g,at){
  if(p.waiting||p.paused||!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
  const ms=Math.min(200,Math.max(0,at-g.serverAt)),course=course589(g);
  const pending=self?(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq)):[];let input=0;
- const defeated=new Set();
+ const defeated=new Set(),brokenShots=new Set();
  for(let dt=0;dt<ms;){
   const step=RUN587.step;const prior={...q};dt+=step;
   while(input<pending.length&&pending[input].at<=g.serverAt+dt){const i=pending[input++];control587(q,i.target,Math.max(g.serverAt,i.at));}
@@ -43,6 +45,13 @@ function extrapolate(c,p,g,at){
    if(buddyContact601(q,before,nextBase,oldBase,g.serverAt+dt)){bounceBuddy601(q,nextBase,g.serverAt+dt);break;}
   }
   if(g.boss600&&!defeated.has('boss600')){const b={...g.boss600,x:bossPosition600(g.boss600,g.elapsed+dt)};if(bossStomp600(q,b,before,g.elapsed+dt)){stomp599(q,{y:b.y-38});defeated.add('boss600');}}
+  for(const base of g.threats604?.shots??[]){
+   if(base.kind!=='cannon'||brokenShots.has(base.id)||base.until<=g.elapsed+dt)continue;
+   const from=(dt-step)/1000,to=dt/1000,s={...base,oldX:base.x+base.vx*from,oldY:base.y+base.vy*from,x:base.x+base.vx*to,y:base.y+base.vy*to},hit=cannonStomp605(q,before,s,g.elapsed+dt);
+   if(!hit)continue;
+   const blocked=surfaces587(g.elapsed+dt,course,g).filter(b=>!b.spike&&!b.ice&&!b.oneWay).some(b=>{const t=sweep604(s.oldX,s.oldY,s.x,s.y,b,s.r);return t!=null&&t<=hit.time;});
+   if(!blocked){stomp599(q,{y:hit.y+24});brokenShots.add(s.id);break;}
+  }
   if(dt>ms){const f=(ms-(dt-step))/step;q.x=prior.x+(q.x-prior.x)*f;q.y=prior.y+(q.y-prior.y)*f;
    q.grounded=prior.grounded&&q.grounded&&prior.platformId===q.platformId;if(!q.grounded)q.platformId=null;
   }

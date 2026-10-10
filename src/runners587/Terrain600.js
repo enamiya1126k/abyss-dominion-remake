@@ -6,7 +6,9 @@ export function crumble600(start,elapsed){
   falling:age>=CRUMBLE600.shake&&age<CRUMBLE600.shake+CRUMBLE600.fall,
   absent:age>=CRUMBLE600.shake+CRUMBLE600.fall&&age<CRUMBLE600.reset};
 }
-export function fallLimit600(course,x){
+export function cameraFloor605(course,x){
  const room=course.secrets600?.find(s=>x>s.left-20&&x<s.right+20);
- return room?room.floor+155:Math.max(460,...course.grounds.filter(([a,b])=>x>=a&&x<=b).map(g=>(g[2]??300)+170));
+ return room?.floor??Math.max(300,...course.grounds.filter(([a,b])=>x>=a&&x<=b).map(g=>g[2]??300));
 }
+// Leave enough room to fall below a portrait viewport before recording a death.
+export const fallLimit600=(course,x)=>cameraFloor605(course,x)+420;

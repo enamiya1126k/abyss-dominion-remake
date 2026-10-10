@@ -75,5 +75,6 @@ export function health604(c,b){
 export function deathPose604(p,t,reduced=false){
  if(!p.respawnAt||!p.death604)return null;const d=p.death604,age=t-d.start;
  if(age<0||age>=500)return null;const seconds=age/1000;
+ if(d.cause==='fall')return {x:d.x+(reduced?0:Math.max(-235,Math.min(235,d.vx??0))*seconds*.4),y:d.y+Math.max(180,d.vy??0)*seconds+675*seconds*seconds,opacity:1,angle:0};
  return {x:d.x+(reduced?0:d.dir*110*seconds),y:d.y+(reduced?0:-235*seconds+490*seconds*seconds),opacity:Math.max(0,1-Math.max(0,age-240)/260),angle:reduced?0:d.dir*age*.12};
 }

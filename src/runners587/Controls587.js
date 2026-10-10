@@ -25,7 +25,7 @@ export function bind587(c,on){const u=ui(c);u.buttons=[...u.root.querySelectorAl
    const old=u.pointers.get(e.pointerId),next=thumb592(e.clientX,e.clientY,u.padRect592,old);
    if(old!==next){u.pointers.set(e.pointerId,next);refresh();if(next!=='neutral')feedback592(u);send587(c,true);}
   });
-  if(!direction)on(b,'pointermove',e=>{if(!u.pointers.has(e.pointerId)||!active587(c))return;e.preventDefault();const old=u.pointers.get(e.pointerId),hit=u.actionRects593?.find(q=>e.clientX>=q.rect.left-6&&e.clientX<=q.rect.right+6&&e.clientY>=q.rect.top-10&&e.clientY<=q.rect.bottom+10);if(hit&&hit.kind!==old){u.pointers.set(e.pointerId,hit.kind);refresh();feedback592(u);send587(c,true);}});
+  if(!direction)on(b,'pointermove',e=>{if(!u.pointers.has(e.pointerId)||!active587(c))return;e.preventDefault();const old=u.pointers.get(e.pointerId),hit=u.actionRects593?.find(q=>e.clientX>=q.rect.left+4&&e.clientX<=q.rect.right-4&&e.clientY>=q.rect.top+4&&e.clientY<=q.rect.bottom-4);if(hit&&hit.kind!==old){u.pointers.set(e.pointerId,hit.kind);refresh();feedback592(u);send587(c,true);}});
   for(const type of ['pointerup','pointercancel','lostpointercapture'])on(b,type,e=>{if(!u.pointers.has(e.pointerId))return;e.preventDefault();u.pointers.delete(e.pointerId);refresh();send587(c,true);});
  }
  u.captureNodes592=[pad,...u.buttons];
