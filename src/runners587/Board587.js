@@ -1,3 +1,5 @@
+import {voyageArt609} from './VoyageArt609.js';
+import {finalArt608} from './FinalArt608.js';
 import {pickupKind607} from './Mechanics607.js';
 import {threatsArt604,axeEnemy604} from './Art604.js';
 import {scenery603} from './Scenery603.js';
@@ -26,13 +28,15 @@ export function paint587(r,g,u,positions,focus,at){const course=course589(g),c=r
  c.save();c.translate(-r.camera*r.scale,r.offsetY);c.scale(r.scale,r.scale);const left=r.camera-100,right=r.camera+view+100,visible=s=>s.x+(s.w??40)>left&&s.x<right;
  warmAhead595(r,course);preload600(course,left);
  const renderedSurfaces=surfaces587(g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),course,g);
- for(const s of renderedSurfaces.filter(s=>visible(s)&&!s.wall&&!s.bridge&&!s.ice&&!s.hub607&&!s.phase603)){const age=crumbleAt597(g.crumbles[s.id],g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)));platform591(r,s.ground&&course.secrets600.some(room=>s.x+s.w>room.left&&s.x<room.right)?{...s,depth602:160}:s.crumble&&age.age>=0&&!age.falling?{...s,x:s.x+(u.reduced?0:Math.sin(at/24)*Math.min(5,age.age/160)),y:s.y+(u.reduced?0:Math.sin(at/31)*2)}:s,course);}
+ for(const s of renderedSurfaces.filter(s=>visible(s)&&!s.wall&&!s.bridge&&!s.ice&&!s.hub607&&!s.ship609&&!s.phase603)){const age=crumbleAt597(g.crumbles[s.id],g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)));platform591(r,s.ground&&course.secrets600.some(room=>s.x+s.w>room.left&&s.x<room.right)?{...s,depth602:160}:s.crumble&&age.age>=0&&!age.falling?{...s,x:s.x+(u.reduced?0:Math.sin(at/24)*Math.min(5,age.age/160)),y:s.y+(u.reduced?0:Math.sin(at/31)*2)}:s,course);}
  for(const press of course.crushers??[]){if(!visible(press))continue;const body=renderedSurfaces.find(q=>q.id==='crusher:'+press.id);for(const x of [press.x+22,press.x+press.w-22])link602(c,'chain',x,-160,x,body.y+6,7);platform591(r,{...body,wall:true},course);strip602(c,'bridge',press.x,body.y+body.h-6,press.w,12,90);}
  if(visible({x:course.goal})){const arrival=u.reduced?null:g.events.findLast(e=>e.type==='goal');gate595(c,course,readyGate589(g),u.reduced?0:at,arrival?at-arrival.at:-1);}
  for(const wall of course.walls.filter(s=>visible(s)&&!g.broken?.includes(s.id)))if(wall.breakable)barrier595(c,wall,g.barrierHits?.[wall.id]??0);else wall602(c,wall);
  scenery589(c,g,{...course,walls:[]},left,right,u.reduced?0:at);
  scenery600(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
  scenery603(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
+ voyageArt609(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
+ finalArt608(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)));
  threatsArt604(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
  scenery601(c,g,course,left,right,g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),u.reduced);
  for(const cp of course.checkpoints.slice(1))if(visible(cp))flag602(c,cp,(g.teamCheckpoint??0)>=course.checkpoints.indexOf(cp),at,u.reduced);

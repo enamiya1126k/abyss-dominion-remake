@@ -1,3 +1,4 @@
+import {hitFinalTarget608} from './FinalRules608.js';
 import {pickupKind607} from './Mechanics607.js';
 import {counterShot604,thaw604,frozen604,sweep604} from './Threats604.js';
 import {hitTarget604} from './Trials604.js';
@@ -49,7 +50,7 @@ export function combat591(g,emit){
   let box=null,time=Infinity,wallTime=Infinity;
   for(const s of surfaces){if(s.spike||s.ice||s.oneWay||s.ground||g.broken?.includes(s.id))continue;const t=boxTime600(oldX,oldY,b.x,b.y,s);if(t==null)continue;if(!s.breakable){wallTime=Math.min(wallTime,t);continue;}if(t<time){box=s;time=t;}}
   const limit=Math.min(wallTime,time);
-  if(counterShot604(g,b,oldX,oldY,emit,limit)||hitTarget604(g,course,b,oldX,oldY,emit,limit))return false;
+  if(counterShot604(g,b,oldX,oldY,emit,limit)||hitTarget604(g,course,b,oldX,oldY,emit,limit)||hitFinalTarget608(g,course,b,oldX,oldY,emit,limit))return false;
   if(wallTime<time)return false;
   if(box){g.barrierHits??={};g.broken??=[];const s=box;g.barrierHits[s.id]=4;
    g.broken.push(s.id);emit(g,'break',{seat:b.owner,x:s.x+s.w/2,y:s.y+s.h/2,wall:s.id});return false;
@@ -70,8 +71,8 @@ export function combat591(g,emit){
   for(const e of g.enemies){
    if(e.defeated||e.downUntil>now)continue;const q=enemyAt587(e,g.elapsed);
    if(!crossed(oldX,b.x,q.x,23)||Math.abs(b.y-(q.y-13))>21)continue;
-   if(e.ice){e.defeated=true;e.downUntil=0;delete e.ice;g.players[b.owner].kills++;emit(g,'shatter',{seat:b.owner,x:q.x,y:q.y});return false;}
-   if(b.kind==='ice'){freeze598(g,e);b.hitsLeft=0;emit(g,'freeze',{seat:b.owner,x:q.x,y:q.y});return false;}e.defeated=true;e.downUntil=0;const owner=g.players[b.owner];owner.kills++;if(b.kind==='thunder'){let links=0;for(const next of g.enemies){if(next.defeated||next===e)continue;const n=enemyAt587(next,g.elapsed);if(Math.hypot(n.x-q.x,n.y-q.y)<140&&links++<2){next.defeated=true;owner.kills++;emit(g,'zap',{seat:b.owner,x:n.x,y:n.y,fromX:q.x,fromY:q.y});}}}
+   if(e.ice){e.defeated=true;e.finalHit608={seat:b.owner,at:g.elapsed};e.downUntil=0;delete e.ice;g.players[b.owner].kills++;emit(g,'shatter',{seat:b.owner,x:q.x,y:q.y});return false;}
+   if(b.kind==='ice'){freeze598(g,e);b.hitsLeft=0;emit(g,'freeze',{seat:b.owner,x:q.x,y:q.y});return false;}e.defeated=true;e.finalHit608={seat:b.owner,at:g.elapsed};e.downUntil=0;const owner=g.players[b.owner];owner.kills++;if(b.kind==='thunder'){let links=0;for(const next of g.enemies){if(next.defeated||next===e)continue;const n=enemyAt587(next,g.elapsed);if(Math.hypot(n.x-q.x,n.y-q.y)<140&&links++<2){next.defeated=true;next.finalHit608={seat:b.owner,at:g.elapsed};owner.kills++;emit(g,'zap',{seat:b.owner,x:n.x,y:n.y,fromX:q.x,fromY:q.y});}}}
    emit(g,'defeat',{seat:b.owner,x:q.x,y:q.y,kind:b.kind});b.hitsLeft=(b.hitsLeft??1)-1;if(b.hitsLeft<=0)return false;
   }
   for(const p of g.players){

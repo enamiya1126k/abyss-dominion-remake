@@ -14,7 +14,7 @@ export function stepIce598(g,emit,hurt){
   const floor=terrain.filter(s=>q.x+20>s.x&&q.x-20<s.x+s.w&&old.y<=s.y+1&&q.y>=s.y).sort((a,b)=>a.y-b.y)[0];if(floor){q.y=floor.y;q.vy=0;}
   if(!q.vx)continue;
   const b=g.boss600;if(b?.hp>0&&Math.abs(q.x-b.x)<55&&Math.abs(q.y-b.y)<65){hitBoss600(g,q.kicker,3,emit);smash(g,e,emit,q.kicker);continue;}
-  for(const foe of g.enemies){if(foe===e||foe.defeated)continue;const p=enemyAt587(foe,g.elapsed);if(p.x<Math.min(old.x,q.x)-38||p.x>Math.max(old.x,q.x)+38||Math.abs(p.y-q.y)>30)continue;foe.defeated=true;const owner=g.players[q.kicker];if(owner)owner.kills++;emit(g,'defeat',{seat:q.kicker,x:p.x,y:p.y,kind:'ice'});}
+  for(const foe of g.enemies){if(foe===e||foe.defeated)continue;const p=enemyAt587(foe,g.elapsed);if(p.x<Math.min(old.x,q.x)-38||p.x>Math.max(old.x,q.x)+38||Math.abs(p.y-q.y)>30)continue;foe.defeated=true;foe.finalHit608={seat:q.kicker,at:g.elapsed};const owner=g.players[q.kicker];if(owner)owner.kills++;emit(g,'defeat',{seat:q.kicker,x:p.x,y:p.y,kind:'ice'});}
   for(const p of g.players){if(!p.alive||p.waiting||p.respawnAt||p.finishTime!=null||p.platformId==='ice:'+e.id||p.seat===q.kicker&&g.elapsed<q.grace)continue;if(p.x>=Math.min(old.x,q.x)-32&&p.x<=Math.max(old.x,q.x)+32&&p.y>q.y-31&&p.y-28<q.y)hurt(g,p,'ice',old.x);}
  }
 }

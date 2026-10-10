@@ -1,3 +1,5 @@
+import {shipAt609} from './Voyage609.js';
+import {finalWalls608} from './FinalRules608.js';
 import {hubSurface607} from './Mechanics607.js';
 import {phase603,platform603} from './Hazards603.js';
 import {crusherSurface601} from './Gimmicks597.js';
@@ -34,11 +36,11 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
   moving:course.platforms.filter(p=>p.move||p.crumble||p.phase603).map(p=>({...p,oneWay:true})),
   walls:[...(course.walls??[]).map(p=>({...p,wall:true})),...(course.hazards??[]).filter(h=>h.kind==='spikes').map(h=>({id:h.id,x:h.x,y:h.y-h.h,w:h.w,h:h.h,wall:true,spike:true})),...(course.springs??[]).map(s=>({id:s.id,x:s.x-23,y:s.y-28,w:46,h:28,wall:true,spring:true,power:s.power}))],bridges:(course.bridges??[]).map(p=>({...p,bridge:true}))};geometry591.set(course,fixed);}
  let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
- const key=course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+Object.entries(world.coop601??{}).filter(([,q])=>q.open).map(([id])=>id).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
+ const key=(world.ship609?world.ship609.leg+':'+world.ship609.at+':'+!!world.ship609.rescue:'')+':'+Object.values(world.final608??{}).map(s=>s.done?1:0).join('')+':'+course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+Object.entries(world.coop601??{}).filter(([,q])=>q.open).map(([id])=>id).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
  if(cache.has(key))return cache.get(key);
 
  const fallen=p=>p.crumble&&crumble600(world?.crumbles?.[p.id],elapsed).absent;
- const result=[...(course.firebars600??[]).map(hubSurface607),...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
+ const result=[...(course.ship609?(()=>{const b=shipAt609(elapsed,world);return [b,...(world.ship609?.rescue?[{...b,id:'ark-rescue609',x:b.x-80,y:b.y-38,w:80,h:14}]:[])];})():[]),...finalWalls608(course,world),...(course.firebars600??[]).map(hubSurface607),...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
   ...fixed.moving.filter(p=>(!p.trial601||world.coop601?.[p.trial601]?.open)&&!fallen(p)&&phase603(p,elapsed).solid).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...platform603(p,elapsed),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
   ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
   ...(course.crushers??[]).map(h=>crusherSurface601(h,elapsed)),
