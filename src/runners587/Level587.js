@@ -1,4 +1,5 @@
 import {voyageShips610} from './Voyage609.js';
+import {deckEnemy616} from './VoyagePath616.js';
 import {finalWalls608} from './FinalRules608.js';
 import {hubSurface607} from './Mechanics607.js';
 import {phase603,platform603} from './Hazards603.js';
@@ -36,11 +37,11 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
   moving:course.platforms.filter(p=>p.move||p.crumble||p.phase603).map(p=>({...p,oneWay:true})),
   walls:[...(course.walls??[]).map(p=>({...p,wall:true})),...(course.hazards??[]).filter(h=>h.kind==='spikes').map(h=>({id:h.id,x:h.x,y:h.y-h.h,w:h.w,h:h.h,wall:true,spike:true})),...(course.springs??[]).map(s=>({id:s.id,x:s.x-23,y:s.y-28,w:46,h:28,wall:true,spring:true,power:s.power}))],bridges:(course.bridges??[]).map(p=>({...p,bridge:true}))};geometry591.set(course,fixed);}
  let cache=frames591.get(world);if(!cache){cache=new Map();frames591.set(world,cache);}
- const key=Object.values(world.final608??{}).map(s=>s.done?1:0).join('')+':'+course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+Object.entries(world.coop601??{}).filter(([,q])=>q.open).map(([id])=>id).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
+ const key=Object.entries(world.ship609?.departures616??{}).map(([id,q])=>id+':'+q.at).join(',')+':'+Object.values(world.final608??{}).map(s=>s.done?1:0).join('')+':'+course.id+':'+elapsed+':'+(world.switches??[]).join(',')+':'+Object.entries(world.crumbles??{}).join(',')+':'+(world.broken??[]).join(',')+':'+Object.entries(world.coop601??{}).filter(([,q])=>q.open).map(([id])=>id).join(',')+':'+(world.enemies??[]).filter(e=>e.ice&&!e.defeated).map(e=>e.id+':'+e.ice.x+':'+e.ice.y+':'+e.ice.vx).join(',');
  if(cache.has(key))return cache.get(key);
 
  const fallen=p=>p.crumble&&crumble600(world?.crumbles?.[p.id],elapsed).absent;
- const result=[...(course.ship609?voyageShips610(elapsed,world):[]),...finalWalls608(course,world),...(course.firebars600??[]).map(hubSurface607),...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
+ const result=[...(course.ship609?voyageShips610(elapsed,world):[]),...finalWalls608(course,world),...(course.firebars600??[]).filter(h=>!h.noHub616).map(hubSurface607),...fixed.ground,...fixed.still.filter(p=>!p.trial601||world.coop601?.[p.trial601]?.open),
   ...fixed.moving.filter(p=>(!p.trial601||world.coop601?.[p.trial601]?.open)&&!fallen(p)&&phase603(p,elapsed).solid).map(p=>{const a=crumble600(world?.crumbles?.[p.id],elapsed);return {...p,...platform603(p,elapsed),...(p.crumble&&a.falling?{y:p.y+a.fall,falling600:true}:{})};}),
   ...fixed.walls.filter(p=>!world.broken?.includes(p.id)),
   ...(course.crushers??[]).map(h=>crusherSurface601(h,elapsed)),
@@ -50,6 +51,7 @@ export function surfaces587(elapsed=0,course=COURSE587,world={}){
 }
 export function enemyAt587(spec,elapsed){
  if(spec.ice){const q=spec.ice,dt=Math.max(-.025,Math.min(.15,(elapsed-q.at)/1000));return {...spec,x:q.x+q.vx*dt,y:q.y+q.vy*dt,dir:Math.sign(q.vx)||q.dir||1};}
+ if(spec.deck616)return deckEnemy616(spec,elapsed);
  if(spec.throw604&&elapsed<spec.throw604.until){const q=spec.throw604;return {...spec,x:q.x,y:q.y,dir:q.dir};}
  elapsed-=spec.motionOffset??0;const width=Math.max(1,spec.max-spec.min),offset=Math.max(0,Math.min(width,spec.x-spec.min)),travel=((spec.advance?width*2-offset:offset)+elapsed/1000*spec.speed)%(width*2);
  return {...spec,y:spec.y+(spec.flying?Math.sin(elapsed/(spec.period??1800)*Math.PI*2)*(spec.bob??12):0),x:spec.min+(travel<=width?travel:width*2-travel),dir:travel<=width?1:-1};

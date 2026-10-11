@@ -3,7 +3,7 @@ import {tickBoss612,bossPose612} from './Boss612.js';
 import {bossPair608} from './FinalRules608.js';
 import {onHub607} from './Mechanics607.js';
 // Pure geometry shared by authority and rendering. Timers use game elapsed time.
-export function firebar600(h,elapsed){const angle=elapsed/h.period*Math.PI*2+(h.offset??0);return Array.from({length:Math.ceil(h.length/15)},(_,i)=>({x:h.x+Math.cos(angle)*(i+1)*15,y:h.y+Math.sin(angle)*(i+1)*15,r:8}));}
+export function firebar600(h,elapsed){const angle=h.angle616??(elapsed/h.period*Math.PI*2+(h.offset??0));return Array.from({length:Math.ceil(h.length/15)},(_,i)=>({x:h.x+Math.cos(angle)*(i+1)*15,y:h.y+Math.sin(angle)*(i+1)*15,r:8}));}
 export const tide600=(h,elapsed)=>({y:h.y+20-(.5-.5*Math.cos((elapsed+(h.offset??0))/h.period*Math.PI*2))*83});
 export function roller600(h,elapsed){const cycle=Math.floor(elapsed/h.period),phase=elapsed%h.period,t=(phase-700)/2800;return {cycle,warning:phase<700,active:t>=0&&t<1,x:h.right-(h.right-h.left)*Math.max(0,t),y:h.y-22,r:22};}
 const overlap=(p,x,y,r)=>p.x+10>x-r&&p.x-10<x+r&&p.y>y-r&&p.y-28<y+r;

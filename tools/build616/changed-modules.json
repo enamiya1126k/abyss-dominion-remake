@@ -1,0 +1,17 @@
+[
+  "src/core/config.js",
+  "src/party/PartyView462.js",
+  "src/race/RaceClient451.js",
+  "src/runners587/Board587.js",
+  "src/runners587/Encounters600.js",
+  "src/runners587/Level587.js",
+  "src/runners587/Motion591.js",
+  "src/runners587/Rules587.js",
+  "src/runners587/Scenery600.js",
+  "src/runners587/View587.js",
+  "src/runners587/Voyage609.js",
+  "src/runners587/VoyageArt609.js",
+  "src/runners587/VoyageEvents616.js",
+  "src/runners587/VoyagePath616.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

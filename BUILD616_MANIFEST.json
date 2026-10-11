@@ -1,0 +1,239 @@
+{
+  "build": 616,
+  "appVersion": "3.1.295",
+  "runnersRules": 24,
+  "compatibleBaseBuilds": [
+    613,
+    614,
+    615
+  ],
+  "requiresServerRestart": true,
+  "includesBuilds": [
+    614,
+    615,
+    616
+  ],
+  "testsPassed": 290,
+  "files": [
+    {
+      "path": "README_BUILD616.md",
+      "bytes": 6507,
+      "sha256": "c46ed38e76ad134e7cd94767fa29102f5a9f05bdee5ecb673e661a9d939c9806"
+    },
+    {
+      "path": "docs/build616/rings-witness.json",
+      "bytes": 29791,
+      "sha256": "ec8f2d38099d5b7da4d9fa5281e80503b8e1fd7ef23c2d0451c124ff7b9f778c"
+    },
+    {
+      "path": "docs/build616/sailing-witness.json",
+      "bytes": 29820,
+      "sha256": "7adf34febc1cc3010ca81a21ca31302c6aa1c84458ab498c150582b3235d71b5"
+    },
+    {
+      "path": "docs/build616/scene-states.json",
+      "bytes": 71874,
+      "sha256": "8f2528d3a6567dbaf33cf03f290ebf8ed1c30aa40720bab9274f49397274dd1b"
+    },
+    {
+      "path": "docs/build616/voyage-preview.png",
+      "bytes": 2393071,
+      "sha256": "0c88778a65109a55af6cec5bd63e4ba5afbcb2315bc261ee4d60a37f834d5fc2"
+    },
+    {
+      "path": "index.html",
+      "bytes": 308257,
+      "sha256": "cf7062a4507b0cbef2154c6ba89675155a0f608be6ea013cefa3344db924a94c"
+    },
+    {
+      "path": "online-server/src/ArcadeCoordinator580.js",
+      "bytes": 3184,
+      "sha256": "29564ee6a846cda7462ffb006610329e760f2d5983defe7434294e3667236c0c"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 27430,
+      "sha256": "5b24db5e9319d88d2652d10eae4a7b06d0899112cf49be93506c986b9c7b0d62"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 29777,
+      "sha256": "851f011ee4204953e91472016a35c84671c331506c4cccd3d055411a65bf4deb"
+    },
+    {
+      "path": "src/arcade580/Board580.js",
+      "bytes": 5979,
+      "sha256": "4eafdc469bce3b17a6d46197c2dd9e7d3d916c9cf87ed4d2cc5def1fa92432ec"
+    },
+    {
+      "path": "src/arcade580/View580.js",
+      "bytes": 15683,
+      "sha256": "3ecefc1dc48a24f1367db7bb5ab621c64cb271368db1b012a9ccc88fb19fe70f"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "a99496ae986c5be26ad5fa9ac66578862dcd1a2e1323428b6ed0071568339a3c"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 15187,
+      "sha256": "7410c79cd35040d5ab9ddf5b5a8f99cc43e16b7a7c5b0015fbf77b5b71d8e512"
+    },
+    {
+      "path": "src/party/Realtime615.js",
+      "bytes": 3589,
+      "sha256": "6fd6f81befe283d1bf618e11314ee557eafff98d7784be7aaf1ee100117d9773"
+    },
+    {
+      "path": "src/party/Snapshots615.js",
+      "bytes": 2097,
+      "sha256": "304ac48c8dec2f430ffe32e1f6743801b13560aa8fda8c25d2c5147c2294f3af"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 33685,
+      "sha256": "675ae46d5826f228f809eb65443efa5e0513047abe5f6974026bfa1ff21878bf"
+    },
+    {
+      "path": "src/runners587/Board587.js",
+      "bytes": 7202,
+      "sha256": "50891a8148f2ad44c7b6310683b2afdfd8ed28c647ad6b235fcb97a7681548cf"
+    },
+    {
+      "path": "src/runners587/Encounters600.js",
+      "bytes": 5515,
+      "sha256": "1cff35c00b2a1ccb86434f11f8b84fbb2a0eaeb11fadc6cf2acb16be0bb0c568"
+    },
+    {
+      "path": "src/runners587/Level587.js",
+      "bytes": 5846,
+      "sha256": "c28121416bd64bcb78c21951eca04000fd871e8f9ce3502970bf0ee3dad3e739"
+    },
+    {
+      "path": "src/runners587/Motion591.js",
+      "bytes": 6356,
+      "sha256": "ef20f4e68efca3a8c093388306e442fcc03a5c56e781bbdd35d932f0f4747b05"
+    },
+    {
+      "path": "src/runners587/Rules587.js",
+      "bytes": 13527,
+      "sha256": "a6e9fbc311fdb8554074c809990a4d9502972bab316dab654c23eef7ab649dd9"
+    },
+    {
+      "path": "src/runners587/Scenery600.js",
+      "bytes": 3681,
+      "sha256": "ee9ecfc344f6047c99d127c3ed245c5ff221ad09de84ed3839060f5b3095a44f"
+    },
+    {
+      "path": "src/runners587/Timeline595.js",
+      "bytes": 1270,
+      "sha256": "f4949c94ebf13d26104141a9dd9b604f1818f139442e0b5658efc1bc7df2e721"
+    },
+    {
+      "path": "src/runners587/View587.js",
+      "bytes": 23796,
+      "sha256": "e59a4545e1cc70e9526fb7391bb74086ee0e3f78c11892b40b07b179c3254ce0"
+    },
+    {
+      "path": "src/runners587/Voyage609.js",
+      "bytes": 8137,
+      "sha256": "474cf22ec07cd108902be3bdd12b7b11a2b2bb74b6023ac64d321340cbd68b80"
+    },
+    {
+      "path": "src/runners587/VoyageArt609.js",
+      "bytes": 4923,
+      "sha256": "adcc6ec5da46076d41de9a5a018556bb5691faf14373a5aa7354a9ae17906a2f"
+    },
+    {
+      "path": "src/runners587/VoyageEvents616.js",
+      "bytes": 2160,
+      "sha256": "1a0cfcfe93415a686d452faa60e0501c3a8838a7451c7d7f91e89beca8e7308a"
+    },
+    {
+      "path": "src/runners587/VoyagePath616.js",
+      "bytes": 2386,
+      "sha256": "3fa00bd3813da3236e040c8a6701a61742c9271b73dda7b590d2ecb142cd189a"
+    },
+    {
+      "path": "src/walls585/Controls586.js",
+      "bytes": 5840,
+      "sha256": "a75be0bd2f0ffa2abada4c5eab71300084e2bd033974292720c2a8835d4da537"
+    },
+    {
+      "path": "src/walls585/View585.js",
+      "bytes": 15147,
+      "sha256": "b534a74ea9f37e44a95f07e23c737a3cb776f339472774e91e6ea5134bb50aa3"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "eafed06a27de575418c5e72cf35bc45c2db78ecf9d5428836e783bd4a693f5c9"
+    },
+    {
+      "path": "tools/build615/handlers.test.mjs",
+      "bytes": 6542,
+      "sha256": "32080fc2add3df38bd782a8eadc8b1a7c3686b799fceac788ce2b44489fa317e"
+    },
+    {
+      "path": "tools/build615/network.test.mjs",
+      "bytes": 7699,
+      "sha256": "4cfd67d2b399cb70982845db75dac31799bd6a116e708a9758bd2f9a0e7c5736"
+    },
+    {
+      "path": "tools/build615/runner-latency.test.mjs",
+      "bytes": 3191,
+      "sha256": "887a476504f5ec2d76443ca4dc231f89eeda47126097fd6e9f03243e0d9cc271"
+    },
+    {
+      "path": "tools/build615/vm-loader.mjs",
+      "bytes": 1231,
+      "sha256": "1d11cbeee819837865168239f09bd3d7be8b8082e12c2f800c27f762b104ef82"
+    },
+    {
+      "path": "tools/build616/changed-modules.json",
+      "bytes": 512,
+      "sha256": "c3d311bc27d73793960cc2357f6fa5e5fc6fb046f8e37e23b8c048e751669cae"
+    },
+    {
+      "path": "tools/build616/party-entry.test.mjs",
+      "bytes": 3240,
+      "sha256": "6532fe23749edef6b35c5278f19b0d7bd409df56a75038329a2a236a66c5891c"
+    },
+    {
+      "path": "tools/build616/render-preview.mjs",
+      "bytes": 5584,
+      "sha256": "1b9d8f7a4a5dfc55d9506bc3bdda0cb7f37ccd9e1b1a8c5c57c74239c858ab0f"
+    },
+    {
+      "path": "tools/build616/sail-check.mjs",
+      "bytes": 5186,
+      "sha256": "0a5914ed702b422833c837f058f9fc914a010a9d77417772a9a4599df2a9b9d1"
+    },
+    {
+      "path": "tools/build616/ship-network.test.mjs",
+      "bytes": 2407,
+      "sha256": "e6e29e83d41cb3fea2f594af09b3e3e070aa8aac8244de3f19daf4d6990b2b58"
+    },
+    {
+      "path": "tools/build616/version.test.mjs",
+      "bytes": 1986,
+      "sha256": "1ee05914b7809a977b430a4056e2d82d79dab561349606ea493503cd40b3854f"
+    },
+    {
+      "path": "tools/build616/voyage.test.mjs",
+      "bytes": 10961,
+      "sha256": "04c90acdc6c58f1f3790d2093e644d0bf0aa36937d91f2ea9651e0a99b9d0678"
+    },
+    {
+      "path": "world-raid-offline616-assets.json",
+      "bytes": 60651,
+      "sha256": "ad0cc363e30284cb6da46be819183273008320fe4eafff5e31b5df59047d96f0"
+    },
+    {
+      "path": "world-raid-offline616-sw.js",
+      "bytes": 2502,
+      "sha256": "80f6c01acb57531ff8c5edab5cd983ee8b2a6e60064abbe2648f8603aa7c73f0"
+    }
+  ]
+}

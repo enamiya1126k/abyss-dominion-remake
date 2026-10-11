@@ -1,4 +1,5 @@
 import {partyClock615} from '../party/Realtime615.js';
+import {voyageTime616} from './VoyagePath616.js';
 import {rememberSnapshot615,snapshotPair615,interpolate615} from '../party/Snapshots615.js';
 import {cannonStomp605} from './CannonStomp605.js';
 import {sweep604} from './Threats604.js';
@@ -9,11 +10,13 @@ import {course589} from './Courses589.js';
 import {enemyAt587,surfaces587} from './Level587.js';
 function ground596(q,g,at,sourceAt=at){
  if(q.waiting||q.paused||!q.grounded||!q.platformId||q.respawnAt||!q.alive||q.finishTime!=null)return q;
- const course=course589(g),elapsed=g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),s=surfaces587(elapsed,course,g).find(s=>s.id===q.platformId);
- if(!s||Math.abs(q.y-s.y)>32)return q;
+ const course=course589(g),elapsed=q.platformId.startsWith('ark')?voyageTime616(g,at):g.elapsed+Math.min(150,Math.max(0,at-g.serverAt)),s=surfaces587(elapsed,course,g).find(s=>s.id===q.platformId);
+ if(!s)return q;
  // Snapshot interpolation can lag by 75ms, but a rider and their platform
  // must be painted at the same time. This affects only display positions.
- if(s.move&&sourceAt!==at){const old=surfaces587(g.elapsed+sourceAt-g.serverAt,course,g).find(p=>p.id===s.id);if(old)q.x+=s.x-old.x;}
+ const old=s.move&&sourceAt!==at?surfaces587(g.elapsed+sourceAt-g.serverAt,course,g).find(p=>p.id===s.id):s;
+ if(!old||Math.abs(q.y-old.y)>32)return q;
+ if(s.move)q.x+=s.x-old.x;
  if(q.x+11>s.x&&q.x-11<s.x+s.w)q.y=s.y;
  return q;
 }
@@ -59,7 +62,7 @@ function extrapolate(c,p,g,at){
    q.grounded=prior.grounded&&q.grounded&&prior.platformId===q.platformId;if(!q.grounded)q.platformId=null;
   }
  }
- return q;
+ return q.platformId?.startsWith('ark')?ground596(q,g,at,g.serverAt+ms):q;
 }
 export function predict591(c,p,at){
  const u=c.runnersUI587,g=c.state.runners,self=p.playerId===c.transport.selfId&&!p.auto;
