@@ -1,0 +1,822 @@
+{
+  "finish": 98175,
+  "deaths": 0,
+  "trace": [
+    {
+      "t": 1000,
+      "x": 90,
+      "y": 300,
+      "platform": "ground0",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 2000,
+      "x": 90,
+      "y": 300,
+      "platform": "ground0",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 3000,
+      "x": 91.1875,
+      "y": 300,
+      "platform": "ground0",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 4000,
+      "x": 319.25,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 5000,
+      "x": 403.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 6000,
+      "x": 403.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 7000,
+      "x": 403.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 8000,
+      "x": 403.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 9000,
+      "x": 403.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 10000,
+      "x": 403.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 11000,
+      "x": 487.5,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 12000,
+      "x": 571.5000000000001,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 13000,
+      "x": 655.5000000000001,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 14000,
+      "x": 730.4250000000001,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 15000,
+      "x": 814.4250000000001,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 16000,
+      "x": 898.4250000000001,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 17000,
+      "x": 982.4250000000001,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 18000,
+      "x": 1066.4249999999984,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 19000,
+      "x": 1150.4249999999952,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 20000,
+      "x": 1234.4249999999952,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 21000,
+      "x": 1318.4999999999952,
+      "y": 264.01250000000005,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 22000,
+      "x": 1407.1624999999951,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 23000,
+      "x": 1491.1624999999951,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 24000,
+      "x": 1575.1624999999951,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 25000,
+      "x": 1659.1624999999951,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 26000,
+      "x": 1743.1624999999951,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 27000,
+      "x": 1827.1624999999951,
+      "y": 300,
+      "platform": "ark609",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 28000,
+      "x": 1904.5624999999952,
+      "y": 213.96250000000003,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 29000,
+      "x": 2121.649999999996,
+      "y": 300,
+      "platform": "ground1",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 30000,
+      "x": 2356.649999999996,
+      "y": 300,
+      "platform": "ground1",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 31000,
+      "x": 2591.649999999996,
+      "y": 300,
+      "platform": "ground1",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 32000,
+      "x": 2826.649999999996,
+      "y": 300,
+      "platform": "ground1",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 33000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 34000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 35000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 36000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 37000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 38000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 39000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 40000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 41000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 42000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 43000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 44000,
+      "x": 2987.274999999996,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 45000,
+      "x": 3004.7988095238056,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 46000,
+      "x": 3096.7988095238056,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 47000,
+      "x": 3188.7988095238056,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 48000,
+      "x": 3269.2988095238056,
+      "y": 243.675,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 49000,
+      "x": 3363.3863095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 50000,
+      "x": 3455.3863095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 51000,
+      "x": 3547.3863095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 52000,
+      "x": 3639.3863095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 53000,
+      "x": 3731.3863095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 54000,
+      "x": 3823.3863095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 55000,
+      "x": 3897.6363095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 56000,
+      "x": 3950.0738095238057,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 57000,
+      "x": 4108.698809523805,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 58000,
+      "x": 4200.698809523805,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 59000,
+      "x": 4292.698809523805,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 60000,
+      "x": 4384.698809523805,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 61000,
+      "x": 4553.198809523805,
+      "y": 300,
+      "platform": "ark-works611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 62000,
+      "x": 4798.674999999996,
+      "y": 300,
+      "platform": "ground2",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 63000,
+      "x": 5033.674999999996,
+      "y": 203.8,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 64000,
+      "x": 5268.674999999996,
+      "y": 300,
+      "platform": "ground2",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 65000,
+      "x": 5503.674999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 66000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 67000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 68000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 69000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 70000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 71000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 72000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 73000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 74000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 75000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 76000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 77000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 78000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 79000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 80000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 81000,
+      "x": 5564.424999999996,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 82000,
+      "x": 5651.265579710141,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 83000,
+      "x": 5869.315579710141,
+      "y": 211.65,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 84000,
+      "x": 5840.24057971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 85000,
+      "x": 5940.15307971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 86000,
+      "x": 6045.46557971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 87000,
+      "x": 6260.34057971014,
+      "y": 203.8,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 88000,
+      "x": 6230.12807971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 89000,
+      "x": 6328.12807971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 90000,
+      "x": 6426.12807971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 91000,
+      "x": 6650.05307971014,
+      "y": 211.65,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 92000,
+      "x": 6630.29057971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 93000,
+      "x": 6728.29057971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 94000,
+      "x": 6826.29057971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 95000,
+      "x": 7037.8405797101395,
+      "y": 203.525,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 96000,
+      "x": 7016.82807971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 97000,
+      "x": 7114.82807971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 98000,
+      "x": 7212.82807971014,
+      "y": 300,
+      "platform": "ark-coast611",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 99000,
+      "x": 7307.928079710139,
+      "y": 203.925,
+      "platform": null,
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 100000,
+      "x": 7547.962499999993,
+      "y": 300,
+      "platform": "ground3",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 101000,
+      "x": 7782.962499999993,
+      "y": 300,
+      "platform": "ground3",
+      "deaths": 0,
+      "alive": true
+    },
+    {
+      "t": 102000,
+      "x": 7830,
+      "y": 300,
+      "platform": "ground3",
+      "deaths": 0,
+      "alive": true
+    }
+  ]
+}

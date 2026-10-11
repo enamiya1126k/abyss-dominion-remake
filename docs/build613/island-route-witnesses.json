@@ -1,0 +1,101 @@
+[
+  {
+    "from": "ground1",
+    "to": "voyage-seal-a",
+    "x": 2112,
+    "hold": 800,
+    "ms": 625,
+    "landing": {
+      "x": 2257.25,
+      "y": 225
+    }
+  },
+  {
+    "from": "voyage-seal-a",
+    "to": "voyage-seal-b",
+    "x": 2238,
+    "hold": 800,
+    "ms": 625,
+    "landing": {
+      "x": 2384.875,
+      "y": 150
+    }
+  },
+  {
+    "from": "voyage-seal-b",
+    "to": "voyage-seal-c",
+    "x": 2418,
+    "hold": 800,
+    "ms": 625,
+    "landing": {
+      "x": 2564.875,
+      "y": 75
+    }
+  },
+  {
+    "from": "voyage-seal-c",
+    "to": "voyage-seal-exit",
+    "x": 2582,
+    "hold": 800,
+    "ms": 925,
+    "landing": {
+      "x": 2789.625,
+      "y": 145
+    }
+  },
+  {
+    "from": "voyage-seal-exit",
+    "to": "ark-works611",
+    "x": 2752,
+    "hold": 800,
+    "ms": 1050,
+    "landing": {
+      "x": 2959.625,
+      "y": 300
+    }
+  },
+  {
+    "from": "ground2",
+    "to": "voyage-fort-a",
+    "x": 4620,
+    "hold": 800,
+    "ms": 625,
+    "landing": {
+      "x": 4766.875,
+      "y": 225
+    }
+  },
+  {
+    "from": "voyage-fort-a",
+    "to": "voyage-fort-b",
+    "x": 4790,
+    "hold": 800,
+    "ms": 625,
+    "landing": {
+      "x": 4936.875,
+      "y": 150
+    }
+  },
+  {
+    "from": "voyage-fort-b",
+    "to": "voyage-fort-c",
+    "x": 4980,
+    "hold": 800,
+    "ms": 925,
+    "landing": {
+      "x": 5197.375,
+      "y": 220
+    }
+  },
+  {
+    "from": "voyage-fort-c",
+    "to": "ark-coast611",
+    "x": 5230,
+    "hold": 800,
+    "ms": 950,
+    "landing": {
+      "x": 5453.25,
+      "y": 300
+    }
+  }
+]
