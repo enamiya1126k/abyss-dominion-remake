@@ -1,10 +1,29 @@
+import {snapshotPair615,interpolate615} from '../party/Snapshots615.js';
 import {WALLS585} from './Rules585.js';
 import {stick586,vector586,move586,canDash586,CONTROL586} from './Mechanics586.js';
 import {clock563 as clock} from '../party/Arcade563.js';
 import {unlock543} from '../cart/Audio543.js';
 const game=c=>c.state?.walls,ui=c=>c.wallsUI585,me=c=>game(c)?.players.find(p=>p.playerId===c.transport.selfId),clamp=n=>Math.max(WALLS585.edge,Math.min(1-WALLS585.edge,n));
 export function active586(c){const g=game(c),p=me(c);return g?.phase==='play'&&g.stage==='run'&&p?.alive&&c.ready()&&c.connected()&&clock(c)-g.serverAt<500;}
-export function position586(c,p,at){const g=game(c),u=ui(c),dt=Math.min(85,Math.max(0,at-g.serverAt))/1000;if(!p.alive||g.stage!=='run')return{x:p.x,y:p.y};if(p.playerId!==c.transport.selfId||p.auto)return{x:clamp(p.x+(p.vx??0)*dt),y:clamp(p.y+(p.vy??0)*dt)};const predicted={...p};if(u.mode==='steer'){predicted.control='steer';predicted.steerX=u.vector?.x??0;predicted.steerY=u.vector?.y??0;predicted.controlAt=at;}else if(u.mode==='point'&&u.target){predicted.control='point';predicted.target=u.target;}return move586(predicted,dt,at,WALLS585.speed,WALLS585.edge);}
+export function position586(c,p,at){
+ const g=game(c),u=ui(c);
+ if(!p.alive||g.stage!=='run')return{x:p.x,y:p.y};
+ if(p.playerId!==c.transport.selfId||p.auto){const pair=snapshotPair615(u,at),q=interpolate615(pair,'players',p.seat);return q?{x:clamp(q.x),y:clamp(q.y)}:{x:p.x,y:p.y};}
+ const predict=(source,player)=>{
+  const predicted={...player},dt=Math.min(300,Math.max(0,at-source.serverAt))/1000;
+  if(u.mode==='steer'){predicted.control='steer';predicted.steerX=u.vector?.x??0;predicted.steerY=u.vector?.y??0;predicted.controlAt=at;}
+  else if(u.mode==='point'&&u.target){predicted.control='point';predicted.target=u.target;}
+  return move586(predicted,dt,at,WALLS585.speed,WALLS585.edge);
+ };
+ const q=predict(g,p),id=g.id+':'+g.round;let r=u.correction615;
+ if(!r||r.id!==id)r=u.correction615={id,source:g,at,dx:0,dy:0};
+ const decay=Math.exp(-Math.max(0,at-r.at)/100);r.dx*=decay;r.dy*=decay;r.at=at;
+ if(r.source.serverAt!==g.serverAt){const old=r.source.players.find(q=>q.playerId===p.playerId);
+  if(old?.alive){const before=predict(r.source,old);r.dx=Math.max(-.18,Math.min(.18,r.dx+before.x-q.x));r.dy=Math.max(-.18,Math.min(.18,r.dy+before.y-q.y));}else{r.dx=0;r.dy=0;}
+  r.source=g;
+ }
+ return{x:clamp(q.x+r.dx),y:clamp(q.y+r.dy)};
+}
 export function command586(c,action,target=null,force=false){if(!active586(c))return false;const g=game(c),u=ui(c),now=performance.now();if(action==='steer'){u.mode='steer';u.vector=vector586(target.x,target.y);u.target=null;}if(action==='move'){u.mode='point';u.target={x:clamp(target.x),y:clamp(target.y)};u.vector={x:0,y:0};target=u.target;}if(!force&&now-u.lastSent<45)return false;const sent=c.raw('wallsInput585',{gameId:g.id,round:g.round,seq:++u.seq,action,...(target?{target}:{} )});if(sent!==false)u.lastSent=now;return sent!==false;}
 export function dash586(c){const p=me(c),u=ui(c),g=game(c),at=clock(c);if(!active586(c)||!canDash586(g,p,at)||performance.now()-(u.dashPending??-9999)<400)return false;unlock543(u);const ok=command586(c,'dash',null,true);if(ok)u.dashPending=performance.now();return ok;}
 export function stop586(c,{send=true}={}){const u=ui(c);if(!u)return;const p=me(c),moving=u.pointer!=null||u.keys?.size||u.target||Math.hypot(u.vector?.x??0,u.vector?.y??0)>.001||Math.hypot(p?.vx??0,p?.vy??0)>.001;if(send&&moving&&active586(c))command586(c,'stop',null,true);const pointer=u.pointer;u.pointer=null;u.keys?.clear();u.vector={x:0,y:0};u.mode='steer';u.target=null;if(u.nodes){u.nodes.pad.classList.remove('is-held');u.nodes.base.hidden=true;u.nodes.stick.hidden=true;try{if(pointer!=null&&u.nodes.pad.hasPointerCapture(pointer))u.nodes.pad.releasePointerCapture(pointer);}catch{}}}

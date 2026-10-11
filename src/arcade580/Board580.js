@@ -1,3 +1,4 @@
+import {snapshotPair615,interpolate615} from '../party/Snapshots615.js';
 import {color563 as color} from '../party/Arcade563.js';
 export const PADS580=[[.28,.35],[.72,.35],[.19,.62],[.50,.72],[.81,.62]];
 const images=new Map();
@@ -18,14 +19,15 @@ export function paint580(r,g,self,u,at){
  const {ctx,w,h}=r;ctx.clearRect(0,0,w,h);r.points=[];
  const reduced=u.reduced,animation=reduced?0:at;
  if(g.game==='elevator'){
+  const pair=snapshotPair615(u,at);
   const shake=g.events.some(e=>e.type==='shake'&&at-e.at<350),sway=reduced?0:Math.sin(animation*.0017)*Math.min(4,g.stress*.06)+(shake?Math.sin(at*.07)*4:0),fallen=g.reason==='collapse'&&g.phase==='roundEnd',fall=fallen?Math.min(h,(at-g.phaseAt)*.45):0;
   ctx.save();ctx.translate(sway,fall);
   ctx.strokeStyle='#ba9c5c';ctx.lineWidth=4;for(const x of [w*.1,w*.9]){ctx.beginPath();ctx.moveTo(x,-10);ctx.lineTo(x,h*.79);ctx.stroke();for(let y=-24+(animation*.024)%24;y<h*.55;y+=24){ctx.strokeStyle='#f1d18b';ctx.lineWidth=2;ctx.strokeRect(x-3,y,6,15);}}
   const cage=asset('elevator580/cage.webp'),cw=w*1.02,ch=cw*.48,cy=h*.79-ch*.70;
   if(cage.complete&&cage.naturalWidth)ctx.drawImage(cage,-w*.01,cy,cw,ch);else{ctx.fillStyle='#79572f';ctx.fillRect(w*.04,h*.79,w*.92,18);}
-  for(const p of g.players){const old=u.previous?.players?.[p.seat],blend=Math.min(1,(performance.now()-(u.receivedAt??0))/50),px=old?.status===p.status?old.x+(p.x-old.x)*blend:p.x;let x=px*w,y=h*.79+fall;if(p.status==='banked'){const t=reduced?1:Math.max(0,Math.min(1,(at-p.bankAt)/750));x+=((p.x<.5?.06:.94)*w-x)*t;y=h*.79+(h*.45-h*.79)*t-Math.sin(t*Math.PI)*h*.13;}if(p.status==='top')y=h*.79;r.points.push({seat:p.seat,x:x+sway,y,status:p.status});if(p.status==='riding'||p.status==='top')ellipse(ctx,px*w,h*.79+1,w*.062,5,color(p)+'66',color(p));}
+  for(const p of g.players){const point=interpolate615(pair,'players',p.seat),px=point?.status===p.status?point.x:p.x;let x=px*w,y=h*.79+fall;if(p.status==='banked'){const t=reduced?1:Math.max(0,Math.min(1,(at-p.bankAt)/750));x+=((p.x<.5?.06:.94)*w-x)*t;y=h*.79+(h*.45-h*.79)*t-Math.sin(t*Math.PI)*h*.13;}if(p.status==='top')y=h*.79;r.points.push({seat:p.seat,x:x+sway,y,status:p.status});if(p.status==='riding'||p.status==='top')ellipse(ctx,px*w,h*.79+1,w*.062,5,color(p)+'66',color(p));}
   ctx.restore();
-  if(!fallen)for(const d of g.drops){const old=u.previous?.drops?.find(v=>v.id===d.id),blend=Math.min(1,(performance.now()-(u.receivedAt??0))/50),y=old?old.y+(d.y-old.y)*blend:d.y;treasure(ctx,d.kind,d.x*w,y*h,Math.max(9,w*.032),animation);}
+  if(!fallen)for(const d of g.drops){const point=interpolate615(pair,'drops',d.id,'id'),y=point?.y??d.y;treasure(ctx,d.kind,d.x*w,y*h,Math.max(9,w*.032),animation);}
   for(const e of g.events){const age=at-e.at;if(age<0||age>1000)continue;if(e.type==='catch'||e.type==='blast'){const p=g.players[e.seat];label(ctx,(e.value>0?'+':'')+e.value,e.x*w,h*.70-age*.035,Math.max(14,w*.04),e.value>0?color(p):'#ff966b');}}
  }else{
   const reveal=g.stage==='reveal';

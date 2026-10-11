@@ -1,3 +1,5 @@
+import {partyClock615} from '../party/Realtime615.js';
+import {rememberSnapshot615,snapshotPair615,interpolate615} from '../party/Snapshots615.js';
 import {cannonStomp605} from './CannonStomp605.js';
 import {sweep604} from './Threats604.js';
 import {buddyContact601,bounceBuddy601} from './Coop601.js';
@@ -22,13 +24,14 @@ export function remember591(c){
  if(self){const epoch=[g.id,g.round,self.motionEpoch600??0,!!self.respawnAt,!!self.waiting,!!self.paused].join(':');
   if(u.life600!==epoch){if(u.life600&&u.renderer&&!self.respawnAt)u.renderer.snap=true;u.life600=epoch;u.inputs591=[];u.corrections591.delete(self.seat);u.pendingJump=null;u.sentJump=false;}
  }
+ rememberSnapshot615(u,g,c.realtime615?.installed?partyClock615(c):g.serverAt);
  const frames=u.frames591;
  if(frames.at(-1)?.serverAt!==g.serverAt){frames.push(g);if(frames.length>6)frames.shift();}
 }
 function extrapolate(c,p,g,at){
  const q={...p},u=c.runnersUI587,self=p.playerId===c.transport.selfId&&!p.auto;
  if(p.waiting||p.paused||!p.alive||p.respawnAt||p.finishTime!=null||g.phase!=='play'||g.stage!=='run')return q;
- const ms=Math.min(200,Math.max(0,at-g.serverAt)),course=course589(g);
+ const ms=Math.min(300,Math.max(0,at-g.serverAt)),course=course589(g);
  const pending=self?(u.inputs591??[]).filter(i=>i.seq>(p.processedSeq??p.lastSeq)):[];let input=0;
  const defeated=new Set(),brokenShots=new Set();
  for(let dt=0;dt<ms;){
@@ -59,29 +62,28 @@ function extrapolate(c,p,g,at){
  return q;
 }
 export function predict591(c,p,at){
- const u=c.runnersUI587,g=c.state.runners,frames=u.frames591??[],self=p.playerId===c.transport.selfId&&!p.auto;
- if(!self&&g.phase==='play'&&g.stage==='run'&&frames.length>1&&!p.respawnAt&&p.alive&&p.finishTime==null){
-  const t=at-75;
-  for(let i=frames.length-1;i>0;i--){const a=frames[i-1],b=frames[i];if(t<a.serverAt||t>b.serverAt)continue;
-   const pa=a.players[p.seat],pb=b.players[p.seat];
-   if(!pa||!pb||pa.respawnAt||pb.respawnAt||pa.motionEpoch600!==pb.motionEpoch600||Math.abs(pa.x-pb.x)>100)break;
-   const f=(t-a.serverAt)/Math.max(1,b.serverAt-a.serverAt);
-   return ground596({...p,x:pa.x+(pb.x-pa.x)*f,y:pa.y+(pb.y-pa.y)*f},g,at,t);
+ const u=c.runnersUI587,g=c.state.runners,self=p.playerId===c.transport.selfId&&!p.auto;
+ if(!self){
+  if(g.phase!=='play'||g.stage!=='run'||!p.alive||p.waiting||p.paused||p.respawnAt||p.finishTime!=null)return {...p};
+  const pair=snapshotPair615(u,at),q=interpolate615(pair,'players',p.seat);
+  if(q&&q.motionEpoch600===p.motionEpoch600&&q.alive&&!q.waiting&&!q.paused&&q.finishTime==null){
+   return ground596(q,g,at,pair.time);
   }
+  return ground596({...p},g,at,g.serverAt);
  }
- // Remote players use snapshots, never run a second physics simulation locally.
- if(!self){const ms=g.phase==='play'&&g.stage==='run'&&p.alive&&!p.waiting&&!p.paused&&!p.respawnAt&&p.finishTime==null?Math.min(50,Math.max(0,at-75-g.serverAt)):0;return ground596({...p,x:p.x+p.vx*ms/1000,y:p.y+(p.grounded?0:p.vy*ms/1000)},g,at,g.serverAt+ms);}
  const q=extrapolate(c,p,g,at);
  const records=u.corrections591??=new Map();let r=records.get(p.seat);
  if(!r){r={source:g,at,dx:0,dy:0};records.set(p.seat,r);}
+ // Decay the previous correction before adding a new one. Decaying the new
+ // correction immediately made each delayed packet visibly kick the player.
+ const decay=Math.exp(-Math.max(0,at-r.at)/100);r.dx*=decay;r.dy*=decay;r.at=at;
  if(r.source.serverAt!==g.serverAt){
   const old=r.source.players[p.seat];
-  if(old&&old.alive&&p.alive&&!old.respawnAt&&!p.respawnAt&&!p.waiting&&!p.paused&&old.motionEpoch600===p.motionEpoch600&&Math.abs(old.x-p.x)<85&&old.checkpoint===p.checkpoint){
-   const before=extrapolate(c,old,r.source,at);r.dx=Math.max(-26,Math.min(26,r.dx+before.x-q.x));r.dy=Math.max(-22,Math.min(22,r.dy+before.y-q.y));
+  if(old&&old.alive&&p.alive&&!old.respawnAt&&!p.respawnAt&&!p.waiting&&!p.paused&&old.motionEpoch600===p.motionEpoch600&&Math.abs(old.x-p.x)<160&&old.checkpoint===p.checkpoint){
+   const before=extrapolate(c,old,r.source,at);r.dx=Math.max(-96,Math.min(96,r.dx+before.x-q.x));r.dy=Math.max(-64,Math.min(64,r.dy+before.y-q.y));
   }else{r.dx=0;r.dy=0;}
   r.source=g;
  }
- const decay=Math.exp(-Math.max(0,at-r.at)/65);r.dx*=decay;r.dy*=decay;r.at=at;
  if(q.grounded||p.respawnAt||p.waiting||p.paused)r.dy=0;
- q.x+=r.dx;q.y+=r.dy;return ground596(q,g,at);
+ q.x=Math.max(RUN587.radius,Math.min(course589(g).length-RUN587.radius,q.x+r.dx));q.y+=r.dy;return ground596(q,g,at);
 }

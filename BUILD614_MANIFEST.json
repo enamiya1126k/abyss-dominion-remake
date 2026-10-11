@@ -1,0 +1,54 @@
+{
+  "build": 614,
+  "base_build": 613,
+  "app_version": "3.1.293",
+  "runners_rules": 23,
+  "compatible_server_build": 613,
+  "files": [
+    {
+      "path": "README_BUILD614.md",
+      "bytes": 2469,
+      "sha256": "e4779590d00052cb340c83ed9ba786f905a176d00b4080f649fe692030a71c65"
+    },
+    {
+      "path": "index.html",
+      "bytes": 304499,
+      "sha256": "2eb2c4d66bda05e24fdee48aa241161fd6c0f2b12b9a0b761f2b4015a54609fb"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "912555e08c2e891399bb4939de833d0f72f4b239196a22850c5cb2694068d7c3"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 15187,
+      "sha256": "39b41dc423826a111efd9a22601a536d73cadd4ff83c5caed76273aa430252eb"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "ab3b8c39c213ab2cf01c3094933bc1d353613f10911d28a3eafab7cc22836a7a"
+    },
+    {
+      "path": "tools/build614/party-entry.test.mjs",
+      "bytes": 3237,
+      "sha256": "7927bce223dd71875712b24c973e0fa6ecaca7acddfdf6430cb313de7057dd55"
+    },
+    {
+      "path": "tools/build614/version.test.mjs",
+      "bytes": 1924,
+      "sha256": "86fab8443ba544f2e287e0e9d765864b4e26eecfe647c9bb31912a30064eb87f"
+    },
+    {
+      "path": "world-raid-offline614-assets.json",
+      "bytes": 60398,
+      "sha256": "27b440274baa75c7eabc715bc1619946fd05b23945a4c3e84850718de5751aae"
+    },
+    {
+      "path": "world-raid-offline614-sw.js",
+      "bytes": 2502,
+      "sha256": "a69c8f3fde8e4cb87d5b314deac47b433ff3b72ee23480bae2a9ecad16393b61"
+    }
+  ]
+}

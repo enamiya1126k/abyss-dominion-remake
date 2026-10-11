@@ -1,0 +1,116 @@
+{
+  "build": 615,
+  "base_build": 614,
+  "app_version": "3.1.294",
+  "runners_rules": 23,
+  "compatible_server_build": 613,
+  "server_update_required": false,
+  "tests_passed": 284,
+  "files": [
+    {
+      "path": "README_BUILD615.md",
+      "bytes": 4470,
+      "sha256": "0b4de4c2f06c1deaa71d3f530de3d09d2c74bfe91549c769485326668b31fec7"
+    },
+    {
+      "path": "index.html",
+      "bytes": 305105,
+      "sha256": "ebf151759af198d5295cfcd69c38056dee0c541be4e61c116d9cf6891bf235e7"
+    },
+    {
+      "path": "src/arcade580/Board580.js",
+      "bytes": 5979,
+      "sha256": "4eafdc469bce3b17a6d46197c2dd9e7d3d916c9cf87ed4d2cc5def1fa92432ec"
+    },
+    {
+      "path": "src/arcade580/View580.js",
+      "bytes": 15683,
+      "sha256": "3ecefc1dc48a24f1367db7bb5ab621c64cb271368db1b012a9ccc88fb19fe70f"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "0704ec76897a51261d6f991ef22f2a4eec7977e5c58eb9311c5d9b38b789c13d"
+    },
+    {
+      "path": "src/party/Realtime615.js",
+      "bytes": 3589,
+      "sha256": "6fd6f81befe283d1bf618e11314ee557eafff98d7784be7aaf1ee100117d9773"
+    },
+    {
+      "path": "src/party/Snapshots615.js",
+      "bytes": 2097,
+      "sha256": "304ac48c8dec2f430ffe32e1f6743801b13560aa8fda8c25d2c5147c2294f3af"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 33685,
+      "sha256": "e7995c438fca0b6457f4bb4a6d51287e944d0fd9b21e915399b2376f2d54084a"
+    },
+    {
+      "path": "src/runners587/Motion591.js",
+      "bytes": 6168,
+      "sha256": "6647055126371c59768e01dabde08a92f824cbc772fae6bc78361b52d19ef84c"
+    },
+    {
+      "path": "src/runners587/Timeline595.js",
+      "bytes": 1270,
+      "sha256": "f4949c94ebf13d26104141a9dd9b604f1818f139442e0b5658efc1bc7df2e721"
+    },
+    {
+      "path": "src/walls585/Controls586.js",
+      "bytes": 5840,
+      "sha256": "a75be0bd2f0ffa2abada4c5eab71300084e2bd033974292720c2a8835d4da537"
+    },
+    {
+      "path": "src/walls585/View585.js",
+      "bytes": 15147,
+      "sha256": "b534a74ea9f37e44a95f07e23c737a3cb776f339472774e91e6ea5134bb50aa3"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "572193d3b58b6ad76f6e0b3a11dba69d73ad9b7beb78ed080534417e57189ed6"
+    },
+    {
+      "path": "tools/build615/changed-modules.json",
+      "bytes": 357,
+      "sha256": "6ffa72dd2f40e60688fb18f50ec800c12805587f77abbe40e2e17808d2f24bc4"
+    },
+    {
+      "path": "tools/build615/handlers.test.mjs",
+      "bytes": 6542,
+      "sha256": "32080fc2add3df38bd782a8eadc8b1a7c3686b799fceac788ce2b44489fa317e"
+    },
+    {
+      "path": "tools/build615/network.test.mjs",
+      "bytes": 7699,
+      "sha256": "4cfd67d2b399cb70982845db75dac31799bd6a116e708a9758bd2f9a0e7c5736"
+    },
+    {
+      "path": "tools/build615/runner-latency.test.mjs",
+      "bytes": 3191,
+      "sha256": "887a476504f5ec2d76443ca4dc231f89eeda47126097fd6e9f03243e0d9cc271"
+    },
+    {
+      "path": "tools/build615/version.test.mjs",
+      "bytes": 1971,
+      "sha256": "fa2b7693d9a4be4ef48eb4b4375db2b8ee50d3c275440c7c47cb5c4ce2b00b36"
+    },
+    {
+      "path": "tools/build615/vm-loader.mjs",
+      "bytes": 1231,
+      "sha256": "1d11cbeee819837865168239f09bd3d7be8b8082e12c2f800c27f762b104ef82"
+    },
+    {
+      "path": "world-raid-offline615-assets.json",
+      "bytes": 60498,
+      "sha256": "e2feb3a3ecd65d3a5ad5c1d09f78c789808246caeaaf43f7160709f71cdacda3"
+    },
+    {
+      "path": "world-raid-offline615-sw.js",
+      "bytes": 2502,
+      "sha256": "6c4140eb5d17e2ec123657dda34ecb80940ecdeee8198cbbc39d3b186b9e688c"
+    }
+  ]
+}
