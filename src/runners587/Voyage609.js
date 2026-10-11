@@ -1,78 +1,76 @@
-// Each island has an incoming vessel and an onward boat waiting at its exit.
+// Build611: one continuous world. Ships are autonomous, optional moving floors.
 export function voyageCourse609(){
- const c={id:'voyage',name:'魔界渡りの暴走船',en:'THE RUNAWAY ARK',theme:'coast',expert603:true,ship609:true,color:'#70d7d2',icon:'wave',level:'上級・追走航路',tag:'上陸・攻略・飛び乗り',mode:'coop',height:400,ground:300,length:6800,goal:6690,duration:600000,description:'船で三つの島を巡る。島の出口には次の船が待機。攻略して全員が乗ると出航する。上陸した島を復帰地点として保存する。1〜4人、星は高所の寄り道。',features:['島で攻略・待機船に乗り換え','上陸した島から再挑戦']};
+ const c={id:'voyage',name:'魔界渡りの暴走船',en:'THE RUNAWAY ARK',theme:'coast',expert603:true,ship609:true,color:'#70d7d2',icon:'wave',level:'上級・島めぐり',tag:'船・分岐・連続コース',mode:'coop',height:400,ground:300,length:6800,goal:6690,duration:600000,description:'砲撃岩礁、水門工場、嵐の灯台をひと続きに走破。船は自動で往復する足場。陸路でも船でもゴールへ進める。鍵・番兵・封印はスターを狙う寄り道。1〜4人、途中の旗から何度でも再挑戦。',features:['船でも陸路でも進める','3つの島・上下の分岐']};
  for(const k of ['grounds','platforms','walls','bridges','switches','switchAccess602','belts','winds','hazards','springs','gems','enemies','pickups','checkpoints','firebars600','swarms600','tides600','rollers600','secrets600','crushers','stars601','trials601','hints601','climbs602','saws603','pendulums603','lightning603','cannons603','meteors603','jets603','modules603'])c[k]=[];
- c.sections=[];c.islands609=[];
- const pad=(id,x,y,w=90)=>c.platforms.push({id,x,y,w,h:18});
- for(let i=0;i<3;i++){
-  const a=i*2200,id='voyage-island-'+i;
-  c.sections.push({x:a,name:['砲火を抜ける船出','番兵島の追走','封印灯台への最終便'][i],sub:''});
-  c.checkpoints.push({x:a+100,y:300});c.grounds.push([a,a+270,300],[a+1960,a+2200,300]);
-  c.islands609.push({id,index:i,kind:['key','guards','seal'][i],x:a+1195,y:84,returnX:a+1560,guards:[id+'-guard-a',id+'-guard-b'],seal:id+'-seal'});
-  // Ship deck (y=300) passes below the island. Three 72px rises need no power.
-  pad(id+'-landing',a+810,228,180);pad(id+'-step',a+970,156,125);pad(id+'-summit',a+1120,84,170);
-  pad(id+'-return-high',a+1320,156,110);pad(id+'-return',a+1460,228,185);
-  pad(id+'-star-low',a+1230,12,55);pad(id+'-star-high',a+1360,-60,48);
-  c.stars601.push({id:id+'-star',x:a+1384,y:-90,slot604:i,kind:'voyage'});
-  c.pickups.push({id:id+'-power',x:a+875,y:204,kind:'fire'});
-  if(i===1){for(const [j,x] of [[0,a+1160],[1,a+1255]])c.enemies.push({id:c.islands609[i].guards[j],x,y:84,min:x-10,max:x+10,speed:16,axe604:true});}
-  if(i===2)c.walls.push({id:id+'-seal',x:a+1210,y:46,w:36,h:38,breakable:true});
-  // Batteries are on visible watchtowers, not floating in empty air.
-  pad(id+'-battery',a+630,228,90);c.cannons603.push({id:id+'-cannon',x:a+675,y:228,period:3400,warning:900,speed:250,range:600,offset:i*310});
-  c.pendulums603.push({id:id+'-pendulum',x:a+1880,y:75,length:190,period:4200,swing:.8,r:20,offset:i});
-  c.walls.push({id:id+'-ceiling',x:a+1700,y:150,w:160,h:92});
-  c.firebars600.push({id:id+'-flame',x:a+430,y:220,length:67,period:7200,offset:i});
-  c.modules603.push({kind:'voyage',left:a,right:a+2200});
- }
- c.grounds.push([6600,6800,300]);return c;
+ const pad=(id,x,y,w=110,more={})=>c.platforms.push({id:'voyage-'+id,x,y,w,h:18,...more});
+ const power=(id,x,y,kind)=>c.pickups.push({id:'voyage-power-'+id,x,y:y-27,kind});
+ c.sections=[{x:0,name:'砲撃岩礁と崩落橋',sub:'崩れる橋を駆け抜け、高台にも寄り道'},{x:2200,name:'水門工場の上下ルート',sub:'蒸気とプレスの下道か、番兵の上道か'},{x:4400,name:'嵐の灯台と風の回廊',sub:'風で灯台へ登るか、海沿いを駆け抜けるか'}];
+ // Safe shores join sections without moving the players or resetting time.
+ c.grounds=[[0,280,300],[1000,1290,228],[1960,2370,300],[2540,2770,245],[2880,3290,245],[3490,3710,300],[4050,4630,300],[5080,5330,210],[6020,6190,260],[6440,6800,300]];
+ c.checkpoints=[{x:90,y:300},{x:1080,y:228},{x:2200,y:300},{x:3220,y:245},{x:4460,y:300},{x:5160,y:210},{x:6090,y:260}];
+ // 1. Uneven reef, crumbling causeway and an optional tall treasure climb.
+ pad('reef-step',350,250,105);pad('reef-crumble',520,206,130,{crumble:true});pad('reef-battery',705,184,155);pad('reef-tide',915,228,110,{move:{axis:'y',range:24,period:4200}});
+ pad('reef-key-step',1020,158,110);pad('reef-key',1180,92,125);pad('reef-star',1360,26,115);pad('reef-high-return',1550,102,100);pad('reef-high-exit',1730,174,100);
+ pad('reef-bridge-a',1380,230,110,{crumble:true});pad('reef-bridge-b',1550,242,110,{crumble:true});pad('reef-bridge-c',1740,262,120,{crumble:true});
+ c.cannons603.push({id:'voyage-reef-cannon',x:810,y:184,period:3700,warning:1050,speed:235,range:580});
+ c.firebars600.push({id:'voyage-reef-flame',x:1860,y:173,length:62,period:7200,offset:0});
+ power('start',180,300,'fire');power('reef',1090,228,'wind');
+ c.gems.push({id:'voyage-reef-boost',x:1395,y:201});
+ // 2. Two horizontal routes: steam / crusher below, guards / treasure above.
+ pad('works-entry',2425,245,105);pad('works-upper-a',2490,175,140);pad('works-guards',2700,105,200);pad('works-star',2960,36,125);pad('works-upper-b',3190,105,110);pad('works-upper-c',3360,180,110);
+ pad('works-lift',3365,250,110,{move:{axis:'y',range:38,period:3900}});pad('works-shuttle',3790,240,120,{move:{axis:'x',range:32,period:3400}});pad('works-exit',3960,240,115);
+ c.hazards.push({id:'voyage-works-steam',x:2650,y:245,w:70,h:63,period:4700,on:1400,offset:500});
+ c.crushers.push({id:'voyage-works-press',x:3020,w:132,y:245,offset:1700});
+ c.belts.push({x:3510,y:300,w:150,speed:-80});
+ c.walls.push({id:'voyage-works-box',x:3645,y:264,w:36,h:36,breakable:true,box:true});
+ for(const [i,x]of [2750,2850].entries())c.enemies.push({id:'voyage-guard-'+i,x,y:105,min:x-26,max:x+26,speed:29,axe604:true});
+ power('works',2290,300,'water');power('guards',2570,175,'fire');power('works-exit',4160,300,'thunder');
+ // 3. Wind tower, a low coast route, vanishing ledge with a permanent catch,
+ // then a moving blade / pendulum gauntlet with a safe checkpoint between.
+ pad('tower-entry',4720,246,110,{move:{axis:'y',range:20,period:4300}});pad('tower-coast',4890,210,130);
+ pad('tower-step-a',5130,140,105);pad('tower-step-b',5290,72,105);pad('tower-seal',5450,8,135);pad('tower-return-a',5650,80,115);pad('tower-return-b',5810,150,120);
+ pad('coast-phase',5420,255,135,{phase603:{period:4500,on:3100,offset:600}});pad('coast-catch',5410,325,170);pad('coast-crumble',5630,255,125,{crumble:true});pad('coast-saw',5820,238,130);pad('coast-last',6260,230,125);
+ c.walls.push({id:'voyage-seal',x:5500,y:-30,w:36,h:38,breakable:true,box:true});
+ c.jets603.push({id:'voyage-updraft',x:5010,y:300,w:65,h:260,speed:320,period:6200,on:2400});
+ c.winds.push({x:5480,y:-60,w:540,h:350,speed:48});
+ c.saws603.push({id:'voyage-coast-saw',x:5890,y:211,axis:'x',range:40,r:14,period:4000});
+ c.pendulums603.push({id:'voyage-coast-pendulum',x:6360,y:20,length:162,period:4900,swing:.6,r:17,offset:.8});
+ power('tower',4510,300,'wind');power('coast',5200,210,'stone');
+ c.islands609=[{id:'voyage-key',index:0,kind:'key',x:1240,y:92},{id:'voyage-guards',index:1,kind:'guards',x:2800,y:105,guards:['voyage-guard-0','voyage-guard-1']},{id:'voyage-seal-bonus',index:2,kind:'seal',x:5518,y:8,seal:'voyage-seal'}];
+ for(const [i,[x,y]] of [[1415,0],[3020,10],[5550,-18]].entries())c.stars601.push({id:'voyage-star-'+i,x,y,slot604:i,kind:'voyage',trial:c.islands609[i].id});
+ c.modules603=[{kind:'reef',left:0,right:2200},{kind:'waterworks',left:2200,right:4400},{kind:'wind-tower',left:4400,right:6800}];
+ return c;
 }
-export const SHIP609={id:'ark609',w:230,y:300,lead:2500,cruise:80,slow:20,escape:100,slowStart:780,slowEnd:1320,end:2010,returnLimit:1840};
-function incoming610(t,world={}){
- const s=world.ship609??{leg:0,at:0},q=SHIP609,a=s.leg*2200;let sec=Math.max(0,t-s.at-q.lead)/1000,offset=40,speed=0,phase='boarding',remaining=q.lead-Math.max(0,t-s.at);
- if(sec>0){const cruise=(q.slowStart-40)/q.cruise,slow=(q.slowEnd-q.slowStart)/q.slow;
-  if(sec<cruise){offset+=sec*q.cruise;speed=q.cruise;phase='cruise';remaining=(cruise-sec)*1000;}
-  else if(sec<cruise+slow){offset=q.slowStart+(sec-cruise)*q.slow;speed=q.slow;remaining=(cruise+slow-sec)*1000;phase=remaining<=6000?'warning':'island';}
-  else{offset=Math.min(q.end,q.slowEnd+(sec-cruise-slow)*q.escape);speed=offset===q.end?0:q.escape;phase=speed?'escape':'arrived';remaining=Math.max(0,(q.returnLimit-offset)/q.escape*1000);}
- }
- return {id:q.id,x:a+offset,y:q.y,w:q.w,h:24,oneWay:true,move:{axis:'x'},ship609:true,speed,phase,remaining:Math.max(0,remaining)};
+// Constant routes and unique IDs keep remote players and prediction in sync.
+// Each vessel returns naturally; no passenger, mission or section state is read.
+export const SHIP_ROUTES611=Object.freeze([
+ {id:'ark609',start:40,end:740,y:300,w:225,speed:84,dwell:2200,offset:0},
+ {id:'ark-reef611',start:1300,end:1970,y:300,w:215,speed:98,dwell:2200,offset:1700},
+ {id:'ark-works611',start:3300,end:3820,y:300,w:200,speed:90,dwell:2000,offset:3500},
+ {id:'ark-tower611',start:4460,end:4840,y:300,w:220,speed:88,dwell:1800,offset:900},
+ {id:'ark-coast611',start:5340,end:5785,y:300,w:220,speed:102,dwell:2000,offset:2300}
+]);
+export function vessel611(route,t){
+ const travel=(route.end-route.start)/route.speed*1000,period=2*(travel+route.dwell),age=((t+route.offset)%period+period)%period;
+ let x=route.start,speed=0,remaining=0;
+ if(age<route.dwell)remaining=route.dwell-age;
+ else if(age<route.dwell+travel){x=route.start+(age-route.dwell)*route.speed/1000;speed=route.speed;}
+ else if(age<2*route.dwell+travel){x=route.end;remaining=2*route.dwell+travel-age;}
+ else{x=route.end-(age-2*route.dwell-travel)*route.speed/1000;speed=-route.speed;}
+ return {id:route.id,x,y:route.y,w:route.w,h:24,oneWay:true,move:{axis:'x'},ship609:true,speed,phase:speed?'cruise':'boarding',remaining};
 }
-export function outgoing610(t,world={}){const s=world.ship609??{leg:0},age=s.departAt==null?0:Math.max(0,t-s.departAt-1000),x=s.leg*2200+Math.min(2010,1460+age*.1);return {id:'ark-out609',x,y:300,w:230,h:24,oneWay:true,move:{axis:'x'},ship609:true,speed:age>0&&x<s.leg*2200+2010?100:0,phase:s.departAt==null?'waiting':age===0?'boarding':x===s.leg*2200+2010?'arrived':'escape',remaining:s.departAt==null?0:Math.max(0,s.departAt+1000-t)};}
-export const shipAt609=(t,g={})=>g.ship609?.departAt!=null?outgoing610(t,g):incoming610(t,g);
-export const voyageShips610=(t,g)=>g.ship609?.departAt!=null?[outgoing610(t,g)]:[incoming610(t,g),outgoing610(t,g)];
+export const voyageShips610=(t,g)=>SHIP_ROUTES611.map(r=>vessel611(r,t));
+export const shipAt609=(t,g)=>vessel611(SHIP_ROUTES611[0],t);
 export const aboard609=(p,b)=>p.grounded&&p.platformId===b.id&&p.x>=b.x-10&&p.x<=b.x+b.w+10;
-export function voyageReady609(g,c){return !c.ship609||g.ship609?.completed?.length===3&&shipAt609(g.elapsed,g).phase==='arrived';}
-export function resetVoyage609(g,c,emit,advance=false){
- const old=g.ship609,leg=old.leg+(advance?1:0),s=g.ship609={leg,at:g.elapsed,completed:[...old.completed],retry:(old.retry??0)+(advance?0:1),objective:!advance&&!!old.objective,landed:!advance&&!!old.landed};
- if(advance)s.completed=[...new Set([...s.completed,old.leg])];
- const a=leg*2200,island=c.islands609[leg];
- if(!s.landed)g.enemies=g.enemies.filter(e=>!e.id.startsWith(island.id)).concat(c.enemies.filter(e=>e.id.startsWith(island.id)).map(e=>({...e,downUntil:0})));
- if(!s.landed)g.broken=g.broken.filter(id=>id!==island.seal);g.projectiles=[];g.enemyShots600=[];g.threats604.shots=[];
- g.teamCheckpoint=leg;g.crumbles={};
- const b=s.landed?{id:'voyage-island-'+leg+(s.objective?'-return':'-landing'),x:a+(s.objective?1460:810),y:228}:shipAt609(g.elapsed,g);
- for(const p of g.players){if(p.departed||p.finishTime!=null)continue;Object.assign(p,{x:b.x+55+p.seat*35,y:b.y,vx:0,vy:0,axis:0,grounded:true,platformId:b.id,checkpoint:leg,respawnAt:0,death604:null,frozenUntil604:0,lastGroundAt:g.lastAt,controlAt:g.lastAt,jumpHeld:false,jumpBufferUntil:0,attackHeld:false,waiting:!!p.paused,waitSurface:{x:b.x,y:b.y},wallSide:0,wallAt:-1e9,wallLockUntil:0,bumpUntil:0,bumpSafeUntil:0,springFlight:false,reboundJump599:false,invincibleUntil:g.lastAt+1600,motionEpoch600:(p.motionEpoch600??0)+1});}
- emit(g,advance?'voyage-next':'voyage-retry',{leg,retry:s.retry});
-}
-export function voyageStep609(g,c,emit,hurt){
- if(!c.ship609)return;const s=g.ship609,b=shipAt609(g.elapsed,g),h=c.islands609[s.leg];
- const crew=g.players.filter(p=>!p.departed&&p.finishTime==null),live=crew.filter(p=>p.alive&&!p.waiting&&!p.paused&&!p.respawnAt);
- if(!s.landed&&live.some(p=>p.grounded&&p.platformId?.startsWith(h.id))){s.landed=true;emit(g,'voyage-landed',{leg:s.leg});}
- s.rescue=live.some(p=>aboard609(p,b)&&p.x>b.x+b.w-60);
- if(s.retryAt!=null){if(g.elapsed>=s.retryAt)resetVoyage609(g,c,emit);return;}
- if(crew.some(p=>p.respawnAt)){s.retryAt=g.elapsed+700;return;}
- if(!s.objective){
-  const islanders=live.filter(p=>p.x>=h.x-130&&p.x<=h.x+150&&p.y<=105&&p.y>=-130);
-  const success=h.kind==='key'?islanders.some(p=>Math.hypot(p.x-h.x,p.y-14-(h.y-20))<30):h.kind==='guards'?h.guards.every(id=>g.enemies.find(e=>e.id===id)?.defeated):g.broken.includes(h.seal);
-  if(success){s.objective=true;emit(g,'voyage-objective',{leg:s.leg,x:h.x,y:h.y});}
- }
- // Waiting on an island or touching a vessel is never a death condition.
- if(s.departAt==null){const next=outgoing610(g.elapsed,g);
-  if(b.phase==='arrived'&&!s.landed&&crew.length&&crew.every(p=>p.x<s.leg*2200+300)){resetVoyage609(g,c,emit);return;}
-  if(s.objective&&crew.length&&crew.every(p=>!p.waiting&&!p.paused&&!p.respawnAt&&aboard609(p,next))){s.departAt=g.elapsed;s.rescue=false;emit(g,'voyage-depart',{leg:s.leg});}
-  return;
- }
- if(b.phase==='arrived'&&s.objective){
-  const allBack=crew.length>0&&crew.every(p=>!p.respawnAt&&(aboard609(p,b)||p.x>=s.leg*2200+1940&&p.y<=320));
-  if(allBack){if(s.leg<2)resetVoyage609(g,c,emit,true);else s.completed=[0,1,2];}
-  else if(crew.some(p=>!p.waiting&&!p.paused&&p.grounded&&p.platformId?.startsWith(h.id)))resetVoyage609(g,c,emit);
+// The voyage never gates the exit. Arrival alone is sufficient, in any order.
+export const voyageReady609=()=>true;
+export const voyageCheckpoint611=(p,cp)=>p.grounded&&!p.platformId?.startsWith('ark')&&p.x>=cp.x-20&&p.x<=cp.x+100&&Math.abs(p.y-cp.y)<6;
+export function voyageStep609(g,c,emit){
+ if(!c.ship609)return;
+ const s=g.ship609??={completed:[]},live=g.players.filter(p=>p.alive&&!p.departed&&!p.waiting&&!p.paused&&!p.respawnAt&&p.finishTime==null);
+ for(const h of c.islands609){
+  if(s.completed.includes(h.index))continue;
+  const success=h.kind==='key'?live.some(p=>Math.hypot(p.x-h.x,p.y-14-(h.y-20))<30):h.kind==='guards'?h.guards.every(id=>g.enemies.find(e=>e.id===id)?.defeated):g.broken.includes(h.seal);
+  if(success){s.completed.push(h.index);g.coop601[h.id]={open:true,at:g.elapsed};emit(g,'voyage-objective',{leg:h.index,x:h.x,y:h.y});}
  }
 }

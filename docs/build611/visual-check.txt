@@ -1,0 +1,5 @@
+Actual Board587 canvas renderer with decoded production image assets.
+Three authored voyage sections inspected at 480 x 590 each.
+Native Canvas render passed without asset errors.
+Browser execution unavailable: installed Playwright package has no browser executable.
+No iPhone Safari or live multiplayer verification.

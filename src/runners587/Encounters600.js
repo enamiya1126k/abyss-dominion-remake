@@ -1,3 +1,5 @@
+import {sweep604} from './Threats604.js';
+import {tickBoss612,bossPose612} from './Boss612.js';
 import {bossPair608} from './FinalRules608.js';
 import {onHub607} from './Mechanics607.js';
 // Pure geometry shared by authority and rendering. Timers use game elapsed time.
@@ -6,8 +8,8 @@ export const tide600=(h,elapsed)=>({y:h.y+20-(.5-.5*Math.cos((elapsed+(h.offset?
 export function roller600(h,elapsed){const cycle=Math.floor(elapsed/h.period),phase=elapsed%h.period,t=(phase-700)/2800;return {cycle,warning:phase<700,active:t>=0&&t<1,x:h.right-(h.right-h.left)*Math.max(0,t),y:h.y-22,r:22};}
 const overlap=(p,x,y,r)=>p.x+10>x-r&&p.x-10<x+r&&p.y>y-r&&p.y-28<y+r;
 const active=p=>p.alive&&!p.waiting&&!p.paused&&!p.respawnAt&&p.finishTime==null;
-const bossSpeed603=b=>b.elite603?(b.elite603.dash+(b.hp<=b.maxHp/2?25:0)):(b.hp<=b.maxHp/2?165:130);
-export function bossPosition600(b,elapsed){return b.phase==='dash'?Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*bossSpeed603(b)*Math.max(0,Math.min(.15,(elapsed-(b.at600??elapsed))/1000)))):b.x;}
+export const bossPosition600=(b,elapsed)=>bossPose612(b,elapsed).x;
+export {bossPose612};
 export const bossOpen604=(b,t)=>['rest','stunned'].includes(b.phase)&&t>=(b.crownUntil604??0);
 export function bossHead606(p,b,old,t=Infinity){return b.hp>0&&!!old&&!(p.frozenUntil604>t)&&Math.abs(p.x-b.x)<=39&&p.vy>=0&&old.y<=b.y-50&&p.y>=b.y-64&&p.y-28<b.y;}
 export const bossStomp600=(p,b,old,t=Infinity)=>bossOpen604(b,t)&&bossHead606(p,b,old,t);
@@ -26,7 +28,7 @@ export function hitBoss600(g,seat,amount,emit,impact={}){
  if(shield&&impact.kind==='shot'&&Math.sign(impact.x-b.x)===b.dir){emit(g,'boss-block',{seat,x:b.x+b.dir*30,y:b.y-32});return false;}
  if(!bossPair608(g,b,seat,emit))return false;if(b.final608)amount=2;
  const combo=seat!=null&&b.lastHitSeat601!=null&&seat!==b.lastHitSeat601&&g.elapsed-b.lastHitAt601<=1500&&g.elapsed>=(b.comboUntil601??0);
- if(combo){amount+=2;b.phase='stunned';b.phaseAt=g.elapsed;b.comboUntil601=g.elapsed+2600;emit(g,'boss-combo',{seat,helper:b.lastHitSeat601,x:b.x,y:b.y-36});}
+ if(combo){amount+=2;b.stun612={y:b.y};b.phase='stunned';b.phaseAt=g.elapsed;b.comboUntil601=g.elapsed+2600;emit(g,'boss-combo',{seat,helper:b.lastHitSeat601,x:b.x,y:b.y-36});}
  b.lastHitSeat601=seat;b.lastHitAt601=g.elapsed;
  b.hp=Math.max(0,b.hp-amount);b.hitUntil=g.elapsed+500;emit(g,'boss-hit',{seat,x:b.x,y:b.y-38});
  if(!b.hp){b.phase='down';b.phaseAt=g.elapsed;g.enemyShots600=[];if(g.players[seat])g.players[seat].kills++;emit(g,'boss-defeat',{seat,x:b.x,y:b.y});}
@@ -49,21 +51,8 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
  const b=g.boss600;
  if(b?.hp>0){
   if(b.final608){const stage=b.hp<=b.maxHp/3?3:b.hp<=b.maxHp*2/3?2:1;b.finalPhase608=stage;Object.assign(b.elite603,{warn:stage===3?420:stage===2?500:600,rest:stage===3?600:stage===2?680:760,dash:stage===3?280:stage===2?260:240,castSpeed:stage===3?380:stage===2?350:320});}
-  if(b.phase!=='counter'&&b.baseY604!=null)b.y=b.baseY604;
-  const target=players.filter(p=>p.x>b.left-150).sort((a,c)=>Math.abs(a.x-b.x)-Math.abs(c.x-b.x))[0];
-  if(b.phase==='sleep'&&target){b.phase='warn';b.phaseAt=now;b.dir=target.x<b.x?-1:1;}
-  let age=now-b.phaseAt;
-  if(b.phase==='warn'&&age>=(b.elite603?.warn??900)){
-   b.phase=b.pattern==='charge'||b.turn%2===0?'dash':'cast';b.phaseAt=now;age=0;
-   if(b.phase==='cast'){
-    const speeds=b.finalPhase608===3?[-120,-80,-40,0,40,80,120]:b.elite603?(b.pattern==='wave'?[-35,0,35]:[-85,-42,0,42,85]):b.pattern==='wave'?[0]:[-55,0,55];
-    for(const vy of speeds)g.enemyShots600.push({x:b.x+b.dir*32,y:b.y-(b.pattern==='wave'?10:30),vx:b.dir*(b.elite603?.castSpeed??230),vy,r:b.pattern==='wave'?10:8,kind:b.pattern,born:now,until:now+2200});
-   }
-  }
-  if(b.phase==='counter'){const progress=Math.min(1,age/650);b.y=(b.baseY604??300)-Math.sin(progress*Math.PI)*54;b.x=Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*3));if(age>=650){b.y=b.baseY604??300;b.phase='warn';b.phaseAt=now;if(target)b.dir=target.x<b.x?-1:1;}}
-  if(b.phase==='dash'){b.x=Math.max(b.left+28,Math.min(b.right-28,b.x+b.dir*bossSpeed603(b)*.025));if(age>=850){b.phase='rest';b.phaseAt=now;}}
-  if(b.phase==='cast'&&age>=350){b.phase='rest';b.phaseAt=now;}
-  if((b.phase==='rest'&&age>=(b.elite603?.rest??1000)||b.phase==='stunned'&&age>=1400)&&target){b.turn++;b.phase='warn';b.phaseAt=now;b.dir=target.x<b.x?-1:1;}
+  if(!['counter','leap','stunned'].includes(b.phase))b.y=b.baseY604??300;
+  tickBoss612(g,b,players);
   for(const p of players){if(!active(p))continue;const old=previous.get(p.seat);if(!old||Math.abs(p.x-b.x)>39)continue;
    const top=b.y-62;
    if(bossStomp600(p,b,old,now)){const hit=hitBoss600(g,p.seat,2,emit,{kind:'stomp'});stomp(p,{y:top+24});if(hit&&b.hp>0){b.baseY604=b.y;b.crownUntil604=now+1800;b.phase='counter';b.phaseAt=now;b.dir=p.x<b.x?1:-1;p.bumpVx=-b.dir*190;p.bumpUntil=g.lastAt+220;p.vx=p.bumpVx;}emit(g,'stomp',{seat:p.seat,x:b.x,y:top});}
@@ -73,8 +62,8 @@ export function encounters600(g,course,previous,emit,hurt,stomp){
   b.at600=now;
  }
  g.enemyShots600=(g.enemyShots600??[]).filter(s=>{
-  const oldX=s.x;s.x+=s.vx*.025;s.y+=s.vy*.025;
-  for(const p of players)if(p.x+10>Math.min(oldX,s.x)-s.r&&p.x-10<Math.max(oldX,s.x)+s.r&&p.y>s.y-s.r&&p.y-28<s.y+s.r){hurt(g,p,'boss-shot',oldX);return false;}
-  return now<s.until&&(!b||s.x>b.left-100&&s.x<b.right+100);
+  const oldX=s.x,oldY=s.y;s.x+=s.vx*.025;s.y+=s.vy*.025;
+  for(const p of players)if(active(p)&&sweep604(oldX,oldY,s.x,s.y,{x:p.x-10,y:p.y-28,w:20,h:28},s.r)!=null){hurt(g,p,'boss-shot',oldX);return false;}
+  return now<s.until&&s.y<370&&s.x>0&&s.x<course.length;
  });
 }

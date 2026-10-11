@@ -1,0 +1,338 @@
+[
+  {
+    "course": "forest",
+    "from": "ground17",
+    "to": "forest-arena612-0",
+    "x": 8000,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 8141,
+      "y": 220
+    }
+  },
+  {
+    "course": "forest",
+    "from": "forest-arena612-0",
+    "to": "forest-arena612-1",
+    "x": 8186,
+    "hold": 800,
+    "ms": 575,
+    "landing": {
+      "x": 8321.125,
+      "y": 135
+    }
+  },
+  {
+    "course": "forest",
+    "from": "ground17",
+    "to": "forest-arena612-2",
+    "x": 8470,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 8611,
+      "y": 220
+    }
+  },
+  {
+    "course": "forest",
+    "from": "forest-arena612-2",
+    "to": "forest-arena612-3",
+    "x": 8714,
+    "hold": 800,
+    "ms": 500,
+    "landing": {
+      "x": 8831.5,
+      "y": 125
+    }
+  },
+  {
+    "course": "relay",
+    "from": "ground12",
+    "to": "relay-arena612-0",
+    "x": 6020,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 6161,
+      "y": 220
+    }
+  },
+  {
+    "course": "relay",
+    "from": "relay-arena612-0",
+    "to": "relay-arena612-1",
+    "x": 6222,
+    "hold": 800,
+    "ms": 550,
+    "landing": {
+      "x": 6351.25,
+      "y": 130
+    }
+  },
+  {
+    "course": "relay",
+    "from": "ground12",
+    "to": "relay-arena612-2",
+    "x": 6516,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 6639.375,
+      "y": 210
+    }
+  },
+  {
+    "course": "relay",
+    "from": "relay-arena612-2",
+    "to": "relay-arena612-3",
+    "x": 6746,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 6869.375,
+      "y": 120
+    }
+  },
+  {
+    "course": "ember",
+    "from": "ground12",
+    "to": "ember-arena612-0",
+    "x": 6558,
+    "hold": 800,
+    "ms": 575,
+    "landing": {
+      "x": 6693.125,
+      "y": 215
+    }
+  },
+  {
+    "course": "ember",
+    "from": "ember-arena612-0",
+    "to": "ember-arena612-1",
+    "x": 6768,
+    "hold": 800,
+    "ms": 475,
+    "landing": {
+      "x": 6879.625,
+      "y": 120
+    }
+  },
+  {
+    "course": "ember",
+    "from": "ground12",
+    "to": "ember-arena612-2",
+    "x": 7010,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 7151,
+      "y": 220
+    }
+  },
+  {
+    "course": "ember",
+    "from": "ember-arena612-2",
+    "to": "ember-arena612-3",
+    "x": 7256,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 7379.375,
+      "y": 130
+    }
+  },
+  {
+    "course": "stormforge",
+    "from": "ground23",
+    "to": "stormforge-arena612-0",
+    "x": 13560,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 13701,
+      "y": 220
+    }
+  },
+  {
+    "course": "stormforge",
+    "from": "stormforge-arena612-0",
+    "to": "stormforge-arena612-1",
+    "x": 13762,
+    "hold": 800,
+    "ms": 550,
+    "landing": {
+      "x": 13891.25,
+      "y": 130
+    }
+  },
+  {
+    "course": "stormforge",
+    "from": "ground23",
+    "to": "stormforge-arena612-2",
+    "x": 14056,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 14179.375,
+      "y": 210
+    }
+  },
+  {
+    "course": "stormforge",
+    "from": "stormforge-arena612-2",
+    "to": "stormforge-arena612-3",
+    "x": 14286,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 14409.375,
+      "y": 120
+    }
+  },
+  {
+    "course": "abyssice",
+    "from": "ground19",
+    "to": "abyssice-arena612-0",
+    "x": 13560,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 13701,
+      "y": 220
+    }
+  },
+  {
+    "course": "abyssice",
+    "from": "abyssice-arena612-0",
+    "to": "abyssice-arena612-1",
+    "x": 13762,
+    "hold": 800,
+    "ms": 550,
+    "landing": {
+      "x": 13891.25,
+      "y": 130
+    }
+  },
+  {
+    "course": "abyssice",
+    "from": "ground19",
+    "to": "abyssice-arena612-2",
+    "x": 14056,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 14179.375,
+      "y": 210
+    }
+  },
+  {
+    "course": "abyssice",
+    "from": "abyssice-arena612-2",
+    "to": "abyssice-arena612-3",
+    "x": 14286,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 14409.375,
+      "y": 120
+    }
+  },
+  {
+    "course": "eclipse",
+    "from": "ground27",
+    "to": "eclipse-arena612-0",
+    "x": 13538,
+    "hold": 800,
+    "ms": 575,
+    "landing": {
+      "x": 13673.125,
+      "y": 215
+    }
+  },
+  {
+    "course": "eclipse",
+    "from": "eclipse-arena612-0",
+    "to": "eclipse-arena612-1",
+    "x": 13748,
+    "hold": 800,
+    "ms": 475,
+    "landing": {
+      "x": 13859.625,
+      "y": 120
+    }
+  },
+  {
+    "course": "eclipse",
+    "from": "ground27",
+    "to": "eclipse-arena612-2",
+    "x": 13990,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 14131,
+      "y": 220
+    }
+  },
+  {
+    "course": "eclipse",
+    "from": "eclipse-arena612-2",
+    "to": "eclipse-arena612-3",
+    "x": 14236,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 14359.375,
+      "y": 130
+    }
+  },
+  {
+    "course": "finale",
+    "from": "ground15",
+    "to": "finale-arena612-0",
+    "x": 9048,
+    "hold": 800,
+    "ms": 575,
+    "landing": {
+      "x": 9183.125,
+      "y": 215
+    }
+  },
+  {
+    "course": "finale",
+    "from": "finale-arena612-0",
+    "to": "finale-arena612-1",
+    "x": 9258,
+    "hold": 800,
+    "ms": 475,
+    "landing": {
+      "x": 9369.625,
+      "y": 120
+    }
+  },
+  {
+    "course": "finale",
+    "from": "ground15",
+    "to": "finale-arena612-2",
+    "x": 9500,
+    "hold": 800,
+    "ms": 600,
+    "landing": {
+      "x": 9641,
+      "y": 220
+    }
+  },
+  {
+    "course": "finale",
+    "from": "finale-arena612-2",
+    "to": "finale-arena612-3",
+    "x": 9746,
+    "hold": 800,
+    "ms": 525,
+    "landing": {
+      "x": 9869.375,
+      "y": 130
+    }
+  }
+]

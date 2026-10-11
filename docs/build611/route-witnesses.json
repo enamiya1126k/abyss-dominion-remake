@@ -1,0 +1,452 @@
+[
+  {
+    "from": "ground0",
+    "to": "reef-step",
+    "t0": 0,
+    "takeoff": 182,
+    "release": 800,
+    "ms": 700,
+    "x": 346.5,
+    "y": 250
+  },
+  {
+    "from": "reef-step",
+    "to": "reef-crumble",
+    "t0": 0,
+    "takeoff": 360,
+    "release": 800,
+    "ms": 725,
+    "x": 530.375,
+    "y": 206
+  },
+  {
+    "from": "reef-crumble",
+    "to": "reef-battery",
+    "t0": 0,
+    "takeoff": 530,
+    "release": 800,
+    "ms": 775,
+    "x": 712.125,
+    "y": 184
+  },
+  {
+    "from": "reef-battery",
+    "to": "reef-tide",
+    "t0": 0,
+    "takeoff": 715,
+    "release": 800,
+    "ms": 925,
+    "x": 932.375,
+    "y": 251.58159535759893
+  },
+  {
+    "from": "reef-tide",
+    "to": "ground1",
+    "t0": 0,
+    "takeoff": 997,
+    "release": 0,
+    "ms": 25,
+    "x": 1002.875,
+    "y": 228
+  },
+  {
+    "from": "ground1",
+    "to": "reef-bridge-a",
+    "t0": 0,
+    "takeoff": 1176,
+    "release": 800,
+    "ms": 825,
+    "x": 1369.875,
+    "y": 230
+  },
+  {
+    "from": "reef-bridge-a",
+    "to": "reef-bridge-b",
+    "t0": 0,
+    "takeoff": 1390,
+    "release": 800,
+    "ms": 850,
+    "x": 1589.75,
+    "y": 242
+  },
+  {
+    "from": "reef-bridge-b",
+    "to": "reef-bridge-c",
+    "t0": 0,
+    "takeoff": 1560,
+    "release": 800,
+    "ms": 850,
+    "x": 1759.75,
+    "y": 262
+  },
+  {
+    "from": "reef-bridge-c",
+    "to": "ground2",
+    "t0": 0,
+    "takeoff": 1750,
+    "release": 800,
+    "ms": 875,
+    "x": 1955.625,
+    "y": 300
+  },
+  {
+    "from": "ground2",
+    "to": "works-entry",
+    "t0": 0,
+    "takeoff": 2256,
+    "release": 800,
+    "ms": 675,
+    "x": 2414.625,
+    "y": 245
+  },
+  {
+    "from": "works-entry",
+    "to": "ground3",
+    "t0": 0,
+    "takeoff": 2435,
+    "release": 0,
+    "ms": 475,
+    "x": 2546.625,
+    "y": 245
+  },
+  {
+    "from": "ground3",
+    "to": "ground4",
+    "t0": 0,
+    "takeoff": 2680,
+    "release": 800,
+    "ms": 825,
+    "x": 2873.875,
+    "y": 245
+  },
+  {
+    "from": "ground4",
+    "to": "works-lift",
+    "t0": 0,
+    "takeoff": 3120,
+    "release": 800,
+    "ms": 1000,
+    "x": 3355,
+    "y": 287.96918193051965
+  },
+  {
+    "from": "works-lift",
+    "to": "ground5",
+    "t0": 1500,
+    "takeoff": 3375,
+    "release": 800,
+    "ms": 875,
+    "x": 3565,
+    "y": 300
+  },
+  {
+    "from": "ground5",
+    "to": "works-shuttle",
+    "t0": 0,
+    "takeoff": 3652,
+    "release": 800,
+    "ms": 675,
+    "x": 3810.625,
+    "y": 240
+  },
+  {
+    "from": "works-shuttle",
+    "to": "works-exit",
+    "t0": 0,
+    "takeoff": 3800,
+    "release": 800,
+    "ms": 825,
+    "x": 3995.3528706766638,
+    "y": 240
+  },
+  {
+    "from": "works-exit",
+    "to": "ground6",
+    "t0": 0,
+    "takeoff": 3970,
+    "release": 800,
+    "ms": 925,
+    "x": 4129.25,
+    "y": 300
+  },
+  {
+    "from": "ground6",
+    "to": "tower-entry",
+    "t0": 0,
+    "takeoff": 4540,
+    "release": 800,
+    "ms": 725,
+    "x": 4710.375,
+    "y": 263.4409881628761
+  },
+  {
+    "from": "tower-entry",
+    "to": "tower-coast",
+    "t0": 0,
+    "takeoff": 4730,
+    "release": 800,
+    "ms": 725,
+    "x": 4900.375,
+    "y": 210
+  },
+  {
+    "from": "tower-coast",
+    "to": "ground7",
+    "t0": 3500,
+    "takeoff": 4900,
+    "release": 800,
+    "ms": 825,
+    "x": 5093.875,
+    "y": 210
+  },
+  {
+    "from": "ground7",
+    "to": "coast-phase",
+    "t0": 0,
+    "takeoff": 5200,
+    "release": 800,
+    "ms": 900,
+    "x": 5411.5,
+    "y": 255
+  },
+  {
+    "from": "coast-phase",
+    "to": "coast-crumble",
+    "t0": 0,
+    "takeoff": 5430,
+    "release": 800,
+    "ms": 825,
+    "x": 5652.599999999996,
+    "y": 255
+  },
+  {
+    "from": "coast-crumble",
+    "to": "coast-saw",
+    "t0": 0,
+    "takeoff": 5640,
+    "release": 800,
+    "ms": 775,
+    "x": 5859.2499999999945,
+    "y": 238
+  },
+  {
+    "from": "coast-saw",
+    "to": "ground8",
+    "t0": 0,
+    "takeoff": 5830,
+    "release": 800,
+    "ms": 850,
+    "x": 6062.149999999995,
+    "y": 260
+  },
+  {
+    "from": "ground8",
+    "to": "coast-last",
+    "t0": 0,
+    "takeoff": 6078,
+    "release": 800,
+    "ms": 750,
+    "x": 6254.25,
+    "y": 230
+  },
+  {
+    "from": "coast-last",
+    "to": "ground9",
+    "t0": 0,
+    "takeoff": 6270,
+    "release": 800,
+    "ms": 925,
+    "x": 6487.375,
+    "y": 300
+  },
+  {
+    "from": "ground1",
+    "to": "reef-key-step",
+    "t0": 0,
+    "takeoff": 1120,
+    "release": 800,
+    "ms": 625,
+    "x": 1085.5,
+    "y": 158
+  },
+  {
+    "from": "reef-key-step",
+    "to": "reef-key",
+    "t0": 0,
+    "takeoff": 1030,
+    "release": 800,
+    "ms": 650,
+    "x": 1182.75,
+    "y": 92
+  },
+  {
+    "from": "reef-key",
+    "to": "reef-star",
+    "t0": 0,
+    "takeoff": 1198,
+    "release": 800,
+    "ms": 650,
+    "x": 1350.75,
+    "y": 26
+  },
+  {
+    "from": "reef-star",
+    "to": "reef-high-return",
+    "t0": 0,
+    "takeoff": 1370,
+    "release": 800,
+    "ms": 950,
+    "x": 1593.25,
+    "y": 102
+  },
+  {
+    "from": "reef-high-return",
+    "to": "reef-high-exit",
+    "t0": 0,
+    "takeoff": 1560,
+    "release": 800,
+    "ms": 950,
+    "x": 1783.25,
+    "y": 174
+  },
+  {
+    "from": "reef-high-exit",
+    "to": "ground2",
+    "t0": 0,
+    "takeoff": 1740,
+    "release": 800,
+    "ms": 1025,
+    "x": 1980.875,
+    "y": 300
+  },
+  {
+    "from": "works-entry",
+    "to": "works-upper-a",
+    "t0": 0,
+    "takeoff": 2435,
+    "release": 800,
+    "ms": 625,
+    "x": 2566.25,
+    "y": 175
+  },
+  {
+    "from": "works-upper-a",
+    "to": "works-guards",
+    "t0": 0,
+    "takeoff": 2540,
+    "release": 800,
+    "ms": 650,
+    "x": 2692.75,
+    "y": 105
+  },
+  {
+    "from": "works-guards",
+    "to": "works-star",
+    "t0": 0,
+    "takeoff": 2802,
+    "release": 800,
+    "ms": 650,
+    "x": 2954.75,
+    "y": 36
+  },
+  {
+    "from": "works-star",
+    "to": "works-upper-b",
+    "t0": 0,
+    "takeoff": 2970,
+    "release": 800,
+    "ms": 925,
+    "x": 3187.375,
+    "y": 105
+  },
+  {
+    "from": "works-upper-b",
+    "to": "works-upper-c",
+    "t0": 0,
+    "takeoff": 3200,
+    "release": 800,
+    "ms": 950,
+    "x": 3423.25,
+    "y": 180
+  },
+  {
+    "from": "works-upper-c",
+    "to": "ground5",
+    "t0": 1500,
+    "takeoff": 3370,
+    "release": 800,
+    "ms": 1000,
+    "x": 3565.875,
+    "y": 300
+  },
+  {
+    "from": "ground7",
+    "to": "tower-step-a",
+    "t0": 0,
+    "takeoff": 5160,
+    "release": 800,
+    "ms": 625,
+    "x": 5203,
+    "y": 140
+  },
+  {
+    "from": "tower-step-a",
+    "to": "tower-step-b",
+    "t0": 0,
+    "takeoff": 5140,
+    "release": 800,
+    "ms": 650,
+    "x": 5292.75,
+    "y": 72
+  },
+  {
+    "from": "tower-step-b",
+    "to": "tower-seal",
+    "t0": 0,
+    "takeoff": 5300,
+    "release": 800,
+    "ms": 650,
+    "x": 5452.75,
+    "y": 8
+  },
+  {
+    "from": "tower-seal",
+    "to": "tower-return-a",
+    "t0": 0,
+    "takeoff": 5460,
+    "release": 800,
+    "ms": 950,
+    "x": 5702.374999999997,
+    "y": 80
+  },
+  {
+    "from": "tower-return-a",
+    "to": "tower-return-b",
+    "t0": 0,
+    "takeoff": 5660,
+    "release": 800,
+    "ms": 925,
+    "x": 5890.574999999993,
+    "y": 150
+  },
+  {
+    "from": "tower-return-b",
+    "to": "ground8",
+    "t0": 0,
+    "takeoff": 5820,
+    "release": 800,
+    "ms": 1000,
+    "x": 6089.799999999995,
+    "y": 260
+  },
+  {
+    "from": "coast-catch",
+    "to": "coast-crumble",
+    "t0": 0,
+    "takeoff": 5444,
+    "release": 800,
+    "ms": 650,
+    "x": 5619.474999999997,
+    "y": 255
+  }
+]

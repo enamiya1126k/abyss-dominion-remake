@@ -1,4 +1,4 @@
-import {voyageStep609,shipAt609} from './Voyage609.js';
+import {voyageStep609,voyageCheckpoint611} from './Voyage609.js';
 import {finalStep608} from './FinalRules608.js';
 import {initThreats604,stepThreats604,resolveThreats604,thaw604,frozen604} from './Threats604.js';
 import {hazards603} from './Hazards603.js';
@@ -14,11 +14,11 @@ import {course589,readyGate589,inHazard589} from './Courses589.js';
 import {mechanics589} from './Mechanics589.js';
 import {RUN587 as C,control587,stepRunner587,enemyContact588,stomp599} from './Physics587.js';
 import {rank588} from './Feel588.js';
-export const makeRunners587=args=>({...make580('runners',{...args,members:args.members.filter(m=>!m.ai)}),rules587:20,courseId:'forest',switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},elapsed:0,stage:'ready',enemies:[],finishAt:null});
+export const makeRunners587=args=>({...make580('runners',{...args,members:args.members.filter(m=>!m.ai)}),rules587:22,courseId:'forest',switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},elapsed:0,stage:'ready',enemies:[],finishAt:null});
 export const signature587=g=>!g?null:['lobby','result'].includes(g.phase)?g:{id:g.id,phase:'play',players:g.players.map(p=>[p.playerId,p.speciesId,p.color499])};
 export function startRunners587(g,now,seed=587){if(g.phase!=='lobby')return false;const course=course589(g);if(course.minPlayers608&&g.members.filter(m=>!m.departed&&!m.ai).length<course.minPlayers608)throw Error('この最終コースは人間2人以上が必要です');g.courseId=course.id;g.players=g.members.filter(m=>!m.departed&&!m.ai).map((m,seat)=>({playerId:m.playerId,name:m.name,seat,ai:false,auto:false,waiting:false,color499:m.color499,speciesId:m.choice?.speciesId??'slime'}));if(!g.players.length)return false;assignColors499(g.players);g.seed=seed>>>0||587;
  for(const p of g.players){delete p.score;Object.assign(p,{x:90+p.seat*24,y:300,vx:0,vy:0,axis:0,facing:1,grounded:true,platformId:'ground0',lastGroundAt:now,controlAt:now,jumpHeld:false,jumpBufferUntil:0,airJumpUsed:false,airJumps598:0,reboundJump599:false,motionEpoch600:0,springFlight:false,lives:1,deaths:0,fatalDeaths601:0,falls:0,paused:false,alive:true,respawnAt:0,invincibleUntil:0,boostUntil:0,gems:[],checkpoint:0,furthest:90,finishTime:null,outAt:null,lastSeq:0,powers:[],weapon:null,ammo:0,attackHeld:false,shotAt:0,shots:0,kills:0,pranks:0,bumpUntil:0,bumpSafeUntil:0,stomps:0,jumps:0,wallJumps:0,buddyBounces:0,buddyUntil:0,wallSide:0,wallAt:-1e9,wallLockUntil:0});}
- Object.assign(g,{phase:'countdown',stage:'ready',phaseAt:now,lastAt:now,serverAt:now,startAt:now+C.countdown,deadline:now+C.countdown+course.duration,elapsed:0,finishAt:null,switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},enemies:course.enemies.map(e=>({...e,downUntil:0})),results:[],winnerIds:[]});initEncounters600(g,course);initCoop601(g);g.final608={};initThreats604(g);g.ship609=course.ship609?{leg:0,at:0,completed:[],retry:0,objective:false}:null;if(course.ship609)for(const p of g.players){p.platformId='ark609';p.x=95+p.seat*35;}g.revision++;return true;
+ Object.assign(g,{phase:'countdown',stage:'ready',phaseAt:now,lastAt:now,serverAt:now,startAt:now+C.countdown,deadline:now+C.countdown+course.duration,elapsed:0,finishAt:null,switches:[],switchBy:{},crumbles:{},rescues:0,teamClear:false,teamCheckpoint:0,projectiles:[],projectileId:0,broken:[],barrierHits:{},ventsOff:{},enemies:course.enemies.map(e=>({...e,downUntil:0})),results:[],winnerIds:[]});initEncounters600(g,course);initCoop601(g);g.final608={};initThreats604(g);g.ship609=course.ship609?{completed:[]}:null;g.revision++;return true;
 }
 export function validRunners587(g,p,m){return g.phase==='play'&&g.stage==='run'&&p?.alive&&(!p.waiting||typeof m.target?.pause==='boolean')&&p.finishTime==null&&(!p.respawnAt||typeof m.target?.pause==='boolean')&&m.action==='control'&&m.target&&[-1,0,1].includes(m.target.axis)&&typeof m.target.jump==='boolean'&&typeof m.target.attack==='boolean';}
 export function inputRunners587(g,p,m){if(!validRunners587(g,p,m))return false;p.lastSeq=Math.max(p.lastSeq,m.seq??0);control587(p,m.target,g.lastAt);return true;}
@@ -61,7 +61,7 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
   for(const p of g.players){const wasWaiting=p.waiting;p.auto=false;p.waiting=!p.departed&&(absent.has(p.playerId)||!!p.paused);const list=inputs.get(p.playerId)??[];inputs.delete(p.playerId);if(p.finishTime!=null)continue;
    if(p.waiting){if(!wasWaiting){const s=surfaces587(g.elapsed,course,g).find(s=>s.id===p.platformId);p.waitSurface=s?{x:s.x,y:s.y}:null;}p.axis=0;p.jumpHeld=false;p.attackHeld=false;p.jumpBufferUntil=0;if(p.respawnAt)p.respawnAt+=C.step;if(p.invincibleUntil)p.invincibleUntil+=C.step;continue;}
    if(wasWaiting&&p.alive){const s=surfaces587(g.elapsed,course,g).find(s=>s.id===p.platformId);if(s&&p.waitSurface){p.x+=s.x-p.waitSurface.x;p.y=s.y;}p.waitSurface=null;p.invincibleUntil=g.lastAt+1600;p.controlAt=g.lastAt;}
-   if(p.respawnAt){for(const m of list)if(m.round==null||m.round===g.round)p.lastSeq=Math.max(p.lastSeq,m.seq??0);list.length=0;if(course.ship609)continue;if(g.lastAt>=p.respawnAt)respawn(g,p);else continue;}
+   if(p.respawnAt){for(const m of list)if(m.round==null||m.round===g.round)p.lastSeq=Math.max(p.lastSeq,m.seq??0);list.length=0;if(g.lastAt>=p.respawnAt)respawn(g,p);else continue;}
    if(!p.alive)continue;
    {const future=[];for(const m of list){if(Number.isFinite(m.at)&&m.at>g.lastAt){future.push(m);continue;}if(m.round==null||m.round===g.round)inputRunners587(g,p,m);}if(future.length)inputs.set(p.playerId,future);}
    const {before,jumped,wallJumped,windJumped,landed,spring,impact,crushed601}=stepRunner587(p,g.lastAt,g.elapsed,C.step/1000,g);previous.set(p.seat,before);if(windJumped)emit(g,'windjump',{seat:p.seat,x:p.x,y:p.y});if(wallJumped){p.wallJumps++;emit(g,'wallkick',{seat:p.seat,x:p.x,y:p.y});}if(jumped){p.jumps++;emit(g,'jump',{seat:p.seat,x:p.x,y:p.y});}
@@ -75,7 +75,7 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
    if(!p.alive||p.respawnAt)continue;
    if(spring)emit(g,'spring',{seat:p.seat,x:spring.x+spring.w/2,y:spring.y+spring.h});
    for(const gem of course.gems)if(!p.gems.includes(gem.id)&&Math.hypot(p.x-gem.x,p.y-C.height/2-gem.y)<25){p.gems.push(gem.id);p.boostUntil=g.lastAt+4000;emit(g,'boost',{seat:p.seat,x:gem.x,y:gem.y});}
-   if(!course.ship609)for(let i=(g.teamCheckpoint??0)+1;i<course.checkpoints.length;i++){const cp=course.checkpoints[i];if(p.x>=cp.x&&p.y<=cp.y+15)checkpoint601(g,i,p.seat,emit);}
+   for(let i=(g.teamCheckpoint??0)+1;i<course.checkpoints.length;i++){const cp=course.checkpoints[i];if(course.ship609?voyageCheckpoint611(p,cp):p.x>=cp.x&&p.y<=cp.y+15)checkpoint601(g,i,p.seat,emit);}
    p.furthest=Math.max(p.furthest,p.x);
   }
   finalStep608(g,course,emit);
@@ -90,11 +90,11 @@ export function advanceRunners587(g,now,inputs=new Map(),absent=new Set()){
   if(course.final608)finalStep608(g,course,emit);
   voyageStep609(g,course,emit,hurtRunners587);
   for(const p of g.players)if(p.alive&&!p.waiting&&!p.respawnAt&&p.finishTime==null&&p.x>=course.goal&&p.y<=320){
-   if(!readyGate589(g)){p.x=course.goal-35;p.vx=0;continue;}
+   if(!readyGate589(g))continue;
    p.finishTime=g.elapsed;p.x=course.goal+10;p.vx=0;p.vy=0;p.axis=0;if(course.mode!=='coop')g.deadline=Math.min(g.deadline,g.lastAt+C.grace);emit(g,'goal',{seat:p.seat,time:p.finishTime});
   }
   if(g.lastAt>=g.deadline||g.players.every(p=>p.finishTime!=null||!p.alive))finishRunners587(g);
  }
  g.serverAt=g.lastAt;g.updatedAt=now;if(changed)g.revision++;return changed;
 }
-export function publicRunners587(g,selfId){return{...publicBase580(g),rules587:g.rules587,ship609:structuredClone(g.ship609??null),final608:structuredClone(g.final608??{}),threats604:structuredClone(g.threats604??null),stars601:[...(g.stars601??[])],starBy601:{...g.starBy601},coop601:structuredClone(g.coop601??{}),boss600:g.boss600?{...g.boss600}:null,enemyShots600:(g.enemyShots600??[]).map(s=>({...s})),rollerBroken600:{...g.rollerBroken600},waves600:structuredClone(g.waves600??{}),courseId:g.courseId??'forest',switches:[...(g.switches??[])],switchBy:{...(g.switchBy??{})},broken:[...(g.broken??[])],barrierHits:{...(g.barrierHits??{})},ventsOff:{...(g.ventsOff??{})},crumbles:{...(g.crumbles??{})},rescues:g.rescues,teamClear:g.teamClear,teamCheckpoint:g.teamCheckpoint,projectiles:g.projectiles.map(b=>({...b})),stage:g.stage,elapsed:g.elapsed,finishAt:g.finishAt,enemies:g.enemies.map(e=>({...e})),players:g.players.map(({inputSeq563,botWait,...p})=>({...p,gems:[...p.gems],powers:[...p.powers],processedSeq:p.lastSeq,lastSeq:p.playerId===selfId?Math.max(p.lastSeq,inputSeq563??0):0}))};}
+export function publicRunners587(g,selfId){return{...publicBase580(g),rules587:g.rules587,ship609:structuredClone(g.ship609??null),final608:structuredClone(g.final608??{}),threats604:structuredClone(g.threats604??null),stars601:[...(g.stars601??[])],starBy601:{...g.starBy601},coop601:structuredClone(g.coop601??{}),boss600:structuredClone(g.boss600??null),enemyShots600:(g.enemyShots600??[]).map(s=>({...s})),rollerBroken600:{...g.rollerBroken600},waves600:structuredClone(g.waves600??{}),courseId:g.courseId??'forest',switches:[...(g.switches??[])],switchBy:{...(g.switchBy??{})},broken:[...(g.broken??[])],barrierHits:{...(g.barrierHits??{})},ventsOff:{...(g.ventsOff??{})},crumbles:{...(g.crumbles??{})},rescues:g.rescues,teamClear:g.teamClear,teamCheckpoint:g.teamCheckpoint,projectiles:g.projectiles.map(b=>({...b})),stage:g.stage,elapsed:g.elapsed,finishAt:g.finishAt,enemies:g.enemies.map(e=>({...e})),players:g.players.map(({inputSeq563,botWait,...p})=>({...p,gems:[...p.gems],powers:[...p.powers],processedSeq:p.lastSeq,lastSeq:p.playerId===selfId?Math.max(p.lastSeq,inputSeq563??0):0}))};}
